@@ -6,8 +6,29 @@
     <link rel="stylesheet" type="text/css" href="{{ asset("css/home.css") }}">
 {% endblock %}
 
+{% block javascripts %} 
+    <script src="{{ asset("js/home.js") }}"></script>
+{% endblock %}
+
 {% block body %}
+    
     <div id="main-container">
-        <h1>Hello World!</h1>
+        <h1>Hello {{name}}!</h1>
     </div>
+
+    <div id="test-container">
+
+        <form name="chronoForm">
+            <input type="text" name="chronotime" id="chronotime" value="0:00:00:00"/>
+              <input type="button" name="startstop" value="start!" onClick="chronoStart()" />
+        </form>
+
+        <p>
+            Appuyez sur une touche du clavier pour voir quelle 
+            valeur clé de KeyboardEvent correspond à chaque événement
+        </p>
+        
+        <div id="output"> </div>
+    </div>
+
 {% endblock %}

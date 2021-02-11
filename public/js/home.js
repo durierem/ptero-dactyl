@@ -51,10 +51,10 @@ function chronoStart() {
 }
 
 function chronoReset() {
-    document.getElementById("chronotime").value = "0:00:00:000";
-    document.chronoForm.startstop.value = "start!";
-    document.chronoForm.startstop.onclick = chronoStart;
-    document.getElementById("output").innerHTML = "";
+  document.getElementById("chronotime").value = "0:00:00:000";
+  document.chronoForm.startstop.value = "start!";
+  document.chronoForm.startstop.onclick = chronoStart;
+  document.getElementById("output").innerHTML = "";
 }
 
 function chronoStop() {

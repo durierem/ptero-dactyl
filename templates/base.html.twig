@@ -2,8 +2,11 @@
 <html lang="fr">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Ptero Dactyl -{% endblock %}</title>
-        <link rel="stylesheet" type="text/css" href="{{ asset("css/style.css") }}">
+        <title>Ptero Dactyl - {% block title %}{% endblock %}</title>
+        <link rel="icon" href="{{ asset("images/small_gra.ico") }}" />
+        <link rel="stylesheet" type="text/css" href="{{ asset("css/style.css") }}" />
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Lato&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
 
         {% block stylesheets %}{% endblock %}
         {% block javascripts %}{% endblock %}

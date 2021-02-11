@@ -9,9 +9,6 @@ class HomeController extends AbstractController
 {
     public function index(): Response
     {
-        $name = "Kaci";
-        return $this->render('home.html.twig', [
-            "name" => $name
-        ]);
+        return $this->render('home.html.twig');
     }
 }

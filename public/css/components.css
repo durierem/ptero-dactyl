@@ -1,0 +1,94 @@
+/* Collection de classes créant des composants réutilisables */
+
+/* Schéma de couleurs et polices */
+:root {
+    --red: #fb4934;
+    --green: #b8bb26;
+    --yellow: #fabd2f;
+    --blue: #83a598;
+    --purple: #d3869b;
+    --aqua: #8ec07c;
+    --orange: #fe9019;
+
+    --background: #282828;
+    --background-hard: #1d2021;
+    --background-soft: #32302f;
+    --foreground: #ebdbb2;
+
+    --accent: var(--orange);
+    --error: var(--red);
+    --success: var(--green);
+
+    --font-standard: "Lato", sans-serif; /*TODO */
+    --font-mono: "Iosevka", monospace; /* TODO */
+}
+
+/* Définit un bouton cliquable */
+.btn {
+	background-color: var(--background-hard);
+    color: var(--foreground);
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+    border: 2px solid var(--foreground);
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 10px #000;
+    transition-duration: 0.1s;
+    min-width: 100px;
+}
+.btn-standard {
+    border: 2px solid var(--accent);
+}
+.btn-success {
+    border: 2px solid var(--success);
+}
+.btn-error {
+    border: 2px solid var(--error);
+}
+.btn:hover {
+    background-color: var(--background-soft);
+    transform: scale(1.05, 1.05);
+    cursor: pointer;
+}
+
+/* Définit un badge */
+.badge {
+    background-color: var(--background-soft);
+    color: var(--foreground);
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+    border: 2px solid var(--background-soft);
+    border-radius: 5px 5px 5px 5px;
+}
+
+.area {
+    background-color: var(--background-soft);
+    color: var(--foreground);
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+    border: 2px solid var(--background-soft);
+    border-radius: 5px 5px 5px 5px;
+    overflow: auto;
+}
+
+/* Ajoute un effet de clignotement doux. */
+.blink {
+    font-family: inherit;
+    font-size: inherit;
+    animation-name: anim-blink;
+    animation-duration: 0.5s;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+@keyframes anim-blink {
+    from { opacity: 100%; }
+    to { opacity: 0%; }
+}
+
+/* Cache un élément. */
+.hidden {
+    display: none !important;
+}

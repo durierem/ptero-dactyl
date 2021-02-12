@@ -6,27 +6,20 @@
     <link rel="stylesheet" type="text/css" href="{{ asset("css/home.css") }}">
 {% endblock %}
 
-{% block body %}
-    <header>
-        <img id="logo" src="{{ asset("images/big_gra.png") }}">
-        <h1>Ptero Dactyl<span class="blink">_</span></h1>
-    </header>
+{% block content %}
+    <button id="start-button" class="btn btn-standard">Démarrer un test</button>
+    <div id="test-container" class="hidden">
+        <form name="chronoForm">
+            <input class="btn btn-standard" type="button" name="startstop" value="start!" onClick="chronoStart()" />
+            <input class="badge" type="text" name="chronotime" id="chronotime" value="0:00:00:00"/>
+        </form>
 
-    <div id="main-content-container">
-        <button id="start-button">Démarrer un test</button>
-        <div id="test-container" class="hidden">
-            <form name="chronoForm">
-                <input class="text-field" type="text" name="chronotime" id="chronotime" value="0:00:00:00"/>
-                <input class="button" type="button" name="startstop" value="start!" onClick="chronoStart()" />
-            </form>
+        <p>
+            Appuyez sur une touche du clavier pour voir quelle 
+            valeur clé de KeyboardEvent correspond à chaque événement.
+        </p>
 
-            <p>
-                Appuyez sur une touche du clavier pour voir quelle 
-                valeur clé de KeyboardEvent correspond à chaque événement
-            </p>
-            
-            <div id="output"></div>
-        </div>
+        <div id="output-container" class="area"></div>
     </div>
 
     <script src="{{ asset("js/home.js") }}"></script>

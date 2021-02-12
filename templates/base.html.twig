@@ -4,14 +4,20 @@
         <meta charset="UTF-8">
         <title>Ptero Dactyl - {% block title %}{% endblock %}</title>
         <link rel="icon" href="{{ asset("images/small_gra.ico") }}" />
-        <link rel="stylesheet" type="text/css" href="{{ asset("css/style.css") }}" />
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Lato&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="{{ asset("css/components.css") }}" />
+        <link rel="stylesheet" type="text/css" href="{{ asset("css/common.css") }}" />
 
         {% block stylesheets %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <header>
+            <img id="logo" src="{{ asset("images/big_gra.png") }}">
+            <a href="/" id="app-title">Ptero Dactyl<span class="blink">_</span></a>
+        </header>
+
+        <div id="main-content-container">
+            {% block content %}{% endblock %}
+        </div>
     </body>
 </html>

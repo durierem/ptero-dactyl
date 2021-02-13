@@ -2,20 +2,26 @@
 
 /* Schéma de couleurs et polices */
 :root {
-    --red: #fb4934;
-    --green: #b8bb26;
-    --yellow: #fabd2f;
-    --blue: #83a598;
-    --purple: #d3869b;
-    --aqua: #8ec07c;
-    --orange: #fe9019;
+    --red: #A30000;
+    --green: #5D924F;
+    --yellow: #FE7F2D;
+    --blue: #3F728D;
 
-    --background: #282828;
-    --background-hard: #1d2021;
-    --background-soft: #32302f;
-    --foreground: #ebdbb2;
+    /* Light theme */
+    --light-bg-primary: #C7CCD1;
+    --light-bg-secondary: #FFFFFF;
+    --light-fg: #2D333B; 
 
-    --accent: var(--orange);
+    /* Dark theme */
+    /*--light-bg-primary: #23232F;
+    --light-bg-secondary: #2B2B3B;
+    --light-fg: #F5F5F5;*/
+
+    --dark-bg-primary: #16161D;
+    --dark-bg-secondary: #23232F;
+    --dark-fg: #F5F5F5;
+
+    --accent: var(--yellow);
     --error: var(--red);
     --success: var(--green);
 
@@ -24,51 +30,33 @@
 }
 
 /* Définit un bouton cliquable */
-.btn {
-	background-color: var(--background-hard);
-    color: var(--foreground);
+.button {
+	background-color: var(--dark-bg-primary);
+    color: var(--dark-fg);
     text-align: center;
     padding: 10px;
     margin: 10px;
-    border: 2px solid var(--foreground);
+    border: 2px solid var(--dark-bg-primary);
     border-radius: 5px 5px 5px 5px;
-    box-shadow: 0 0 10px #000;
     transition-duration: 0.1s;
     min-width: 100px;
 }
-.btn-standard {
-    border: 2px solid var(--accent);
-}
-.btn-success {
-    border: 2px solid var(--success);
-}
-.btn-error {
-    border: 2px solid var(--error);
-}
-.btn:hover {
-    background-color: var(--background-soft);
-    transform: scale(1.05, 1.05);
+.button:hover {
+    background-color: var(--dark-bg-secondary);
+    border-color: var(--accent);
+    transform: scale(1.10, 1.10);
+    box-shadow: 0 0 10px var(--accent);
     cursor: pointer;
 }
 
-/* Définit un badge */
-.badge {
-    background-color: var(--background-soft);
-    color: var(--foreground);
-    text-align: center;
-    padding: 10px;
-    margin: 10px;
-    border: 2px solid var(--background-soft);
-    border-radius: 5px 5px 5px 5px;
-}
-
+/* Définit une zone de texte ou d'information mise en évidence */
 .area {
-    background-color: var(--background-soft);
-    color: var(--foreground);
+    background-color: var(--light-bg-secondary);
+    color: var(--light-fg);
     text-align: center;
     padding: 10px;
     margin: 10px;
-    border: 2px solid var(--background-soft);
+    border: 2px solid var(--light-bg-secondary);
     border-radius: 5px 5px 5px 5px;
     overflow: auto;
 }

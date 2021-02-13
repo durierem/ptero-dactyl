@@ -1,10 +1,8 @@
 #start-button {
     font-size: 4em;
-    box-shadow: 0 0 25px #000;
 }
 
 #test-container .button {
-    font-size: 1.5em;
     min-width: 100px;
 }
 

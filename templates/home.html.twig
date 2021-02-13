@@ -7,11 +7,11 @@
 {% endblock %}
 
 {% block content %}
-    <button id="start-button" class="btn btn-standard">Démarrer un test</button>
+    <button id="start-button" class=button>Démarrer un test</button>
     <div id="test-container" class="hidden">
         <form name="chronoForm">
-            <input class="btn btn-standard" type="button" name="startstop" value="start!" onClick="chronoStart()" />
-            <input class="badge" type="text" name="chronotime" id="chronotime" value="0:00:00:00"/>
+            <input class=button type="button" name="startstop" value="start!" onClick="chronoStart()" />
+            <input class="area" type="text" name="chronotime" id="chronotime" value="0:00:00:00"/>
         </form>
 
         <p>

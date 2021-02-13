@@ -1,3 +1,7 @@
 home:
-   path: /
-   controller: App\Controller\HomeController::index
+ path: /
+ controller: App\Controller\HomeController::index
+
+dactylotest:
+  path: /dactylotest
+  controller: App\Controller\DactylotestController::main

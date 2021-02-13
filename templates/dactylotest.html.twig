@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dactylotest{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset("css/dactylotest.css") }}">
+{% endblock %}
+
+{% block content %}
+<div id="dactylotest-container">
+	<div id="ref-text-container" class="area">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc malesuada magna nec magna commodo, non sollicitudin nunc ullamcorper. Nulla luctus erat quis turpis bibendum sollicitudin. Quisque vulputate tincidunt erat in gravida. Nulla varius, enim a laoreet iaculis, enim purus pellentesque quam, lobortis commodo metus nisl et nisi. Morbi diam elit.</div>
+	<textarea id="user-input" class="area" placeholder="Recopiez le texte ici" autofocus="true"></textarea>
+</div>
+
+<script type="text/javascript" src="{{ asset("js/dactylotest.js") }}"></script>
+{% endblock %}

@@ -7,9 +7,10 @@
 {% endblock %}
 
 {% block content %}
+<h1> Cliques sur la zone de texte pour commencer à écrire !</h1>
 <div id="dactylotest-container">
-	<div id="ref-text-container" class="area">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc malesuada magna nec magna commodo, non sollicitudin nunc ullamcorper. Nulla luctus erat quis turpis bibendum sollicitudin. Quisque vulputate tincidunt erat in gravida. Nulla varius, enim a laoreet iaculis, enim purus pellentesque quam, lobortis commodo metus nisl et nisi. Morbi diam elit.</div>
-	<textarea id="user-input" class="area" placeholder="Recopiez le texte ici" autofocus="true"></textarea>
+  <textarea id="hidden-input" style="opacity:0;width:0;height:0;"> </textarea>
+  <div id="user-input" class="text-area"></div>
 </div>
 
 <script type="text/javascript" src="{{ asset("js/dactylotest.js") }}"></script>

@@ -1,35 +1,59 @@
 'use strict'
 
 /**
- * Définit un thème et ses 3 couleurs.
+ * Représente un thème de couleur.
+ *
+ * Un thème de couleur est composé de deux couleurs d'arrière plan et d'une
+ * couleur de premier plan.
+ * On peut imaginer étendre cette spécification à une sélection de variables
+ * CSS trouvées dans la pseudo-classe :root (public/css/components.css).
  */
-function Theme (bgPrimary, bgSecondary, foreground) {
-  this.bgPrimary = bgPrimary
-  this.bgSecondary = bgSecondary
-  this.foreground = foreground
+class Theme {
+  constructor (bgPrimary, bgSecondary, foreground) {
+    this.bgPrimary = bgPrimary
+    this.bgSecondary = bgSecondary
+    this.foreground = foreground
+  }
 }
 
 /**
- * Met à jour les propriétés CSS de :root en fonction du thème donné.
+ * Représente un sélectionneur de thème.
+ *
+ * Les thèmes disponibles pour un sélectionneur sont définis à l'instanciation.
  */
-function setTheme (theme) {
-  const root = document.documentElement
-  root.style.setProperty('--light-bg-primary', theme.bgPrimary)
-  root.style.setProperty('--light-bg-secondary', theme.bgSecondary)
-  root.style.setProperty('--light-fg', theme.foreground)
+class ThemeSwitcher {
+  constructor (themes, current) {
+    this.themes = themes
+    if (current === undefined) {
+      this.current = themes[Object.keys(themes)[0]]
+    } else {
+      this.current = current
+    }
+  }
+
+  apply (theme) {
+    const root = document.documentElement
+    root.style.setProperty('--light-bg-primary', theme.bgPrimary)
+    root.style.setProperty('--light-bg-secondary', theme.bgSecondary)
+    root.style.setProperty('--light-fg', theme.foreground)
+    this.current = theme
+  }
 }
 
-// Les deux thèmes disponibles
-const light = new Theme('#C7CCD1', '#FFFFFF', '#2D333B')
-const dark = new Theme('#23232F', '#2B2B3B', '#F5F5F5')
-
-// Thème par défaut à l'ouverture de l'application
-let current = light
+// Construit un nouveau sélectionneur de thème avec les thèmes disponibles
+const switcher = new ThemeSwitcher({
+  'light': new Theme('#C7CCD1', '#FFFFFF', '#2D333B'),
+  'dark': new Theme('#23232F', '#2B2B3B', '#F5F5F5')
+  // Si vous voulez vous amuser à ajouter d'autres thèmes farfelus...
+})
+switcher.apply(switcher.themes['dark'])
 
 // Ajoute l'EventListener qui va bien :]
-const switcher = document.getElementById('theme-switcher')
-switcher.addEventListener('click', function () {
-  const next = current === light ? dark : light
-  setTheme(next)
-  current = next
+const button = document.getElementById('theme-switcher')
+button.addEventListener('click', () => {
+  if (switcher.current === switcher.themes['light']) {
+    switcher.apply(switcher.themes['dark'])
+  } else {
+    switcher.apply(switcher.themes['light'])
+  }
 })

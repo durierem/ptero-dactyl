@@ -76,7 +76,20 @@
     to { opacity: 0%; }
 }
 
+.cursor-blink {
+    animation-name: cursor-blink;
+    animation: cursor-blink 0.8s step-start infinite;
+}
+@keyframes cursor-blink {
+    50% {
+        color: #fff;
+        background-color: #000;
+    }
+}
+
 /* Cache un élément. */
 .hidden {
-    display: none !important;
+    position: absolute;
+    width: 0;
+    height: 0;
 }

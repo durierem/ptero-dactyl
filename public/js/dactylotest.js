@@ -1,69 +1,61 @@
-'use strict';
+'use strict'
 
-const text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nNunc malesuada magna nec magna commodo, non sollicitudin nunc ullamcorper.\nNulla luctus erat quis turpis bibendum sollicitudin.\nQuisque vulputate tincidunt erat in gravida.\nNulla varius, enim a laoreet iaculis, enim purus pellentesque quam,\nlobortis commodo metus nisl et nisi.\nMorbi diam elit.';
+const text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nNunc malesuada magna nec magna commodo, non sollicitudin nunc ullamcorper.\nNulla luctus erat quis turpis bibendum sollicitudin.\nQuisque vulputate tincidunt erat in gravida.\nNulla varius, enim a laoreet iaculis, enim purus pellentesque quam,\nlobortis commodo metus nisl et nisi.\nMorbi diam elit.'
 
 const hiddenInput = document.getElementById('hidden-input')
 const userContainer = document.getElementById('user-input')
-var cursor = 0;
-
-// Wyrd charaters
-var carriage_return = '↲';
-var space = '␣';
+let cursor = 0
 
 // Initial text treatment, convert it into span and add spans to userContainer
-let max_character_by_lines = 60;
-let char_on_line = 0;
 for (let i = 0; i < text.length; ++i) {
-  let c = text.charAt(i)
-  let sp = document.createElement('span')
+  const c = text.charAt(i)
+  const sp = document.createElement('span')
   switch (c) {
     case ' ':
-      sp.innerHTML = '␣';
-      break;
+      sp.innerHTML = '␣'
+      break
     case '\n':
-      sp.innerHTML = '↲';
-      break;
+      sp.innerHTML = '↲'
+      break
     default:
-      sp.innerHTML = c;
+      sp.innerHTML = c
   }
   userContainer.appendChild(sp)
-  ++char_on_line;
   if (c === '\n') {
-    let sp = document.createElement('br')
+    const sp = document.createElement('br')
     userContainer.appendChild(sp)
-    char_on_line = 0;
-    continue;
+    continue
   }
 }
 
 // index === 0 -> intial value
 // index === 1 -> the current character have been misstyped by user
-var index = 0;
-hiddenInput.addEventListener('keydown', function(e) {
-  let c = e.key;
+let index = 0
+hiddenInput.addEventListener('keydown', function (e) {
+  const c = e.key
   if (c === 'Shift') {
-    return;
+    return
   }
   if (text.charAt(cursor) === '\n' && c === 'Enter') {
     ;
-  } else if (text.charAt(cursor) != c) {
+  } else if (text.charAt(cursor) !== c) {
     console.log(text.charAt(cursor))
-    index = 1;
-    return;
+    index = 1
+    return
   }
-  
+
   if (index === 0) {
     setCurrSpanCursorTyped()
   } else {
     setCurrSpanCursorRed()
-    index = 0;
+    index = 0
   }
-  cursor += 1;
+  cursor += 1
   setNextCursor()
 })
 
 hiddenInput.addEventListener('focusout', function () {
-  unsetPresentCursor();
+  unsetPresentCursor()
 })
 
 userContainer.addEventListener('click', function () {
@@ -71,44 +63,43 @@ userContainer.addEventListener('click', function () {
   setCursor()
 })
 
-
-var span_cursor_number = -1;
+let spanCursorNb = -1
 // Let's find the first position of the cursor
 findNextCursor()
 
-function setNextCursor() {
+function setNextCursor () {
   unsetPresentCursor()
   findNextCursor()
   setCursor()
 }
 
-function findNextCursor() {
-  ++ span_cursor_number;
-  let sp = userContainer.children.item(span_cursor_number)
+function findNextCursor () {
+  ++spanCursorNb
+  let sp = userContainer.children.item(spanCursorNb)
   while (sp.tagName === 'BR') {
-    ++ span_cursor_number;
-    sp = userContainer.children.item(span_cursor_number)
+    ++spanCursorNb
+    sp = userContainer.children.item(spanCursorNb)
   }
 }
-function setCursor() {
-  let sp = userContainer.children.item(span_cursor_number)
-  sp.classList.add("cursor-blink")
+function setCursor () {
+  const sp = userContainer.children.item(spanCursorNb)
+  sp.classList.add('cursor-blink')
 }
 
-function unsetPresentCursor() {
-  let sp = userContainer.children.item(span_cursor_number)
+function unsetPresentCursor () {
+  const sp = userContainer.children.item(spanCursorNb)
   if (sp == null) {
-    return;
+    return
   }
-  sp.classList.remove("cursor-blink")
+  sp.classList.remove('cursor-blink')
 }
 
-function setCurrSpanCursorRed() {
-  let sp = userContainer.children.item(span_cursor_number)
+function setCurrSpanCursorRed () {
+  const sp = userContainer.children.item(spanCursorNb)
   sp.setAttribute('style', 'color:red;')
 }
 
-function setCurrSpanCursorTyped() {
-  let sp = userContainer.children.item(span_cursor_number)
+function setCurrSpanCursorTyped () {
+  const sp = userContainer.children.item(spanCursorNb)
   sp.setAttribute('style', 'color:gray;')
 }

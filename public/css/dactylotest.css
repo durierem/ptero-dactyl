@@ -1,7 +1,6 @@
 #dactylotest-container {
-    width: 50%;
-    height: 100%;
-    display: table;
+    display: flex;
+    flex-direction: row;
 }
 
 #user-input {
@@ -12,33 +11,12 @@
 }
 
 #user-input br {
-  margin: 5px 0px 5px 0px;
-  font-family: inherit;
-  font-size: 1.5em;
+    margin: 5px 0px 5px 0px;
+    font-family: inherit;
+    font-size: 1.5em;
 }
 
 #user-input span {
   font-size: 30px;
   font-family: "Iosevka Etoile Extrabold";
-}
-
-.text-area {
-  background-color: var(--light-bg-secondary);
-  color: var(--light-fg);
-  border: 2px solid var(--light-bg-secondary);
-  border-radius: 5px 5px 5px 5px;
-  width: min-content;
-  margin: auto;
-  padding: 20px 20px 20px 20px;
-}
-
-.cursor-blink {
-  animation-name: cursor-blink;
-  animation: cursor-blink 0.8s step-start infinite;
-}
-@keyframes cursor-blink {
-  50% { 
-    color:#fff;
-    background-color:#000 
-  }
 }

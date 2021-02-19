@@ -46,7 +46,7 @@ const switcher = new ThemeSwitcher({
   'dark': new Theme('#23232F', '#2B2B3B', '#F5F5F5')
   // Si vous voulez vous amuser à ajouter d'autres thèmes farfelus...
 })
-switcher.apply(switcher.themes['dark'])
+switcher.apply(switcher.themes['light'])
 
 // Ajoute l'EventListener qui va bien :]
 const button = document.getElementById('theme-switcher')

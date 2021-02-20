@@ -4,19 +4,16 @@
 }
 
 #user-input {
-    min-height: 200px;
+    max-width: 900px;
     resize: none;
     text-align: left;
     user-select: none;
 }
 
 #user-input br {
-    margin: 5px 0px 5px 0px;
     font-family: inherit;
-    font-size: 1.5em;
 }
 
 #user-input span {
-  font-size: 30px;
-  font-family: "Iosevka Etoile Extrabold";
+    font-family: "Iosevka Slab Regular";
 }

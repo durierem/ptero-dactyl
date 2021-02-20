@@ -3,10 +3,24 @@
   src: url(/fonts/iosevka-etoile-extrabold.ttf);
 }
 
+@font-face {
+    font-family: Iosevka Slab Regular;
+    src: url(/fonts/iosevka-slab-regular.ttf);
+}
+
+@font-face {
+    font-family: Lato Regular;
+    src: local("Lato Regular"),
+         url(/fonts/Lato-Regular.ttf);
+}
+
+:root {
+    --font-standard: "Lato Regular", sans-serif;
+    --font-mono: "Iosevka Slab Regular", monospace;
+}
+
 * {
     margin: 0;
-    font-family: var(--font-standard);
-    font-size: large;
 }
 
 html,
@@ -16,16 +30,15 @@ body {
 
 body {
     background-color: var(--light-bg-primary);
+    color: var(--light-fg);
+    font-family: var(--font-standard);
+    font-size: large;
     display: flex;
     flex-flow: row wrap;
 }
 
 body > * {
     flex: 1 100%;
-}
-
-p {
-    color: var(--light-fg);
 }
 
 #main-content-container {
@@ -56,4 +69,26 @@ header {
     -webkit-text-stroke-width: 2px;
     -webkit-text-stroke-color: var(--dark-fg);
     text-decoration: none;
+}
+
+#theme-switcher {
+    position: absolute;
+    right: 0;
+    margin: 20px;
+
+    width: 20px;
+    height: 20px;
+    background-color: var(--yellow);
+    border: 1px solid var(--yellow);
+    box-shadow: 0 0 20px var(--yellow);
+    border-radius: 50%;
+    transition-duration: 0.5s;
+}
+
+#theme-switcher:hover {
+    background-color: var(--blue);
+    border: 1px solid var(--blue);
+    box-shadow: 0 0 10px var(--blue);
+    border-radius: 50%;
+    cursor: pointer;
 }

@@ -4,9 +4,9 @@
         <meta charset="UTF-8">
         <title>Ptero Dactyl - {% block title %}{% endblock %}</title>
         <link rel="icon" href="{{ asset("images/small_gra.ico") }}" />
+        <link rel="stylesheet" type="text/css" href="{{ asset("css/colorschemes.css") }}" />
         <link rel="stylesheet" type="text/css" href="{{ asset("css/components.css") }}" />
         <link rel="stylesheet" type="text/css" href="{{ asset("css/common.css") }}" />
-
         {% block stylesheets %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </head>
@@ -14,12 +14,14 @@
         <header>
             <img id="logo" src="{{ asset("images/big_gra.png") }}">
             <a href="/" id="app-title">Ptero Dactyl<span class="blink">_</span></a>
-            <button id="theme-switcher" class="button">Switch theme!</button>
-            <script type="text/javascript" src="{{ asset("js/theme.js") }}"></script>
+            <button id="theme-switcher" title="Changer de thème"></button>
         </header>
 
         <div id="main-content-container">
             {% block content %}{% endblock %}
         </div>
     </body>
+
+    <script type="text/javascript" src="{{ asset("js/theme.js") }}"></script>
+
 </html>

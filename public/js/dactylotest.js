@@ -1,6 +1,6 @@
 'use strict'
 
-const text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nNunc malesuada magna nec magna commodo, non sollicitudin nunc ullamcorper.\nNulla luctus erat quis turpis bibendum sollicitudin.\nQuisque vulputate tincidunt erat in gravida.\nNulla varius, enim a laoreet iaculis, enim purus pellentesque quam,\nlobortis commodo metus nisl et nisi.\nMorbi diam elit.'
+const text = 'La philosophie est une démarche de réflexion critique et de questionnement sur le monde, la connaissance et l\'existence humaine. Elle existe depuis l\'Antiquité en Occident et en Orient, à travers la figure du philosophe, non seulement en tant qu\'activité rationnelle mais aussi comme mode de vie. L\'histoire de la philosophie permet d\'appréhender son évolution.'
 
 const hiddenInput = document.getElementById('hidden-input')
 const userContainer = document.getElementById('user-input')
@@ -12,7 +12,7 @@ for (let i = 0; i < text.length; ++i) {
   const sp = document.createElement('span')
   switch (c) {
     case ' ':
-      sp.innerHTML = '␣'
+      sp.innerHTML = ' '
       break
     case '\n':
       sp.innerHTML = '↲'

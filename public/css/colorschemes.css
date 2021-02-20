@@ -1,0 +1,37 @@
+.light {
+    --red: #A30000;
+    --green: #5D924F;
+    --yellow: #FE7F2D;
+    --blue: #3F728D;
+
+    --light-bg-primary: #C7CCD1;
+    --light-bg-secondary: #FFFFFF;
+    --light-fg: #2D333B;
+
+    --dark-bg-primary: #16161D;
+    --dark-bg-secondary: #23232F;
+    --dark-fg: #F5F5F5;
+
+    --accent: var(--yellow);
+    --error: var(--red);
+    --success: var(--green);
+}
+
+.dark {
+    --red: #A30000;
+    --green: #5D924F;
+    --yellow: #FE7F2D;
+    --blue: #3F728D;
+
+    --light-bg-primary: #23232F;
+    --light-bg-secondary: #2B2B3B;
+    --light-fg: #F5F5F5;
+
+    --dark-bg-primary: #16161D;
+    --dark-bg-secondary: #23232F;
+    --dark-fg: #F5F5F5;
+
+    --accent: var(--yellow);
+    --error: var(--red);
+    --success: var(--green);
+}

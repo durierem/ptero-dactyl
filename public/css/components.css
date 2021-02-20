@@ -1,33 +1,4 @@
-/* Collection de classes créant des composants réutilisables */
-
-/* Schéma de couleurs et polices */
-:root {
-    --red: #A30000;
-    --green: #5D924F;
-    --yellow: #FE7F2D;
-    --blue: #3F728D;
-
-    /* Light theme */
-    --light-bg-primary: #C7CCD1;
-    --light-bg-secondary: #FFFFFF;
-    --light-fg: #2D333B; 
-
-    /* Dark theme */
-    /*--light-bg-primary: #23232F;
-    --light-bg-secondary: #2B2B3B;
-    --light-fg: #F5F5F5;*/
-
-    --dark-bg-primary: #16161D;
-    --dark-bg-secondary: #23232F;
-    --dark-fg: #F5F5F5;
-
-    --accent: var(--yellow);
-    --error: var(--red);
-    --success: var(--green);
-
-    --font-standard: "Lato", sans-serif; /*TODO */
-    --font-mono: "Iosevka", monospace; /* TODO */
-}
+/* Collection de classes créant des composants/comportement réutilisables. */
 
 /* Définit un bouton cliquable */
 .button {
@@ -76,6 +47,7 @@
     to { opacity: 0%; }
 }
 
+/* Ajoute un effet de clignotement type curseur */
 .cursor-blink {
     animation-name: cursor-blink;
     animation: cursor-blink 0.8s step-start infinite;
@@ -87,9 +59,11 @@
     }
 }
 
-/* Cache un élément. */
+/* Cache un élément. L'élément est toujours rendu dans la page. */
 .hidden {
     position: absolute;
+    top: -9999px;
+    left: -9999px;
     width: 0;
     height: 0;
 }

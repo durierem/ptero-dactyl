@@ -75,20 +75,38 @@ header {
     position: absolute;
     right: 0;
     margin: 20px;
-
     width: 20px;
     height: 20px;
-    background-color: var(--yellow);
-    border: 1px solid var(--yellow);
-    box-shadow: 0 0 20px var(--yellow);
     border-radius: 50%;
-    transition-duration: 0.5s;
+    transition-duration: 0.1s;
 }
 
 #theme-switcher:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+.red-switcher {
+    background-color: var(--yellow);
+    border: 1px solid var(--yellow);
+    box-shadow: 0 0 20px var(--yellow);
+}
+
+.red-switcher:hover {
     background-color: var(--blue);
     border: 1px solid var(--blue);
     box-shadow: 0 0 10px var(--blue);
-    border-radius: 50%;
-    cursor: pointer;
+}
+
+.blue-switcher {
+    background-color: var(--blue);
+    border: 1px solid var(--blue);
+    box-shadow: 0 0 10px var(--blue);
+}
+
+.blue-switcher:hover {
+    background-color: var(--yellow);
+    border: 1px solid var(--yellow);
+    box-shadow: 0 0 20px var(--yellow);
+    
 }

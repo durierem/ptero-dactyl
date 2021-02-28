@@ -12,7 +12,7 @@ class ThemeManager {
 }
 
 const manager = new ThemeManager()
-manager.setCurrent('light')
+manager.setCurrent('dark')
 
 const button = document.getElementById('theme-switcher')
 button.addEventListener('click', () => {

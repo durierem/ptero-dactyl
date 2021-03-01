@@ -80,9 +80,9 @@ class VirtualUserInput extends EventTarget {
     this.realInput.addEventListener('keydown', (e) => {
       const c = e.key
 
-      // Faut tester avec une regexp plutôt que de tester tous les caractères
-      // potentiels qui vont pas (arrows, escape, alt, caps, ...)
-      if (['Shift'].includes(c)) {
+      // Esquive les caractères spéciaux du type "Control", "Escape", etc.
+      // Laisse passer "Backspace" uniquement pour autoriser l'effacement.
+      if (!/Backspace|^.$/.test(c)) {
         return
       }
 
@@ -124,21 +124,16 @@ class Benchmark extends AbstractDactyloTest {
     for (let c of this.text) {
       this.spanManager.append(c)
     }
-
-    const manager = new SpanManager(this.textContainer)
-    manager.setCursor(0)
-    this.virtualUserInput.addEventListener('keydown', () => {
-      manger.removeCursor()
-      manager.setCursor(this.virtualUserInput.spanManager.cursorIndex)
-    })
   }
 }
 
 class Exercise extends AbstractDactyloTest {
   constructor (text) {
-    // this.virtualUserInput.setLogic(function () {
-    //   // logique pour les exercices
-    // })
+    // ...
+  }
+
+  deploy () {
+    // ...
   }
 }
 

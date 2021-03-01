@@ -1,10 +1,50 @@
 'use strict'
 
-// TODO : une classe outil qui permet de gérer simplement les span.
-// Peut-être une liste de span ? Des méthodes du genre span.setRed() ou
-// span.setCursorActive() ou des trucs du genre ?
 class SpanManager {
+  constructor (parentNode) {
+    this.parentNode = parentNode
+    this.spanList = parentNode.children
+    this.cursorIndex = 0
 
+    // Première span qui sert de curseur.
+    this.parentNode.appendChild(document.createElement('span'))
+  }
+
+  append (innerHTML) {
+    const span = document.createElement('span')
+    span.innerHTML = innerHTML
+    this.parentNode.appendChild(span)
+  }
+
+  insertLast (value) {
+    this.spanList[this.spanList.length - 1].innerHTML = value
+    this.append('')
+  }
+
+  removeLast () {
+    const nodeToRemove = this.spanList[this.spanList.length - 1]
+    this.parentNode.removeChild(nodeToRemove)
+    this.spanList[this.spanList.length - 1].innerHTML = ''
+  }
+
+  setCursor (index = this.cursorIndex) {
+    this.spanList[index].classList.add('cursor-blink')
+    this.cursorIndex = index
+  }
+
+  removeCursor () {
+    this.spanList[this.cursorIndex].classList.remove('cursor-blink')
+  }
+
+  moveCursorRight () {
+    this.removeCursor()
+    this.setCursor(this.cursorIndex + 1)
+  }
+
+  moveCursorLeft () {
+    this.removeCursor()
+    this.setCursor(this.cursorIndex - 1)
+  }
 }
 
 // On gère la partie input dans cette classe qui gère l'input réél "user-input"
@@ -18,23 +58,17 @@ class VirtualUserInput extends EventTarget {
     // Initialisation des attributs
     this.realInput = document.getElementById('user-input')
     this.virtualInput = document.getElementById('virtual-user-input')
-    this.index = 1
-
-    // Créé une première span vide
-    // FIXME: la première span reste vide et le curseur ne s'affiche pas
-    //        au clic dans la zone
-    this.currentSpan = document.createElement('span')
-    this.virtualInput.appendChild(this.currentSpan)
+    this.spanManager = new SpanManager(this.virtualInput)
     
     // Permet le focus de la vrai zone d'input au clic sur la zone virtuelle,
     // ainsi que l'affichage d'un "curseur" (aka un span qui clignote)
     this.addEventListener('click', () => {
       this.realInput.focus()
-      this.currentSpan.classList.add('cursor-blink')
+      this.spanManager.setCursor()
     })
     this.addEventListener('focusout', () => {
       this.realInput.focusout()
-      this.currentSpan.classList.remove('cursor-blink')
+      this.spanManager.removeCursor()
     })
 
     // Cœur de la logique.
@@ -48,21 +82,19 @@ class VirtualUserInput extends EventTarget {
 
       // Faut tester avec une regexp plutôt que de tester tous les caractères
       // potentiels qui vont pas (arrows, escape, alt, caps, ...)
-      if (['Shift', 'Backspace'].includes(c)) {
+      if (['Shift'].includes(c)) {
         return
       }
 
-      // Créé un span qui contient le caractère frappé et l'ajoute à
-      const span = document.createElement('span')
-      span.innerHTML = c
-      this.virtualInput.appendChild(span)
-      
-      // On "déplace" le "curseur". C'est un peu trop manuel, faudrait voir
-      // si ça peut se gérere avec le SpanManager ou autre
-      this.currentSpan.classList.remove('cursor-blink')
-      this.currentSpan = this.virtualInput.children.item(this.index)
-      this.currentSpan.classList.add('cursor-blink')
-      this.index++
+      if (c === 'Backspace') {
+        if (this.spanManager.cursorIndex > 0) {
+          this.spanManager.moveCursorLeft()
+          this.spanManager.removeLast()
+        }
+      } else {
+        this.spanManager.insertLast(c)
+        this.spanManager.moveCursorRight()
+      }
     })
   }
 
@@ -74,25 +106,41 @@ class VirtualUserInput extends EventTarget {
   }
 }
 
-
-// Représente le becnhmark et devrait extends quelque chose du genre
-// AbtractDactyloTest. Elle aura son alter-ego Exercise qui implentera
-// certaines choses différemment (à priori)
-class Benchmark {
+class AbstractDactyloTest {
   constructor (text) {
     this.text = text
     this.textContainer = document.getElementById('text-container')
     this.virtualUserInput = new VirtualUserInput()
+  }
+}
 
-    // this.virtualUserInput.setLogic(...) <-- idéal...
-    // ... mais voir problème de this non défini (ligne 43)
+class Benchmark extends AbstractDactyloTest {
+  constructor (text) {
+    super(text)
+    this.spanManager = new SpanManager(this.textContainer)
   }
 
   deploy () {
-    this.textContainer.innerHTML = this.text
+    for (let c of this.text) {
+      this.spanManager.append(c)
+    }
+
+    const manager = new SpanManager(this.textContainer)
+    manager.setCursor(0)
+    this.virtualUserInput.addEventListener('keydown', () => {
+      manger.removeCursor()
+      manager.setCursor(this.virtualUserInput.spanManager.cursorIndex)
+    })
+  }
+}
+
+class Exercise extends AbstractDactyloTest {
+  constructor (text) {
+    // this.virtualUserInput.setLogic(function () {
+    //   // logique pour les exercices
+    // })
   }
 }
 
 const text = 'La philosophie est une démarche de réflexion critique et de questionnement sur le monde, la connaissance et l\'existence humaine. Elle existe depuis l\'Antiquité en Occident et en Orient, à travers la figure du philosophe, non seulement en tant qu\'activité rationnelle mais aussi comme mode de vie. L\'histoire de la philosophie permet d\'appréhender son évolution.'
-const bench = new Benchmark(text)
-bench.deploy()
+new Benchmark(text).deploy()

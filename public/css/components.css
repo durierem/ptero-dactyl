@@ -37,7 +37,7 @@
     font-family: inherit;
     font-size: inherit;
     animation-name: anim-blink;
-    animation-duration: 0.5s;
+    animation-duration: 1s;
     animation-direction: alternate;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
@@ -50,12 +50,25 @@
 /* Ajoute un effet de clignotement type curseur */
 .cursor-blink {
     animation-name: cursor-blink;
-    animation: cursor-blink 0.8s step-start infinite;
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    width: 10px;
+    display: inline-block;
+    height: 1em;
+    transform: translateY(2px);
+    background-color: var(--light-fg);
+    color: var(--light-bg-secondary);
+    transition: 0;
 }
 @keyframes cursor-blink {
-    50% {
-        color: #fff;
-        background-color: #000;
+    10% {
+        background-color: var(--light-bg-secondary);
+        color: var(--light-fg);
+    } 
+    90% {
+       background-color: var(--light-fg);
+       color: var(--light-bg-secondary);
     }
 }
 

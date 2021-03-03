@@ -1,6 +1,5 @@
 'use strict'
 
-
 // Définition de la méthode top() sur les tableaux
 Array.prototype.top = function () {
   return this[this.length - 1]
@@ -116,127 +115,53 @@ class SpanManager {
   }
 }
 
-// -------------------------------------------------------------------------- //
-
-
-// On gère la partie input dans cette classe qui gère l'input réél "user-input"
-// (qui sera caché à terme) et l'input virtuel "virtual-user-input" qui nous
-// permet de gérer plus finement l'affichage caractère par caractère (ce qui
-// sembble impossible avec un <textarea> de base)
-class VirtualUserInput extends EventTarget {
-  constructor () {
+class DactyloTestModel {
+  constructor (referenceText) {
     super()
+    this.referenceText = referenceText
+    this.lastInput = null
+  }
 
-    // Initialisation des attributs
-    this.realInput = document.getElementById('user-input')
-    this.virtualInput = document.getElementById('virtual-user-input')
-    this.spanManager = new SpanManager(this.virtualInput)
+  isLastInputCorrect () {
 
-    this.spanManager.insertLast('')
-    this.currSpanIndex = 0
-    
-    // Permet le focus de la vrai zone d'input au clic sur la zone virtuelle,
-    // ainsi que l'affichage d'un "curseur" (aka un span qui clignote)
-    this.addEventListener('click', () => {
-      this.realInput.focus()
-      this.spanManager.placeCursor(this.currSpanIndex)
-    })
-    this.addEventListener('focusout', () => {
-      this.realInput.focusout()
-      this.spanManager.removeCursor()
-    })
+  }
+}
 
-    // Cœur de la logique.
-    // Puisque l'autre dactylotest devra apporter des modifications ici,
-    // on peut imaginer une méthode setLogic(fun) qui attends en argument le
-    // code cible de l'EventListener. Mais le problème de "this" se pose alors:
-    // this.virtualInput n'est pas défini en dehors de cette classe. J'avoue
-    // je sais pas ce qu'il faudrait faire...
-    this.realInput.addEventListener('keydown', (e) => {
-      const c = e.key
+class Benchmark {
+  constructor (referenceText) {
+    this.model = new DactyloTestModel(referenceText)
+    this.hiddenTextArea = //...
+    this.spanManager = new SpanManager()
+    this.initialize()
+  }
 
-      // Esquive les caractères spéciaux du type "Control", "Escape", etc.
-      // Laisse passer "Backspace" uniquement pour autoriser l'effacement.
-      if (!/Backspace|^.$/.test(c)) {
-        return
-      }
+  initialize () {
+    this.hiddenTextArea.addEventListener('keydown', (e) => {
+      const char = e.key
 
-      // Une span curseur est définie comme une span sans caractère possèdant la classe curseur
-      if (c === 'Backspace') {
-        // Si la touche 'effacer' est pressée et qu'il y au moin 1 caractère avant le curseur...
-        if (this.spanManager.cursorIndex > 0) {
-          --this.currSpanIndex
-          // ...on retire la span curseur actuel du conteneur...
-          this.spanManager.removeLast()
-          // ...puis on remplace la span d'avant par un span curseur.
-          this.spanManager.setCharAt('', this.currSpanIndex)
-          this.spanManager.moveCursorLeft()
-        }
+      // if (!/Backspace|^.$/.test(c)) {
+      //   return
+      // }
+
+      if (char === 'Backspace') {
+        this.model.deleteLastinput()
       } else {
-        // Sinon on attribut le caractère tapé au span curseur. 
-        this.spanManager.setCharAt(c, this.currSpanIndex)
-        // Et on ajoute une nouvelle span curseur
-        this.spanManager.insertLast('')
-        this.spanManager.moveCursorRight()
-
-        // Si un mauvais caractère à été tapé on colorie la span en rouge
-        if (c != text.charAt(this.currSpanIndex)) {
-          this.spanManager.spans[this.currSpanIndex].setColor('red')
+        this.model.setlastInput(char)
+        if (this.model.isLastInputCorrect()) {
+          this.spanManager(char, 'black')
         } else {
-          this.spanManager.spans[this.currSpanIndex].setColor('white')
+          this.spanManager(char, 'red')
         }
-
-        ++this.currSpanIndex
       }
+
+      this.updateCursor() // 
     })
   }
 
-  // On ne peut pas ajouter un EventListener sur un VirtualUserInput. On veut
-  // l'ajouter sur l'attribut "virtualInput". On redéfinit donc la méthode
-  // addEventListener pour contourner (tout en héritant d'EventTarget).
-  addEventListener (event, callback) {
-    this.virtualInput.addEventListener(event, callback)
+  updateCursor () {
+    this.spanManager.setCursor(this.model.getIndex())
   }
 }
-
-// -------------------------------------------------------------------------- //
-
-class AbstractDactyloTest {
-  constructor (text) {
-    this.text = text
-    this.textContainer = document.getElementById('text-container')
-    this.virtualUserInput = new VirtualUserInput()
-  }
-}
-
-// -------------------------------------------------------------------------- //
-
-class Benchmark extends AbstractDactyloTest {
-  constructor (text) {
-    super(text)
-    this.spanManager = new SpanManager(this.textContainer)
-  }
-
-  deploy () {
-    for (let c of this.text) {
-      this.spanManager.insertLast(c)
-    }
-  }
-}
-
-// -------------------------------------------------------------------------- //
-
-class Exercise extends AbstractDactyloTest {
-  constructor (text) {
-    // ...
-  }
-
-  deploy () {
-    // ...
-  }
-}
-
-// -------------------------------------------------------------------------- //
 
 const text = 'La philosophie est une démarche de réflexion critique et de questionnement sur le monde, la connaissance et l\'existence humaine. Elle existe depuis l\'Antiquité en Occident et en Orient, à travers la figure du philosophe, non seulement en tant qu\'activité rationnelle mais aussi comme mode de vie. L\'histoire de la philosophie permet d\'appréhender son évolution.'
-new Benchmark(text).deploy()
+const benchmark = new Benchmark(text)

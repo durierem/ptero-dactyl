@@ -7,7 +7,7 @@ Array.prototype.top = function () {
 
 // -------------------------------------------------------------------------- //
 
-// Une SpanObject est l'encapsulation Objet d'un objet HTML span. 
+// Une SpanObject est l'encapsulation Objet d'un objet HTML span.
 // Une SpanObject est ratachée à un conteneur de span donné par container.
 // Une SpanObject contiendra 1 caractère donné par char. Ce caratctère est modifiable.
 class SpanObject {
@@ -121,16 +121,169 @@ class SpanManager {
 
 // -------------------------------------------------------------------------- //
 
+class dataManager {
+  constructor () {
+    this.timer = null
+    this.time = null // temps en ms
+    this.lastTime = 0 // temps en ms
+    this.errChar = 0
+    this.errCharPrev = 0
+    this.numberOfFalseWord = 0
+    this.mistakes = []
+    this.wordTimes = []
+    this.keyComb = this.initializeKeyComb()
+  }
+
+  // Initialise un tableau avec toutes les combinaisons de couples de lettre
+  // de l'alphabet.
+  initializeKeyComb() {
+    arr = []
+    for(i = 97; i <= 122; i++) {
+      for(j = 97; j <= 122; j++) {
+        arr[String.fromCharCode(i) + String.fromCharCode(j)] = []
+      }
+    }
+    return arr
+  }
+
+  getData() {
+    return {
+      "time": this.time,
+      "character_errors": this.errChar,
+      "nb_false_word": this.numberOfFalseWord,
+      "word_errors": this.mistakes,
+      "word_times": this.computeWordTimes(),
+      "key_cobinations": this.keyComb
+    }
+  }
+
+  computeWordTimes () {
+    res = []
+    s = 0
+    this.wordTimes.forEach(function(val){
+      res.push(val - s)
+      s += val
+    })
+  }
+
+  incFalseChar () {
+    this.errChar++
+  }
+
+  incFalseWords () {
+    this.numberOfFalseWord++
+  }
+
+  addMistake(word) {
+    if (mistakes[word] == undefined) {
+      this.mistakes[word] = [this.errChar - this.errCharPrev]
+    } else {
+      this.mistakes[word].push(this.errChar - this.errCharPrev)
+    }
+    this.errCharPrev = this.errChar
+  }
+
+  addWordTime () {
+    wordTimes.push(time)
+  }
+
+  // prend en parametre 2 LETTRES
+  addKeyComb(a, b) {
+    this.keyComb[a + b].push(this.time - this.lastTime)
+    this.lastTime = this.time
+  }
+
+  startTimer() {
+    timer = setInterval(function(){ this.time+= 10 }, 10);
+  }
+
+  stopTimer () {
+    clearInterval(timer)
+  }
+}
+
+// -------------------------------------------------------------------------- //
+
 class DactyloTestModel {
   constructor (referenceText) {
     //super()
     this.referenceText = referenceText
-    this.lastInput = null
+    this.userText = ""
+    this.currChar = null
+    this.currWord = null
+    this.cursorIndex = -1
+  }
+
+  getReferenceTextLength() {
+    return this.referenceText.length
+  }
+
+  getUserTextLength() {
+    return this.userText.length
+  }
+
+  getReferenceText () {
+    return this.referenceText
+  }
+
+  getUserText () {
+    return this.userText
+  }
+
+  getCurrWord () {
+    return this.currWord
   }
 
   isLastInputCorrect () {
-
+    return this.userText.charAt(this.cursorIndex - 1)
+                === this.referenceText.charAt(this.cursorIndex -1)
   }
+
+  findLastSpace () {
+    for (i = this.cursorIndex - 1; i > 0; i--) {
+      if (this.referenceText.charAt(i) === ' ') {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  delAt () {
+    if(this.cursorIndex == 0) { return }
+    if (currChar === 'Space') {
+      lastSpace = this.findLastSpace()
+      this.currWord = this.referenceText.slice(lastSpace == -1 ? 0 : lastSpace,
+                                            cursorIndex - 1)
+    }
+    this.currChar = this.userText[cursorIndex - 1]
+    fHalf = this.userText.slice(0,this.cursorIndex)
+    sHalf = this.userText.slice(this.cursorIndex + 1)
+    this.userText = fHalf + sHalf
+    this.cursorIndex--
+  }
+
+  findNextSpace () {
+    for (i = this.cursorIndex + 1; i < this.referenceText.length; i++) {
+      if (this.referenceText.charAt(i) === ' ') {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  setLastInput (input) {
+    if (currChar === 'Space') {
+      nextSpace = this.findNextSpace()
+      this.currWord = this.referenceText.slice(this.cursorIndex + 1,
+                      nextSpace == -1 ? this.referenceText.length - 1 : nextSpace)
+    }
+    this.currChar = input
+    fHalf = this.userText.slice(0,this.cursorIndex)
+    sHalf = this.userText.slice(this.cursorIndex)
+    this.userText = fHalf + input + sHalf
+    this.cursorIndex++
+  }
+
 }
 
 // -------------------------------------------------------------------------- //
@@ -180,7 +333,7 @@ class Benchmark {
           this.inputZone.moveCursorLeft()
         }
       } else {
-        // Sinon on attribut le caractère tapé au span curseur. 
+        // Sinon on attribut le caractère tapé au span curseur.
         this.inputZone.setCharAt(c, this.currSpanIndex)
         // Et on ajoute une nouvelle span curseur
         this.inputZone.insertLast('')
@@ -195,20 +348,20 @@ class Benchmark {
         this.currSpanIndex += 1
       }
 
-      
-      // CA C'EST CE QUE REMI ET THOMAS ONT ECRIT, A FARE EN SORTE QUE CA MARCHE 
+
+      // CA C'EST CE QUE REMI ET THOMAS ONT ECRIT, A FARE EN SORTE QUE CA MARCHE
 
       // if (char === 'Backspace') {
       //   this.model.deleteLastinput()
       // } else {
-      //   this.model.setlastInput(char)
+      //   this.model.setcurrChar(char)
       //   if (this.model.isLastInputCorrect()) {
       //     this.spanManager(c, 'black')
       //   } else {
       //     this.spanManager(c, 'red')
       //   }
       // }
-      // this.updateCursor() // 
+      // this.updateCursor() //
     })
   }
 

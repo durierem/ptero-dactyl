@@ -129,6 +129,7 @@ class dataManager {
     this.errChar = 0
     this.errCharPrev = 0
     this.numberOfFalseWord = 0
+    this.sameMis = false
     this.mistakes = []
     this.wordTimes = []
     this.keyComb = this.initializeKeyComb()
@@ -159,10 +160,10 @@ class dataManager {
 
   computeWordTimes () {
     let res = []
-    s = 0
+    let prev = 0
     this.wordTimes.forEach(function(val){
-      res.push(val - s)
-      s += val
+      res.push(val - prev)
+      prev = val
     })
     return res
   }
@@ -176,13 +177,21 @@ class dataManager {
   }
 
   addMistake(word) {
-    if (this.mistakes[word] == undefined) {
+    this.incFalseChar()
+    if (this.sameMis) {
+      ++this.mistakes[word][this.mistakes[word].length - 1]
+    } else if (this.mistakes[word] == undefined) {
       this.mistakes[word] = [this.errChar - this.errCharPrev]
+      this.incFalseWords()
     } else {
       this.mistakes[word].push(this.errChar - this.errCharPrev)
     }
-    this.incFalseWords()
+    this.sameMis = true
     this.errCharPrev = this.errChar
+  }
+
+  resetMis() {
+    this.sameMis = false
   }
 
   addWordTime () {
@@ -270,7 +279,7 @@ class DactyloTestModel {
 
   delAt () {
     if(this.cursorIndex == 0) { return }
-    if (currChar === 'Space') {
+    if (currChar === ' ') {
       lastSpace = this.findLastSpace()
       this.currWord = this.referenceText.slice(lastSpace == -1 ? 0 : lastSpace,
                                             cursorIndex - 1)
@@ -283,7 +292,7 @@ class DactyloTestModel {
   }
 
   findNextSpace () {
-    for (i = this.cursorIndex + 1; i < this.referenceText.length; i++) {
+    for (let i = this.cursorIndex + 1; i < this.referenceText.length; i++) {
       if (this.referenceText.charAt(i) === ' ') {
         return i;
       }
@@ -292,9 +301,9 @@ class DactyloTestModel {
   }
 
   setLastInput (input) {
-    if (this.currChar === 'Space') {
+    if (this.currChar === ' ') {
       let nextSpace = this.findNextSpace()
-      this.currWord = this.referenceText.slice(this.cursorIndex + 1,
+      this.currWord = this.referenceText.slice(this.cursorIndex,
                       nextSpace == -1 ? this.referenceText.length - 1 : nextSpace)
     }
     this.currChar = input
@@ -439,13 +448,14 @@ class Exercise {
           }
           this.data.incFalseChar()
         } else {
-          if (c === 'Space') {
+          if (c === ' ') {
+            this.data.resetMis()
             this.data.addWordTime()
           }
           // on ajoute le caractere avec la bonne couleur
           this.inputZone.setCharAt(c, this.model.getCursorIndex())
           this.inputZone.spans[this.model.getCursorIndex()].setColor(this.mis ?
-                                                          '--red'
+                                                          '#A30000'
                                                           : '--light-fg')
           this.mis = false
           // on avance le curseur
@@ -455,7 +465,7 @@ class Exercise {
           this.model.setLastInput(c)
           if(this.model.isFinished()) {
             this.data.stopTimer()
-            alert("FINISHED !")
+            console.log('FINISHED!', this.data.getData())
           }
         }
       }
@@ -465,5 +475,5 @@ class Exercise {
 
 // -------------------------------------------------------------------------- //
 
-const text = 'Put all speaking her delicate recurred possible.'
+const text = 'Put all speaking her speaking delicate recurred possible.'
 const benchmark = new Exercise(text)

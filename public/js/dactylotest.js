@@ -124,7 +124,7 @@ class SpanManager {
 class dataManager {
   constructor () {
     this.timer = null
-    this.time = null // temps en ms
+    this.time = 0 // temps en ms
     this.lastTime = 0 // temps en ms
     this.errChar = 0
     this.errCharPrev = 0
@@ -137,9 +137,9 @@ class dataManager {
   // Initialise un tableau avec toutes les combinaisons de couples de lettre
   // de l'alphabet.
   initializeKeyComb() {
-    arr = []
-    for(i = 97; i <= 122; i++) {
-      for(j = 97; j <= 122; j++) {
+    let arr = []
+    for(let i = 97; i <= 122; i++) {
+      for(let j = 97; j <= 122; j++) {
         arr[String.fromCharCode(i) + String.fromCharCode(j)] = []
       }
     }
@@ -158,12 +158,13 @@ class dataManager {
   }
 
   computeWordTimes () {
-    res = []
+    let res = []
     s = 0
     this.wordTimes.forEach(function(val){
       res.push(val - s)
       s += val
     })
+    return res
   }
 
   incFalseChar () {
@@ -175,16 +176,17 @@ class dataManager {
   }
 
   addMistake(word) {
-    if (mistakes[word] == undefined) {
+    if (this.mistakes[word] == undefined) {
       this.mistakes[word] = [this.errChar - this.errCharPrev]
     } else {
       this.mistakes[word].push(this.errChar - this.errCharPrev)
     }
+    this.incFalseWords()
     this.errCharPrev = this.errChar
   }
 
   addWordTime () {
-    wordTimes.push(time)
+    this.wordTimes.push(this.time)
   }
 
   // prend en parametre 2 LETTRES
@@ -193,12 +195,18 @@ class dataManager {
     this.lastTime = this.time
   }
 
+  // Controle du timer
+  //  au 100e de seconde pre car c'est le plus petit interval possible pour
+  //  setInterval()
   startTimer() {
-    timer = setInterval(function(){ this.time+= 10 }, 10);
+    let myData = this
+    this.timer = setInterval(function(){
+      myData.time += 10
+    }, 10);
   }
 
   stopTimer () {
-    clearInterval(timer)
+    clearInterval(this.timer)
   }
 }
 
@@ -222,6 +230,10 @@ class DactyloTestModel {
     return this.userText.length
   }
 
+  isFinished() {
+    return this.getUserTextLength() === this.getReferenceTextLength()
+  }
+
   getReferenceText () {
     return this.referenceText
   }
@@ -232,6 +244,14 @@ class DactyloTestModel {
 
   getCurrWord () {
     return this.currWord
+  }
+
+  getCursorIndex() {
+    return this.cursorIndex
+  }
+
+  isInputCorrect(c) {
+    return c === this.referenceText[this.cursorIndex]
   }
 
   isLastInputCorrect () {
@@ -272,14 +292,14 @@ class DactyloTestModel {
   }
 
   setLastInput (input) {
-    if (currChar === 'Space') {
-      nextSpace = this.findNextSpace()
+    if (this.currChar === 'Space') {
+      let nextSpace = this.findNextSpace()
       this.currWord = this.referenceText.slice(this.cursorIndex + 1,
                       nextSpace == -1 ? this.referenceText.length - 1 : nextSpace)
     }
     this.currChar = input
-    fHalf = this.userText.slice(0,this.cursorIndex)
-    sHalf = this.userText.slice(this.cursorIndex)
+    let fHalf = this.userText.slice(0,this.cursorIndex)
+    let sHalf = this.userText.slice(this.cursorIndex)
     this.userText = fHalf + input + sHalf
     this.cursorIndex++
   }
@@ -372,5 +392,78 @@ class Benchmark {
 
 // -------------------------------------------------------------------------- //
 
-const text = 'La philosophie est une démarche de réflexion critique et de questionnement sur le monde, la connaissance et l\'existence humaine. Elle existe depuis l\'Antiquité en Occident et en Orient, à travers la figure du philosophe, non seulement en tant qu\'activité rationnelle mais aussi comme mode de vie. L\'histoire de la philosophie permet d\'appréhender son évolution.'
-const benchmark = new Benchmark(text)
+// Exercise: Insere slmt les caracteres s'ils sont corrects,
+//  rouge: erreur / normal: bon
+class Exercise {
+  constructor (referenceText) {
+    this.data = new dataManager()
+    this.model = new DactyloTestModel(referenceText)
+    this.textContainer = new SpanManager(document.getElementById('text-container'))
+    this.inputZone = new SpanManager(document.getElementById('virtual-user-input'))
+    this.initialize()
+    this.mis = false
+    this.firstInput = true
+  }
+
+  initialize () {
+    for (let c of this.model.getReferenceText()) {
+      this.textContainer.insertLast(c)
+    }
+
+    this.model.setLastInput('')
+    this.inputZone.insertLast('')
+    this.currSpanIndex = this.model.getCursorIndex()
+
+    this.inputZone.getElement().addEventListener('click', () => {
+      this.inputZone.placeCursor(this.model.getCursorIndex())
+    })
+
+
+    this.inputZone.getElement().addEventListener('keydown', (e) => {
+      if (this.firstInput) {
+        this.data.startTimer()
+        this.firstInput = false
+      }
+
+      const c = e.key
+
+      if (!/Backspace|^.$/.test(c)) {
+        return
+      }
+
+      if (c !== 'Backspace') {
+        if (!this.model.isInputCorrect(c)) {
+          if (!this.mis) {
+            this.mis = true
+            this.data.addMistake(this.model.getCurrWord())
+          }
+          this.data.incFalseChar()
+        } else {
+          if (c === 'Space') {
+            this.data.addWordTime()
+          }
+          // on ajoute le caractere avec la bonne couleur
+          this.inputZone.setCharAt(c, this.model.getCursorIndex())
+          this.inputZone.spans[this.model.getCursorIndex()].setColor(this.mis ?
+                                                          '--red'
+                                                          : '--light-fg')
+          this.mis = false
+          // on avance le curseur
+          this.inputZone.insertLast('')
+          this.inputZone.moveCursorRight()
+          // on met a jour le modele
+          this.model.setLastInput(c)
+          if(this.model.isFinished()) {
+            this.data.stopTimer()
+            alert("FINISHED !")
+          }
+        }
+      }
+    })
+  }
+}
+
+// -------------------------------------------------------------------------- //
+
+const text = 'Put all speaking her delicate recurred possible.'
+const benchmark = new Exercise(text)

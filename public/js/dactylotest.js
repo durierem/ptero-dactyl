@@ -313,10 +313,6 @@ class DactyloTestModel {
     this.cursorIndex++
   }
 
-
-  aEffacerGetCurrCharr(){
-    return this.currChar
-  }
 }
 
 // -------------------------------------------------------------------------- //
@@ -386,8 +382,6 @@ class Benchmark {
 
         this.currSpanIndex += 1
       }
-      console.log(this.model.getUserText())
-      console.log(this.model.aEffacerGetCurrCharr())
 
       if (this.model.isFinished()){
         this.data.addWordTime()

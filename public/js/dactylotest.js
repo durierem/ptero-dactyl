@@ -227,8 +227,8 @@ class DactyloTestModel {
     this.referenceText = referenceText
     this.userText = ""
     this.currChar = null
-    this.currWord = null
     this.cursorIndex = -1
+    this.currWord = this.referenceText.slice(0,this.findNextSpace())
   }
 
   getReferenceTextLength() {
@@ -269,7 +269,7 @@ class DactyloTestModel {
   }
 
   findLastSpace () {
-    for (i = this.cursorIndex - 1; i > 0; i--) {
+    for (let i = this.cursorIndex - 1; i > 0; i--) {
       if (this.referenceText.charAt(i) === ' ') {
         return i;
       }
@@ -278,15 +278,15 @@ class DactyloTestModel {
   }
 
   delAt () {
-    if(this.cursorIndex == 0) { return }
-    if (currChar === ' ') {
-      lastSpace = this.findLastSpace()
+    if(this.cursorIndex == -1) { return }
+    if (this.currChar === ' ') {
+      let lastSpace = this.findLastSpace()
       this.currWord = this.referenceText.slice(lastSpace == -1 ? 0 : lastSpace,
-                                            cursorIndex - 1)
+                                            this.cursorIndex - 1)
     }
-    this.currChar = this.userText[cursorIndex - 1]
-    fHalf = this.userText.slice(0,this.cursorIndex)
-    sHalf = this.userText.slice(this.cursorIndex + 1)
+    this.currChar = this.userText[this.cursorIndex - 2]
+    let fHalf = this.userText.slice(0,this.cursorIndex - 1)
+    let sHalf = this.userText.slice(this.cursorIndex + 1)
     this.userText = fHalf + sHalf
     this.cursorIndex--
   }
@@ -313,6 +313,10 @@ class DactyloTestModel {
     this.cursorIndex++
   }
 
+
+  aEffacerGetCurrCharr(){
+    return this.currChar
+  }
 }
 
 // -------------------------------------------------------------------------- //
@@ -322,23 +326,26 @@ class Benchmark {
     this.referenceText = referenceText
 
     this.model = new DactyloTestModel(referenceText)
+    this.data = new dataManager()
     this.textContainer = new SpanManager(document.getElementById('text-container'))
     this.inputZone = new SpanManager(document.getElementById('virtual-user-input'))
     this.initialize()
   }
 
-  initialize () {
+  initialize() {
     for (let c of this.referenceText) {
       this.textContainer.insertLast(c)
     }
 
-    // A MODIFIER POUR CONVENIR AU MVC
-    // INITIALISATION DU CURSEUR
+    this.mis = false
     this.currSpanIndex = 0
     this.inputZone.insertLast('')
+    this.model.setLastInput('')
 
     this.inputZone.getElement().addEventListener('click', () => {
-      this.inputZone.placeCursor(this.currSpanIndex)
+      this.inputZone.placeCursor(this.model.getCursorIndex())
+      this.data.startTimer() // pas sur d'ici
+      console.log(this.model.getCurrWord())
     })
 
     this.inputZone.getElement().addEventListener('keydown', (e) => {
@@ -348,54 +355,46 @@ class Benchmark {
         return
       }
 
-      // A MODIFIER AFIN DE CORRESPONDRE AU MVC //
-
-      // Une span curseur est définie comme une span sans caractère possèdant la classe curseur
-      if (c === 'Backspace') {
-        // Si la touche 'effacer' est pressée et qu'il y au moin 1 caractère avant le curseur...
+      if (c === 'Backspace'){
         if (this.inputZone.cursorIndex > 0) {
           this.currSpanIndex -= 1
-          // ...on retire la span curseur actuel du conteneur...
           this.inputZone.removeLast()
-          // ...puis on remplace la span d'avant par un span curseur.
+          this.model.delAt()
           this.inputZone.setCharAt('', this.currSpanIndex)
           this.inputZone.moveCursorLeft()
         }
       } else {
-        // Sinon on attribut le caractère tapé au span curseur.
         this.inputZone.setCharAt(c, this.currSpanIndex)
+        this.model.setLastInput(c)
+        if (this.model.isLastInputCorrect()){
+          this.inputZone.spans[this.currSpanIndex].setColor('white')
+          if (c === ' ') {
+            this.data.resetMis()
+            this.data.addWordTime()
+          }
+        } else {
+          this.inputZone.spans[this.currSpanIndex].setColor('red')
+          if (!this.mis) {
+            this.mis = true
+            this.data.addMistake(this.model.getCurrWord())
+          }
+        }
         // Et on ajoute une nouvelle span curseur
         this.inputZone.insertLast('')
         this.inputZone.moveCursorRight()
+        this.mis = false
 
-        // Si un mauvais caractère à été tapé on colorie la span en rouge
-        if (c != text.charAt(this.currSpanIndex)) {
-          this.inputZone.spans[this.currSpanIndex].setColor('red')
-        } else {
-          this.inputZone.spans[this.currSpanIndex].setColor('white')
-        }
         this.currSpanIndex += 1
       }
+      console.log(this.model.getUserText())
+      console.log(this.model.aEffacerGetCurrCharr())
 
-
-      // CA C'EST CE QUE REMI ET THOMAS ONT ECRIT, A FARE EN SORTE QUE CA MARCHE
-
-      // if (char === 'Backspace') {
-      //   this.model.deleteLastinput()
-      // } else {
-      //   this.model.setcurrChar(char)
-      //   if (this.model.isLastInputCorrect()) {
-      //     this.spanManager(c, 'black')
-      //   } else {
-      //     this.spanManager(c, 'red')
-      //   }
-      // }
-      // this.updateCursor() //
+      if (this.model.isFinished()){
+        this.data.addWordTime()
+        console.log('THE END')
+        console.log(this.data.getData())
+      }
     })
-  }
-
-  updateCursor () {
-    this.spanManager.setCursor(this.model.getIndex())
   }
 }
 
@@ -476,4 +475,4 @@ class Exercise {
 // -------------------------------------------------------------------------- //
 
 const text = 'Put all speaking her speaking delicate recurred possible.'
-const benchmark = new Exercise(text)
+const benchmark = new Benchmark(text)

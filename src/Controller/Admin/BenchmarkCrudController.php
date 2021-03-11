@@ -23,8 +23,8 @@ class BenchmarkCrudController extends AbstractCrudController
         ];
     }
 
-    public function create(): Response
+    /*public function create(): Response
     {
          return $this->render();
-    }
+    }*/
 }

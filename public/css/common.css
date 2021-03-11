@@ -52,17 +52,40 @@ header {
     background-color: var(--dark-bg-primary);
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     box-shadow: 0 0 10px black;
 }
 
+nav {
+    height: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+nav > a,
+nav > a:visited {
+    background-color: var(--dark-bg-secondary);
+    color: var(--dark-fg);
+    text-decoration: none;
+}
+
+#logo-container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: shrink;
+}
+
 #logo {
-    width: auto;
+    display: block;
     height: 90%;
     margin: 10px;
 }
 
 #app-title, #app-title:active, #app-title:hover, #app-title:visited {
+    display: block;
+    height: 100%;
     color: #282828;
     font-family: "Iosevka Etoile Extrabold", serif;
     font-size: 3em;
@@ -72,8 +95,6 @@ header {
 }
 
 #theme-switcher {
-    position: absolute;
-    right: 0;
     margin: 20px;
     width: 20px;
     height: 20px;
@@ -108,5 +129,4 @@ header {
     background-color: var(--yellow);
     border: 1px solid var(--yellow);
     box-shadow: 0 0 20px var(--yellow);
-    
 }

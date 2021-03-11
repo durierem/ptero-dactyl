@@ -12,8 +12,16 @@
     </head>
     <body>
         <header>
-            <img id="logo" src="{{ asset("images/big_gra.png") }}">
-            <a href="/" id="app-title">Ptero Dactyl<span class="blink">_</span></a>
+            <nav>
+                <a class="button" href="/login">Connexion</a>
+                <a class="button" href="#">Créer un compte</a>
+            </nav>
+
+            <div id="logo-container">
+                <img id="logo" src="{{ asset("images/big_gra.png") }}" alt="Logo">
+                <a href="/" id="app-title">Ptero Dactyl<span class="blink">_</span></a>
+            </div>
+
             <button id="theme-switcher" class="red-switcher" title="Changer de thème"></button>
         </header>
 
@@ -23,5 +31,4 @@
     </body>
 
     <script type="text/javascript" src="{{ asset("js/theme.js") }}"></script>
-
 </html>

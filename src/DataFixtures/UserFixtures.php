@@ -19,19 +19,19 @@ class UserFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $user = new User();
-        $user->setUsername("KaciBgdu76");
+        $user->setUsername("admin");
         $user->setPassword($this->passwordEncoder->encodePassword(
             $user,
-            'newSuperSecretPass'
+            'amdinpass'
         ));
         $user->setRoles(array('ROLE_ADMIN'));
         $manager->persist($user);
 
         $user = new User();
-        $user->setUsername("RémiGigaUltraSwag");
+        $user->setUsername("user");
         $user->setPassword($this->passwordEncoder->encodePassword(
             $user,
-            'MotdePassDe#MecSwag76'
+            'userpass'
         ));
         $user->setRoles(array('ROLE_VERDETERRE'));
         $manager->persist($user);

@@ -34,6 +34,7 @@ body {
     font-family: var(--font-standard);
     font-size: large;
     display: flex;
+    flex-flow: column no-wrap;
     justify-content: center;
     align-items: center;
 }
@@ -52,35 +53,32 @@ header {
 }
 
 nav {
-    height: 100%;
+    flex: 1;
     display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+    flex-flow: row no-wrap;
+    justify-content: flex-start;
 }
 
-nav > a,
-nav > a:visited {
-    background-color: var(--dark-bg-secondary);
+button a,
+button a:visited {
     color: var(--dark-fg);
     text-decoration: none;
 }
 
 #logo-container {
+    flex: 2;
     height: 100%;
     display: flex;
     justify-content: center;
-    align-items: shrink;
+    align-items: center;
 }
 
 #logo {
-    display: block;
     height: 90%;
     margin: 10px;
 }
 
 #app-title, #app-title:active, #app-title:hover, #app-title:visited {
-    display: block;
-    height: 100%;
     color: #282828;
     font-family: "Iosevka Etoile Extrabold", serif;
     font-size: 3em;
@@ -89,39 +87,50 @@ nav > a:visited {
     text-decoration: none;
 }
 
+#theme-switcher-container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
 #theme-switcher {
+    border:none;
+    background: none;
+    font-size: 1em;
     margin: 20px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
     transition-duration: 0.1s;
 }
 
 #theme-switcher:hover {
     cursor: pointer;
-    transform: scale(1.1);
+    transform: scale(1.5) rotate(-45deg);
 }
 
 .red-switcher {
-    background-color: var(--yellow);
-    border: 1px solid var(--yellow);
-    box-shadow: 0 0 20px var(--yellow);
+    color: var(--yellow);
 }
 
 .red-switcher:hover {
-    background-color: var(--blue);
-    border: 1px solid var(--blue);
-    box-shadow: 0 0 10px var(--blue);
+    color: var(--blue);
 }
 
 .blue-switcher {
-    background-color: var(--blue);
-    border: 1px solid var(--blue);
-    box-shadow: 0 0 10px var(--blue);
+    color: var(--blue);
 }
 
 .blue-switcher:hover {
-    background-color: var(--yellow);
-    border: 1px solid var(--yellow);
-    box-shadow: 0 0 20px var(--yellow);
+    color: var(--yellow);
+}
+
+#main-content-container {
+    height: 80vh;
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#main-content-container > * {
+    margin: 20px;
 }

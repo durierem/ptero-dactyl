@@ -4,6 +4,7 @@
 .button {
     background-color: var(--dark-bg-primary);
     color: var(--dark-fg);
+    font-family: var(--font-standard);
     text-align: center;
     padding: 10px;
     margin: 10px;
@@ -15,7 +16,7 @@
 .button:hover {
     background-color: var(--dark-bg-secondary);
     border-color: var(--accent);
-    transform: scale(1.10, 1.10);
+    transform: scale(1.10);
     box-shadow: 0 0 10px var(--accent);
     cursor: pointer;
 }
@@ -52,7 +53,7 @@
     animation: cursor-blink 1s step-start infinite;
     width: 10px;
     display: inline-block;
-    height: 1em;
+    height: 1.2em;
     transform: translateY(2px);
     background-color: var(--light-fg);
     color: var(--light-bg-secondary);

@@ -11,6 +11,10 @@
     {% include "header.html.twig" %}
 
     <div id="main-content-container">
-        <a href="{{ path("dactylotest") }}" class="button" id="start-button">Démarrer un test</a>
+        <button class="button" id="start-button">
+            <i class="fas fa-play"></i>
+            <a href="{{ path("dactylotest") }}">Démarrer</a>
+        </button>
     </div>
+
 {% endblock %}

@@ -1,7 +1,13 @@
  <header>
     <nav>
-        <a class="button" href="{{ path("app_login") }}">Connexion</a>
-        <a class="button" href="#">Créer un compte</a>
+        <button class="button">
+            <i class="fas fa-sign-in-alt"></i>
+            <a href="{{ path("app_login") }}">Connexion</a>
+        </button>
+        <button class="button">
+            <i class="fas fa-user"></i>
+            <a href="#">Créer un compte</a>
+        </button>
     </nav>
 
     <div id="logo-container">
@@ -9,5 +15,9 @@
         <a href="{{ path('home') }}" id="app-title">Ptero Dactyl<span class="blink">_</span></a>
     </div>
 
-    <button id="theme-switcher" class="red-switcher" title="Changer de thème"></button>
+    <div id="theme-switcher-container">
+        <button id="theme-switcher" class="red-switcher" title="Changer de thème">
+            <i class="fas fa-sun"></i>
+        </button>
+    </div>
 </header>

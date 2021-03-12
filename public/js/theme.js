@@ -12,7 +12,7 @@ class ThemeManager {
 }
 
 const manager = new ThemeManager()
-manager.setCurrent('dark')
+manager.setCurrent('light')
 
 const button = document.getElementById('theme-switcher')
 button.addEventListener('click', () => {
@@ -20,9 +20,11 @@ button.addEventListener('click', () => {
     manager.setCurrent('dark')
     button.classList.remove('red-switcher')
     button.classList.add('blue-switcher')
+    button.innerHTML = '<i class="fas fa-moon"></i>'
   } else {
     manager.setCurrent('light')
     button.classList.remove('blue-switcher')
     button.classList.add('red-switcher')
+    button.innerHTML = '<i class="fas fa-sun"></i>'
   }
 })

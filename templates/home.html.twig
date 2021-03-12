@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends "base.html.twig" %}
 
 {% block title %}Accueil{% endblock %}
 
@@ -6,21 +6,11 @@
     <link rel="stylesheet" type="text/css" href="{{ asset("css/home.css") }}">
 {% endblock %}
 
-{% block content %}
-    <a href="/dactylotest"id="start-button" class=button>Démarrer un test</a>
-   {#  <div id="test-container" class="hidden">
-        <form name="chronoForm">
-            <input class=button type="button" name="startstop" value="start!" onClick="chronoStart()" />
-            <input class="area" type="text" name="chronotime" id="chronotime" value="0:00:00:00"/>
-        </form>
+{% block body %}
 
-        <p>
-            Appuyez sur une touche du clavier pour voir quelle 
-            valeur clé de KeyboardEvent correspond à chaque événement.
-        </p>
+    {% include "header.html.twig" %}
 
-        <div id="output-container" class="area"></div>
+    <div id="main-content-container">
+        <a href="{{ path("dactylotest") }}" class="button" id="start-button">Démarrer un test</a>
     </div>
-
-    <script src="{{ asset("js/home.js") }}"></script> #}
 {% endblock %}

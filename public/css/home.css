@@ -2,11 +2,3 @@
     font-size: 4em;
     text-decoration: none;
 }
-
-#test-container .button {
-    min-width: 100px;
-}
-
-#output-container {
-    height: 400px;
-}

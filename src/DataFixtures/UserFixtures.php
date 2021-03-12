@@ -22,7 +22,7 @@ class UserFixtures extends Fixture
         $user->setUsername("admin");
         $user->setPassword($this->passwordEncoder->encodePassword(
             $user,
-            'amdinpass'
+            'adminpass'
         ));
         $user->setRoles(array('ROLE_ADMIN'));
         $manager->persist($user);

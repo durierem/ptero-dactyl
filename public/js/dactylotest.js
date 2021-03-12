@@ -147,6 +147,7 @@ class dataManager {
     return arr
   }
 
+  // formate un json (par defaut) pour stocker les donnees a sauvegarder
   getData() {
     return {
       "time": this.time,
@@ -156,6 +157,18 @@ class dataManager {
       "word_times": this.computeWordTimes(),
       "key_cobinations": this.keyComb
     }
+  }
+
+  sendData() {
+    let target = "/benchmark/save" // cible de la requete
+    let content = JSON.stringify(this.getData())
+    // requete avec jquery
+    // on peut stocker l'objet jquery dans une variable si on veut utiliser
+    // ses methodes plus tard [.done(), .fail(), .always()]
+    $.post(target, {data: content})
+      .done(function(data){
+        console.log("response: " + data)
+      });
   }
 
   computeWordTimes () {
@@ -176,6 +189,7 @@ class dataManager {
     this.numberOfFalseWord++
   }
 
+  // "": empty string means punctuation
   addMistake(word) {
     this.incFalseChar()
     if (this.sameMis) {
@@ -226,9 +240,9 @@ class DactyloTestModel {
     //super()
     this.referenceText = referenceText
     this.userText = ""
-    this.currChar = null
+    this.currChar = this.referenceText.charAt(0)
     this.cursorIndex = -1
-    this.currWord = this.referenceText.slice(0,this.findNextSpace())
+    this.currWord = this.referenceText.slice(0, this.findNextSpace())
   }
 
   getReferenceTextLength() {
@@ -293,7 +307,7 @@ class DactyloTestModel {
 
   findNextSpace () {
     for (let i = this.cursorIndex + 1; i < this.referenceText.length; i++) {
-      if (this.referenceText.charAt(i) === ' ') {
+      if (!/\w|\d/.test(this.referenceText.charAt(i))) {
         return i;
       }
     }
@@ -301,10 +315,11 @@ class DactyloTestModel {
   }
 
   setLastInput (input) {
-    if (this.currChar === ' ') {
+    if (!/\w|\d/.test(input)) {
       let nextSpace = this.findNextSpace()
-      this.currWord = this.referenceText.slice(this.cursorIndex,
+      this.currWord = this.referenceText.slice(this.cursorIndex + 1,
                       nextSpace == -1 ? this.referenceText.length - 1 : nextSpace)
+      console.log(this.currWord)
     }
     this.currChar = input
     let fHalf = this.userText.slice(0,this.cursorIndex)
@@ -363,13 +378,13 @@ class Benchmark {
         this.inputZone.setCharAt(c, this.currSpanIndex)
         this.model.setLastInput(c)
         if (this.model.isLastInputCorrect()){
-          this.inputZone.spans[this.currSpanIndex].setColor('white')
+          this.inputZone.spans[this.currSpanIndex].setColor('--light-fg')
           if (c === ' ') {
             this.data.resetMis()
             this.data.addWordTime()
           }
         } else {
-          this.inputZone.spans[this.currSpanIndex].setColor('red')
+          this.inputZone.spans[this.currSpanIndex].setColor('#A30000')
           if (!this.mis) {
             this.mis = true
             this.data.addMistake(this.model.getCurrWord())
@@ -412,6 +427,7 @@ class Exercise {
       this.textContainer.insertLast(c)
     }
 
+    console.log(this.model.currChar)
     this.model.setLastInput('')
     this.inputZone.insertLast('')
     this.currSpanIndex = this.model.getCursorIndex()
@@ -420,46 +436,46 @@ class Exercise {
       this.inputZone.placeCursor(this.model.getCursorIndex())
     })
 
-
     this.inputZone.getElement().addEventListener('keydown', (e) => {
       if (this.firstInput) {
         this.data.startTimer()
         this.firstInput = false
       }
 
+      console.log(e, e.key)
+
       const c = e.key
 
-      if (!/Backspace|^.$/.test(c)) {
+      if (!/Backspace|^.$/.test(c) || c === 'Backspace') {
         return
       }
 
-      if (c !== 'Backspace') {
-        if (!this.model.isInputCorrect(c)) {
-          if (!this.mis) {
-            this.mis = true
-            this.data.addMistake(this.model.getCurrWord())
-          }
-          this.data.incFalseChar()
+      if (!this.model.isInputCorrect(c)) {
+        if (!this.mis) {
+          this.mis = true
+          this.data.addMistake(this.model.getCurrWord())
         } else {
-          if (c === ' ') {
-            this.data.resetMis()
-            this.data.addWordTime()
-          }
-          // on ajoute le caractere avec la bonne couleur
-          this.inputZone.setCharAt(c, this.model.getCursorIndex())
-          this.inputZone.spans[this.model.getCursorIndex()].setColor(this.mis ?
-                                                          '#A30000'
-                                                          : '--light-fg')
-          this.mis = false
-          // on avance le curseur
-          this.inputZone.insertLast('')
-          this.inputZone.moveCursorRight()
-          // on met a jour le modele
-          this.model.setLastInput(c)
-          if(this.model.isFinished()) {
-            this.data.stopTimer()
-            console.log('FINISHED!', this.data.getData())
-          }
+          this.data.incFalseChar()
+        }
+      } else {
+        if (!/\w|\d/.test(c)) {
+          this.data.resetMis()
+          this.data.addWordTime()
+        }
+        // on ajoute le caractere avec la bonne couleur
+        this.inputZone.setCharAt(c, this.model.getCursorIndex())
+        this.inputZone.spans[this.model.getCursorIndex()].setColor(this.mis ?
+                                                        '#A30000'
+                                                        : '--light-fg')
+        this.mis = false
+        // on avance le curseur
+        this.inputZone.insertLast('')
+        this.inputZone.moveCursorRight()
+        // on met a jour le modele
+        this.model.setLastInput(c)
+        if(this.model.isFinished()) {
+          this.data.stopTimer()
+          console.log('FINISHED!', this.data.getData())
         }
       }
     })
@@ -468,5 +484,5 @@ class Exercise {
 
 // -------------------------------------------------------------------------- //
 
-const text = 'Put all speaking her speaking delicate recurred possible.'
-const benchmark = new Benchmark(text)
+const text = 'Put all speaking, her speaking delicate recurred possible.'
+const benchmark = new Exercise(text)

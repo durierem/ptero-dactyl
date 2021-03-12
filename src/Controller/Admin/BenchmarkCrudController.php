@@ -2,7 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 use App\Entity\Benchmark;
+use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
@@ -27,4 +31,23 @@ class BenchmarkCrudController extends AbstractCrudController
     {
          return $this->render();
     }*/
+
+    public function save(Request $request): Response
+    {
+        if (!$request->isXmlHttpRequest()) {
+            return new Response("not an ajax request");
+        }
+        $data = $request->request->get('data');
+        $decoded = json_decode($data, true);
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $benchmark = new Benchmark();
+        $benchmark->setData($decoded);
+        $benchmark->setUser($this->getUser());
+
+        $entityManager->persist($benchmark);
+        $entityManager->flush();
+        return new Response("done");
+    }
 }

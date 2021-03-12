@@ -33,7 +33,6 @@ class UserFixtures extends Fixture
             $user,
             'userpass'
         ));
-        $user->setRoles(array('ROLE_VERDETERRE'));
         $manager->persist($user);
 
         $manager->flush();

@@ -6,11 +6,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use App\Entity\Benchmark;
-use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class BenchmarkCrudController extends AbstractCrudController
 {
@@ -35,7 +35,7 @@ class BenchmarkCrudController extends AbstractCrudController
     public function save(Request $request): Response
     {
         if (!$request->isXmlHttpRequest()) {
-            return new Response("not an ajax request");
+          throw new HttpException(403, "not ajax.");
         }
         $data = $request->request->get('data');
         $decoded = json_decode($data, true);

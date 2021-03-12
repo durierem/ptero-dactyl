@@ -241,7 +241,7 @@ class DactyloTestModel {
     this.referenceText = referenceText
     this.userText = ""
     this.currChar = this.referenceText.charAt(0)
-    this.cursorIndex = -1
+    this.cursorIndex = 0
     this.currWord = this.referenceText.slice(0, this.findNextSpace())
   }
 
@@ -319,7 +319,32 @@ class DactyloTestModel {
       let nextSpace = this.findNextSpace()
       this.currWord = this.referenceText.slice(this.cursorIndex + 1,
                       nextSpace == -1 ? this.referenceText.length - 1 : nextSpace)
-      console.log(this.currWord)
+    }
+    this.currChar = input
+    let fHalf = this.userText.slice(0,this.cursorIndex)
+    let sHalf = this.userText.slice(this.cursorIndex)
+    this.userText = fHalf + input + sHalf
+    this.cursorIndex++
+  }
+
+  findNextSpace2 () {
+    for (let i = this.cursorIndex + 2; i < this.referenceText.length; i++) {
+      if (!/\w|\d/.test(this.referenceText.charAt(i))) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  setLastInput2 (input) {
+    if (this.cursorIndex < this.referenceText.length) {
+      if (!/\d|\w/.test(this.referenceText.charAt(this.cursorIndex + 1))) {
+        this.currWord = this.referenceText.charAt(this.cursorIndex + 1)
+      } else if (!/\d|\w/.test(this.referenceText.charAt(this.cursorIndex - 1))) {
+        let nextSpace = this.findNextSpace2()
+        this.currWord = this.referenceText.slice(this.cursorIndex,
+                        nextSpace == -1 ? this.referenceText.length - 1 : nextSpace)
+      }
     }
     this.currChar = input
     let fHalf = this.userText.slice(0,this.cursorIndex)
@@ -351,7 +376,6 @@ class Benchmark {
     this.mis = false
     this.currSpanIndex = 0
     this.inputZone.insertLast('')
-    this.model.setLastInput('')
 
     this.inputZone.getElement().addEventListener('click', () => {
       this.inputZone.placeCursor(this.model.getCursorIndex())
@@ -378,13 +402,13 @@ class Benchmark {
         this.inputZone.setCharAt(c, this.currSpanIndex)
         this.model.setLastInput(c)
         if (this.model.isLastInputCorrect()){
-          this.inputZone.spans[this.currSpanIndex].setColor('--light-fg')
+          this.inputZone.spans[this.currSpanIndex].setColor('var(--light-fg)')
           if (c === ' ') {
             this.data.resetMis()
             this.data.addWordTime()
           }
         } else {
-          this.inputZone.spans[this.currSpanIndex].setColor('#A30000')
+          this.inputZone.spans[this.currSpanIndex].setColor('var(--error)')
           if (!this.mis) {
             this.mis = true
             this.data.addMistake(this.model.getCurrWord())
@@ -417,9 +441,9 @@ class Exercise {
     this.model = new DactyloTestModel(referenceText)
     this.textContainer = new SpanManager(document.getElementById('text-container'))
     this.inputZone = new SpanManager(document.getElementById('virtual-user-input'))
-    this.initialize()
     this.mis = false
     this.firstInput = true
+    this.initialize()
   }
 
   initialize () {
@@ -427,8 +451,6 @@ class Exercise {
       this.textContainer.insertLast(c)
     }
 
-    console.log(this.model.currChar)
-    this.model.setLastInput('')
     this.inputZone.insertLast('')
     this.currSpanIndex = this.model.getCursorIndex()
 
@@ -442,11 +464,9 @@ class Exercise {
         this.firstInput = false
       }
 
-      console.log(e, e.key)
-
       const c = e.key
 
-      if (!/Backspace|^.$/.test(c) || c === 'Backspace') {
+      if (!/^.$/.test(c)) {
         return
       }
 
@@ -454,9 +474,8 @@ class Exercise {
         if (!this.mis) {
           this.mis = true
           this.data.addMistake(this.model.getCurrWord())
-        } else {
-          this.data.incFalseChar()
         }
+        this.data.incFalseChar()
       } else {
         if (!/\w|\d/.test(c)) {
           this.data.resetMis()
@@ -465,17 +484,18 @@ class Exercise {
         // on ajoute le caractere avec la bonne couleur
         this.inputZone.setCharAt(c, this.model.getCursorIndex())
         this.inputZone.spans[this.model.getCursorIndex()].setColor(this.mis ?
-                                                        '#A30000'
-                                                        : '--light-fg')
+                                                        'var(--error)'
+                                                        : 'var(--light-fg)')
         this.mis = false
         // on avance le curseur
         this.inputZone.insertLast('')
         this.inputZone.moveCursorRight()
         // on met a jour le modele
-        this.model.setLastInput(c)
+        this.model.setLastInput2(c)
         if(this.model.isFinished()) {
           this.data.stopTimer()
           console.log('FINISHED!', this.data.getData())
+          this.data.sendData()
         }
       }
     })
@@ -484,5 +504,5 @@ class Exercise {
 
 // -------------------------------------------------------------------------- //
 
-const text = 'Put all speaking, her speaking delicate recurred possible.'
+const text = 'Put all speaking, her69 speaking delicate recurred possible.'
 const benchmark = new Exercise(text)

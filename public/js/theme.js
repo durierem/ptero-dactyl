@@ -1,30 +1,39 @@
 'use strict'
 
 class ThemeManager {
-  constructor () {
-    this.current = undefined
+  constructor (theme) {
+    this.current = theme
+    this.button = document.getElementById('theme-switcher')
+    this.icon = this.button.getElementsByTagName('i')[0]
+    this.initialize(theme)
   }
 
   setCurrent (theme) {
     document.body.classList = theme
     this.current = theme
   }
+
+  switchTheme() {
+    console.log('switch')
+    this.button.classList.toggle('blue-switcher')
+    this.button.classList.toggle('red-switcher')
+    this.icon.classList.toggle('fa-moon')
+    this.icon.classList.toggle('fa-sun')
+    this.setCurrent(this.current === 'light' ?
+      'dark' : 'light')
+  }
+
+  initialize (theme) {
+    document.body.classList = theme
+    this.button.classList.add(theme === 'dark' ?
+      'blue-switcher' : 'red-switcher')
+    this.icon.classList.add(theme === 'dark' ?
+      'fa-moon' : 'fa-sun')
+    this.button.addEventListener('click', () => {
+      this.switchTheme()
+    })
+  }
 }
 
-const manager = new ThemeManager()
-manager.setCurrent('light')
-
-const button = document.getElementById('theme-switcher')
-button.addEventListener('click', () => {
-  if (manager.current === 'light') {
-    manager.setCurrent('dark')
-    button.classList.remove('red-switcher')
-    button.classList.add('blue-switcher')
-    button.innerHTML = '<i class="fas fa-moon"></i>'
-  } else {
-    manager.setCurrent('light')
-    button.classList.remove('blue-switcher')
-    button.classList.add('red-switcher')
-    button.innerHTML = '<i class="fas fa-sun"></i>'
-  }
-})
+// theme par defaut en argument du constructeur
+const manager = new ThemeManager('dark')

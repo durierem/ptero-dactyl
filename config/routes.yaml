@@ -5,7 +5,3 @@ home:
 dactylotest:
   path: /dactylotest
   controller: App\Controller\DactylotestController::main
-
-savebenchmark:
-  path: /benchmark/save
-  controller: App\Controller\Admin\BenchmarkCrudController::save

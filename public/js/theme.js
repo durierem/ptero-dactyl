@@ -17,12 +17,17 @@ class ThemeManager {
   }
 
   switchTheme () {
-    console.log('switch')
     this.button.classList.toggle('blue-switcher')
     this.button.classList.toggle('red-switcher')
     this.icon.classList.toggle('fa-moon')
     this.icon.classList.toggle('fa-sun')
-    this.setCurrent(this.current === 'light' ? 'dark' : 'light')
+
+    // Switch de thème
+    let newTheme = ((this.current === 'light') ? 'dark' : 'light');
+    // On actualise le cookie theme sur le thème choisi 
+    setCookie('theme', newTheme)
+    // On affiche le thème choisi
+    this.setCurrent(newTheme)
   }
 
   setCurrent (theme) {
@@ -32,4 +37,12 @@ class ThemeManager {
 }
 
 // Thème par defaut en argument du constructeur
-new ThemeManager('dark').initialize()
+let cookieTheme = getCookie('theme')
+
+// Si un thème préféré est enregistré dans les cookies
+// on le selectionne, sinon on affiche le thème light par défaut
+if (cookieTheme) {
+  new ThemeManager(cookieTheme).initialize()
+} else {
+  new ThemeManager('light').initialize()
+}

@@ -173,7 +173,7 @@ class DataManager {
   }
 
   sendData () {
-    const target = '/benchmark/save' // cible de la requete
+    const target = '/dactylotest/save' // cible de la requete
     const content = JSON.stringify(this.getData())
     // requete avec jquery
     // on peut stocker l'objet jquery dans une variable si on veut utiliser
@@ -545,4 +545,4 @@ class Exercise {
 // -------------------------------------------------------------------------- //
 
 const text = 'Put all speaking, her69 speaking delicate recurred possible.'
-const benchmark = new Exercise(text)
+const benchmark = new Benchmark(text)

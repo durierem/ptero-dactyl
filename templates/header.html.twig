@@ -1,11 +1,21 @@
 <header>
+    {% if app.user %}
+    <nav>
+        <button class="button">
+            <a href="{{ path(" app_logout") }}"><i class="fas fa-sign-out-alt"></i> Deconnexion</a>
+        </button>
+        <button class="button">
+            <a href="{{ path(" userpanel") }}"><i class="fas fa-user"></i> {{ app.user.username }}</a>
+        </button>
+    </nav>
+    {% else %}
     <nav>
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
         <button class="button">
             <a href="{{ path('app_logout') }}"><i class="fas fa-sign-in-alt"></i> Déconnexion</a>
         </button>
         <button class="button">
-            <a href="#"> <i class="fas fa-user"></i> Mes statistiques</a>
+            <a href="{{ path(" app_register") }}"><i class="fas fa-user"></i> Créer un compte</a>
         </button>
         {% else %}
         <button class="button">
@@ -17,6 +27,7 @@
         {% endif %}
 
     </nav>
+    {% endif%}
 
     <div id="logo-container">
         <img id="logo" src="{{ asset('images/big_gra.png') }}" alt="Logo">

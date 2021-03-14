@@ -8,27 +8,24 @@ class ThemeManager {
     this.initialize(theme)
   }
 
-  setCurrent(theme) {
+  setCurrent (theme) {
     document.body.classList = theme
     this.current = theme
   }
 
-  switchTheme() {
+  switchTheme () {
     console.log('switch')
     this.button.classList.toggle('blue-switcher')
     this.button.classList.toggle('red-switcher')
     this.icon.classList.toggle('fa-moon')
     this.icon.classList.toggle('fa-sun')
-    this.setCurrent(this.current === 'light' ?
-      'dark' : 'light')
+    this.setCurrent(this.current === 'light' ? 'dark' : 'light')
   }
 
-  initialize(theme) {
+  initialize (theme) {
     document.body.classList = theme
-    this.button.classList.add(theme === 'dark' ?
-      'blue-switcher' : 'red-switcher')
-    this.icon.classList.add(theme === 'dark' ?
-      'fa-moon' : 'fa-sun')
+    this.button.classList.add(theme === 'dark' ? 'blue-switcher' : 'red-switcher')
+    this.icon.classList.add(theme === 'dark' ? 'fa-moon' : 'fa-sun')
     this.button.addEventListener('click', () => {
       this.switchTheme()
     })

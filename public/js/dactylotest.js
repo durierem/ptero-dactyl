@@ -11,38 +11,42 @@ Array.prototype.top = function () {
 // Une SpanObject est ratachée à un conteneur de span donné par container.
 // Une SpanObject contiendra 1 caractère donné par char. Ce caratctère est modifiable.
 class SpanObject {
-  constructor (container, char, cursor=false) {
+  constructor (container, char, index = null, cursor = false) {
     this.container = container
     this.char = char
 
     this.element = document.createElement('span')
     this.innerHTML = this.element.innerHTML
     this.element.innerText = char
-    container.appendChild(this.element)
+    const referenceNode = index === null ? null : this.container.childNodes.item(index)
+    console.log('index')
+    console.log(index)
+    console.log(referenceNode)
+    container.insertBefore(this.element, referenceNode)
 
     if (cursor) {
       this.setCursor(true)
     }
   }
 
-  getChar () {
+  getChar() {
     return this.char
   }
 
-  getColor () {
+  getColor() {
     return this.element.style.color
   }
 
-  setChar (char) {
+  setChar(char) {
     this.char = char
     this.element.innerText = char
   }
 
-  setColor (color) {
+  setColor(color) {
     this.element.style.color = color
   }
 
-  setCursor (bool) {
+  setCursor(bool) {
     if (bool) {
       this.element.classList.add('cursor-blink')
     } else {
@@ -63,55 +67,64 @@ class SpanManager {
     this.spans = []
     this.spanList = parentNode.children
     this.cursorIndex = -1
+    this.maxCurdorIndex = -1
 
     // Première span qui sert de curseur.
     this.parentNode.appendChild(document.createElement('span'))
   }
 
-  getElement () {
+  getElement() {
     return this.parentNode
   }
 
-  append (span) {
+  append(span) {
     this.spans.push(span)
   }
 
-  insertLast (value) {
+  insertLast(value) {
     this.append(new SpanObject(this.parentNode, value))
+    this.maxCurdorIndex += 1
   }
 
-  removeLast () {
+  insertCharAt(char, index) {
+    this.spans.splice(index, 0, new SpanObject(this.parentNode, char, index))
+    this.maxCurdorIndex += 1
+  }
+
+  removeLast() {
     this.spans.pop().detach()
+    this.maxCurdorIndex -= 1
   }
 
-  setCharAt (char, index) {
+  setCharAt(char, index) {
     this.spans[index].setChar(char)
   }
 
-  getCursorIndex () {
+  getCursorIndex() {
     return this.cursorIndex
   }
 
-  placeCursor (index) {
+  placeCursor(index) {
     if (index < 0 || index >= this.spans.length) { return }
     this.spans[index].setCursor(true)
     this.cursorIndex = index
   }
 
-  removeCursor () {
+  removeCursor() {
     if (this.cursorIndex < 0 || this.cursorIndex >= this.spans.length) { return }
     this.spans[this.cursorIndex].setCursor(false)
     // No cursor on the text => cursorIndex === -1
     this.cursorIndex = -1
   }
 
-  moveCursorRight () {
+  moveCursorRight() {
+    if (this.cursorIndex >= this.maxCurdorIndex) { return }
     const index = this.cursorIndex + 1
     this.removeCursor()
     this.placeCursor(index)
   }
 
-  moveCursorLeft () {
+  moveCursorLeft() {
     if (this.cursorIndex === 0) { return }
     const index = this.cursorIndex - 1
     this.removeCursor()
@@ -121,7 +134,7 @@ class SpanManager {
 
 // -------------------------------------------------------------------------- //
 
-class dataManager {
+class DataManager {
   constructor () {
     this.timer = null
     this.time = 0 // temps en ms
@@ -138,9 +151,9 @@ class dataManager {
   // Initialise un tableau avec toutes les combinaisons de couples de lettre
   // de l'alphabet.
   initializeKeyComb() {
-    let arr = []
-    for(let i = 97; i <= 122; i++) {
-      for(let j = 97; j <= 122; j++) {
+    const arr = []
+    for (let i = 97; i <= 122; i++) {
+      for (let j = 97; j <= 122; j++) {
         arr[String.fromCharCode(i) + String.fromCharCode(j)] = []
       }
     }
@@ -150,42 +163,42 @@ class dataManager {
   // formate un json (par defaut) pour stocker les donnees a sauvegarder
   getData() {
     return {
-      "time": this.time,
-      "character_errors": this.errChar,
-      "nb_false_word": this.numberOfFalseWord,
-      "word_errors": this.mistakes,
-      "word_times": this.computeWordTimes(),
-      "key_cobinations": this.keyComb
+      time: this.time,
+      character_errors: this.errChar,
+      nb_false_word: this.numberOfFalseWord,
+      word_errors: this.mistakes,
+      word_times: this.computeWordTimes(),
+      key_cobinations: this.keyComb
     }
   }
 
   sendData() {
-    let target = "/benchmark/save" // cible de la requete
-    let content = JSON.stringify(this.getData())
+    const target = '/benchmark/save' // cible de la requete
+    const content = JSON.stringify(this.getData())
     // requete avec jquery
     // on peut stocker l'objet jquery dans une variable si on veut utiliser
     // ses methodes plus tard [.done(), .fail(), .always()]
-    $.post(target, {data: content})
-      .done(function(data){
-        console.log("response: " + data)
-      });
+    $.post(target, { data: content })
+      .done(function (data) {
+        console.log('response: ' + data)
+      })
   }
 
-  computeWordTimes () {
-    let res = []
+  computeWordTimes() {
+    const res = []
     let prev = 0
-    this.wordTimes.forEach(function(val){
+    this.wordTimes.forEach(function (val) {
       res.push(val - prev)
       prev = val
     })
     return res
   }
 
-  incFalseChar () {
+  incFalseChar() {
     this.errChar++
   }
 
-  incFalseWords () {
+  incFalseWords() {
     this.numberOfFalseWord++
   }
 
@@ -194,7 +207,7 @@ class dataManager {
     this.incFalseChar()
     if (this.sameMis) {
       ++this.mistakes[word][this.mistakes[word].length - 1]
-    } else if (this.mistakes[word] == undefined) {
+    } else if (this.mistakes[word] === undefined) {
       this.mistakes[word] = [this.errChar - this.errCharPrev]
       this.incFalseWords()
     } else {
@@ -208,7 +221,7 @@ class dataManager {
     this.sameMis = false
   }
 
-  addWordTime () {
+  addWordTime() {
     this.wordTimes.push(this.time)
   }
 
@@ -222,13 +235,13 @@ class dataManager {
   //  au 100e de seconde pre car c'est le plus petit interval possible pour
   //  setInterval()
   startTimer() {
-    let myData = this
-    this.timer = setInterval(function(){
+    const myData = this
+    this.timer = setInterval(function () {
       myData.time += 10
-    }, 10);
+    }, 10)
   }
 
-  stopTimer () {
+  stopTimer() {
     clearInterval(this.timer)
   }
 }
@@ -237,11 +250,17 @@ class dataManager {
 
 class DactyloTestModel {
   constructor (referenceText) {
-    //super()
+    // super()
     this.referenceText = referenceText
-    this.userText = ""
-    this.currChar = this.referenceText.charAt(0)
-    this.cursorIndex = 0
+    this.userText = ''
+
+    // this.currChar = this.referenceText.charAt(0)
+    // this.cursorIndex = 0
+    // this.currWord = this.referenceText.slice(0, this.findNextSpace())
+
+    this.currChar = null
+    this.cursorIndex = -1
+    this.maxCurdorIndex = -1
     this.currWord = this.referenceText.slice(0, this.findNextSpace())
   }
 
@@ -257,15 +276,15 @@ class DactyloTestModel {
     return this.getUserTextLength() === this.getReferenceTextLength()
   }
 
-  getReferenceText () {
+  getReferenceText() {
     return this.referenceText
   }
 
-  getUserText () {
+  getUserText() {
     return this.userText
   }
 
-  getCurrWord () {
+  getCurrWord() {
     return this.currWord
   }
 
@@ -274,85 +293,93 @@ class DactyloTestModel {
   }
 
   isInputCorrect(c) {
+    console.log(this.referenceText[this.cursorIndex])
+    console.log(c)
     return c === this.referenceText[this.cursorIndex]
   }
 
-  isLastInputCorrect () {
-    return this.userText.charAt(this.cursorIndex - 1)
-                === this.referenceText.charAt(this.cursorIndex -1)
+  isLastInputCorrect() {
+    return this.userText.charAt(this.cursorIndex - 1) ===
+      this.referenceText.charAt(this.cursorIndex - 1)
   }
 
-  findLastSpace () {
+  findLastSpace() {
     for (let i = this.cursorIndex - 1; i > 0; i--) {
       if (this.referenceText.charAt(i) === ' ') {
-        return i;
+        return i
       }
     }
-    return -1;
+    return -1
   }
 
-  delAt () {
-    if(this.cursorIndex == -1) { return }
+  delAt() {
+    if (this.cursorIndex === -1) { return }
     if (this.currChar === ' ') {
-      let lastSpace = this.findLastSpace()
-      this.currWord = this.referenceText.slice(lastSpace == -1 ? 0 : lastSpace,
-                                            this.cursorIndex - 1)
+      const lastSpace = this.findLastSpace()
+      this.currWord = this.referenceText.slice(lastSpace === -1 ? 0 : lastSpace,
+        this.cursorIndex - 1)
     }
     this.currChar = this.userText[this.cursorIndex - 2]
-    let fHalf = this.userText.slice(0,this.cursorIndex - 1)
-    let sHalf = this.userText.slice(this.cursorIndex + 1)
+    const fHalf = this.userText.slice(0, this.cursorIndex - 1)
+    const sHalf = this.userText.slice(this.cursorIndex + 1)
     this.userText = fHalf + sHalf
+    this.cursorIndex--
+    this.maxCurdorIndex--
+  }
+
+  findNextSpace() {
+    for (let i = this.cursorIndex + 1; i < this.referenceText.length; i++) {
+      if (!/\w|\d/.test(this.referenceText.charAt(i))) {
+        return i
+      }
+    }
+    return -1
+  }
+
+  setLastInput(input) {
+    if (!/\w|\d/.test(input)) {
+      const nextSpace = this.findNextSpace()
+      this.currWord = this.referenceText.slice(this.cursorIndex + 1,
+        nextSpace === -1 ? this.referenceText.length - 1 : nextSpace)
+    }
+    this.currChar = input
+    const fHalf = this.userText.slice(0, this.cursorIndex)
+    const sHalf = this.userText.slice(this.cursorIndex)
+    this.userText = fHalf + input + sHalf
+    this.cursorIndex++
+    this.maxCurdorIndex++
+  }
+
+  moveCursorLeft() {
+    if (this.cursorIndex < 0) { return }
     this.cursorIndex--
   }
 
-  findNextSpace () {
-    for (let i = this.cursorIndex + 1; i < this.referenceText.length; i++) {
-      if (!/\w|\d/.test(this.referenceText.charAt(i))) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  setLastInput (input) {
-    if (!/\w|\d/.test(input)) {
-      let nextSpace = this.findNextSpace()
-      this.currWord = this.referenceText.slice(this.cursorIndex + 1,
-                      nextSpace == -1 ? this.referenceText.length - 1 : nextSpace)
-    }
-    this.currChar = input
-    let fHalf = this.userText.slice(0,this.cursorIndex)
-    let sHalf = this.userText.slice(this.cursorIndex)
-    this.userText = fHalf + input + sHalf
-    this.cursorIndex++
-  }
-
-  findNextSpace2 () {
+  findNextSpace2() {
     for (let i = this.cursorIndex + 2; i < this.referenceText.length; i++) {
       if (!/\w|\d/.test(this.referenceText.charAt(i))) {
-        return i;
+        return i
       }
     }
-    return -1;
+    return -1
   }
 
-  setLastInput2 (input) {
+  setLastInput2(input) {
     if (this.cursorIndex < this.referenceText.length) {
       if (!/\d|\w/.test(this.referenceText.charAt(this.cursorIndex + 1))) {
         this.currWord = this.referenceText.charAt(this.cursorIndex + 1)
       } else if (!/\d|\w/.test(this.referenceText.charAt(this.cursorIndex - 1))) {
-        let nextSpace = this.findNextSpace2()
+        const nextSpace = this.findNextSpace2()
         this.currWord = this.referenceText.slice(this.cursorIndex,
-                        nextSpace == -1 ? this.referenceText.length - 1 : nextSpace)
+          nextSpace === -1 ? this.referenceText.length - 1 : nextSpace)
       }
     }
     this.currChar = input
-    let fHalf = this.userText.slice(0,this.cursorIndex)
-    let sHalf = this.userText.slice(this.cursorIndex)
+    const fHalf = this.userText.slice(0, this.cursorIndex)
+    const sHalf = this.userText.slice(this.cursorIndex)
     this.userText = fHalf + input + sHalf
     this.cursorIndex++
   }
-
 }
 
 // -------------------------------------------------------------------------- //
@@ -362,14 +389,14 @@ class Benchmark {
     this.referenceText = referenceText
 
     this.model = new DactyloTestModel(referenceText)
-    this.data = new dataManager()
+    this.data = new DataManager()
     this.textContainer = new SpanManager(document.getElementById('text-container'))
     this.inputZone = new SpanManager(document.getElementById('virtual-user-input'))
     this.initialize()
   }
 
   initialize() {
-    for (let c of this.referenceText) {
+    for (const c of this.referenceText) {
       this.textContainer.insertLast(c)
     }
 
@@ -386,22 +413,34 @@ class Benchmark {
     this.inputZone.getElement().addEventListener('keydown', (e) => {
       const c = e.key
 
+      if (c === 'ArrowRight') {
+        this.model.moveCursorRight()
+        this.inputZone.moveCursorRight()
+        return
+      }
+
+      if (c === 'ArrowLeft') {
+        this.model.moveCursorLeft()
+        this.inputZone.moveCursorLeft()
+        return
+      }
+
       if (!/Backspace|^.$/.test(c)) {
         return
       }
 
-      if (c === 'Backspace'){
+      if (c === 'Backspace') {
         if (this.inputZone.cursorIndex > 0) {
           this.currSpanIndex -= 1
           this.inputZone.removeLast()
           this.model.delAt()
-          this.inputZone.setCharAt('', this.currSpanIndex)
+          this.inputZone.setCharAt('', this.model.getCursorIndex())
           this.inputZone.moveCursorLeft()
         }
       } else {
         this.inputZone.setCharAt(c, this.currSpanIndex)
         this.model.setLastInput(c)
-        if (this.model.isLastInputCorrect()){
+        if (this.model.isLastInputCorrect()) {
           this.inputZone.spans[this.currSpanIndex].setColor('var(--light-fg)')
           if (c === ' ') {
             this.data.resetMis()
@@ -419,10 +458,11 @@ class Benchmark {
         this.inputZone.moveCursorRight()
         this.mis = false
 
+        this.model.setLastInput(c)
         this.currSpanIndex += 1
       }
 
-      if (this.model.isFinished()){
+      if (this.model.isFinished()) {
         this.data.addWordTime()
         console.log('THE END')
         console.log(this.data.getData())
@@ -437,7 +477,7 @@ class Benchmark {
 //  rouge: erreur / normal: bon
 class Exercise {
   constructor (referenceText) {
-    this.data = new dataManager()
+    this.data = new DataManager()
     this.model = new DactyloTestModel(referenceText)
     this.textContainer = new SpanManager(document.getElementById('text-container'))
     this.inputZone = new SpanManager(document.getElementById('virtual-user-input'))
@@ -446,8 +486,8 @@ class Exercise {
     this.initialize()
   }
 
-  initialize () {
-    for (let c of this.model.getReferenceText()) {
+  initialize() {
+    for (const c of this.model.getReferenceText()) {
       this.textContainer.insertLast(c)
     }
 
@@ -483,16 +523,16 @@ class Exercise {
         }
         // on ajoute le caractere avec la bonne couleur
         this.inputZone.setCharAt(c, this.model.getCursorIndex())
-        this.inputZone.spans[this.model.getCursorIndex()].setColor(this.mis ?
-                                                        'var(--error)'
-                                                        : 'var(--light-fg)')
+        this.inputZone.spans[this.model.getCursorIndex()].setColor(this.mis
+          ? 'var(--error)'
+          : 'var(--light-fg)')
         this.mis = false
         // on avance le curseur
         this.inputZone.insertLast('')
         this.inputZone.moveCursorRight()
         // on met a jour le modele
         this.model.setLastInput2(c)
-        if(this.model.isFinished()) {
+        if (this.model.isFinished()) {
           this.data.stopTimer()
           console.log('FINISHED!', this.data.getData())
           this.data.sendData()

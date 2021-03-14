@@ -3,23 +3,23 @@
 {% block title %}Dactylotest{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{{ asset("css/dactylotest.css") }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('css/dactylotest.css') }}">
 {% endblock %}
 
 {% block body %}
-    
-    {% include "header.html.twig" %}
 
-    <div id="main-content-container">
-        <div id="dactylotest-container">
+{% include "header.html.twig" %}
 
-            <div id="text-container" class="area"></div>
-            {# <textarea id="user-input" class="area"></textarea> #}
-            <div id="virtual-user-input" tabindex="1" class="area"></div>
-            {# tabindex="1" to allow div to receive focus #}
+<div id="main-content-container">
+    <div id="dactylotest-container">
 
-        </div>
+        <div id="text-container" class="area"></div>
+        {# <textarea id="user-input" class="area"></textarea> #}
+        <div id="virtual-user-input" tabindex="1" class="area"></div>
+        {# tabindex="1" to allow div to receive focus #}
+
     </div>
+</div>
 
-    <script type="text/javascript" src="{{ asset("js/dactylotest.js") }}"></script>
+<script type="text/javascript" src="{{ asset('js/dactylotest.js') }}"></script>
 {% endblock %}

@@ -22,7 +22,7 @@ class TextFixtures extends Fixture
 
         $manager->persist((new Text())->setContent(
             "A Book Like This est le premier album du duo de musique folk Angus
-            and Julia Stone, un frère et une sœur, compositeurs-interprètes,
+            and Julia Stone, un frère et une soeur, compositeurs-interprètes,
             originaires d'Australie. Paru en 2007, l'album est produit par Ian
             Pritchett, Fran Healy et Angus & Julia Stone."
         ));

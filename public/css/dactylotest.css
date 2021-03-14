@@ -1,19 +1,17 @@
 #dactylotest-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-#user-input {
-    max-width: 900px;
+#virtual-user-input,
+#text-container {
+    width: 800px;
+    height: 150px;
     resize: none;
     text-align: left;
     user-select: none;
-}
-
-#user-input br {
-    font-family: inherit;
-}
-
-#user-input span {
+    overflow: wrap;
     font-family: "Iosevka Slab Regular";
 }

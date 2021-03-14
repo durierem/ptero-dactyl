@@ -23,6 +23,9 @@
     "doctrine/common": {
         "version": "3.1.1"
     },
+    "doctrine/data-fixtures": {
+        "version": "1.5.0"
+    },
     "doctrine/dbal": {
         "version": "2.12.1"
     },
@@ -39,6 +42,18 @@
             "config/packages/prod/doctrine.yaml",
             "src/Entity/.gitignore",
             "src/Repository/.gitignore"
+        ]
+    },
+    "doctrine/doctrine-fixtures-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "e5b542d4ef47d8a003c91beb35650c76907f7e53"
+        },
+        "files": [
+            "src/DataFixtures/AppFixtures.php"
         ]
     },
     "doctrine/doctrine-migrations-bundle": {
@@ -77,6 +92,15 @@
     },
     "doctrine/sql-formatter": {
         "version": "1.1.1"
+    },
+    "easycorp/easyadmin-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "b131e6cbfe1b898a508987851963fff485986285"
+        }
     },
     "egulias/email-validator": {
         "version": "2.1.25"
@@ -266,6 +290,18 @@
     "symfony/intl": {
         "version": "v5.2.1"
     },
+    "symfony/lock": {
+        "version": "5.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.2",
+            "ref": "13350583a83fa636bf45a5fb62da3bdc73be52a1"
+        },
+        "files": [
+            "config/packages/lock.yaml"
+        ]
+    },
     "symfony/mailer": {
         "version": "4.3",
         "recipe": {
@@ -362,6 +398,9 @@
     "symfony/polyfill-php80": {
         "version": "v1.22.0"
     },
+    "symfony/polyfill-uuid": {
+        "version": "v1.22.1"
+    },
     "symfony/process": {
         "version": "v5.2.1"
     },
@@ -376,6 +415,9 @@
     },
     "symfony/proxy-manager-bridge": {
         "version": "v5.2.1"
+    },
+    "symfony/rate-limiter": {
+        "version": "v5.2.4"
     },
     "symfony/routing": {
         "version": "5.1",
@@ -468,6 +510,9 @@
     },
     "symfony/twig-pack": {
         "version": "v1.0.1"
+    },
+    "symfony/uid": {
+        "version": "v5.2.5"
     },
     "symfony/validator": {
         "version": "4.3",

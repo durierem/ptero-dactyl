@@ -4,6 +4,7 @@
 .button {
     background-color: var(--dark-bg-primary);
     color: var(--dark-fg);
+    font-family: var(--font-standard);
     text-align: center;
     padding: 10px;
     margin: 10px;
@@ -15,7 +16,7 @@
 .button:hover {
     background-color: var(--dark-bg-secondary);
     border-color: var(--accent);
-    transform: scale(1.10, 1.10);
+    transform: scale(1.10);
     box-shadow: 0 0 10px var(--accent);
     cursor: pointer;
 }
@@ -37,7 +38,7 @@
     font-family: inherit;
     font-size: inherit;
     animation-name: anim-blink;
-    animation-duration: 0.5s;
+    animation-duration: 1s;
     animation-direction: alternate;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
@@ -49,13 +50,18 @@
 
 /* Ajoute un effet de clignotement type curseur */
 .cursor-blink {
-    animation-name: cursor-blink;
-    animation: cursor-blink 0.8s step-start infinite;
+    animation: cursor-blink 1s step-start infinite;
+    width: 10px;
+    display: inline-block;
+    height: 1.2em;
+    transform: translateY(2px);
+    background-color: var(--light-fg);
+    color: var(--light-bg-secondary);
+    opacity: 0;
 }
 @keyframes cursor-blink {
     50% {
-        color: #fff;
-        background-color: #000;
+        opacity: 100;
     }
 }
 

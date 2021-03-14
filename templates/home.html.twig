@@ -3,17 +3,28 @@
 {% block title %}Accueil{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{{ asset("css/home.css") }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('css/home.css') }}">
 {% endblock %}
 
 {% block body %}
 
-    {% include "header.html.twig" %}
+{% include "header.html.twig" %}
 
-    <div id="main-content-container">
-        <button class="button" id="start-button">
-            <a href="{{ path("dactylotest") }}"><i class="fas fa-play"></i> Démarrer</a>
-        </button>
-    </div>
+<div id="main-content-container">
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+
+    <button class="button start-button">
+        <a href="{{ path('benchmark') }}"><i class="fas fa-play"></i> Benchmark</a>
+    </button>
+    <button class="button start-button">
+        <a href="{{ path('exercise') }}"><i class="fas fa-play"></i> Exercice</a>
+    </button>
+
+    {% else %}
+
+    <p>Pour accéder aux benchmarks et aux exercices, veuillez vous connecter.</p>
+
+    {% endif %}
+</div>
 
 {% endblock %}

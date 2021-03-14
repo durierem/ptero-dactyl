@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Text;
 use App\Entity\Benchmark;
+use App\Repository\TextRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -38,15 +39,13 @@ class PrivateApiController extends AbstractController
     /**
      * @Route("/text/random", name="random_text")
      */
-    public function random(Request $request): Response
+    public function random(Request $request, TextRepository $textRepository): Response
     {
         if (!$request->isXmlHttpRequest()) {
             throw new HttpException(403, "Unauthorized request: private API");
         }
 
-        $text = $this->getDoctrine()
-            ->getRepository(Text::class)
-            ->findRandom();
+        $text = $textRepository->findRandom();
 
         return new Response($text->getContent());
     }

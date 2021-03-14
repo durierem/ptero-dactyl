@@ -1,15 +1,25 @@
- <header>
+<header>
     <nav>
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
         <button class="button">
-            <a href="{{ path("app_login") }}"><i class="fas fa-sign-in-alt"></i> Connexion</a>
+            <a href="{{ path('app_logout') }}"><i class="fas fa-sign-in-alt"></i> Déconnexion</a>
         </button>
         <button class="button">
-            <a href="{{ path("app_register") }}"> <i class="fas fa-user"></i> Créer un compte</a>
+            <a href="#"> <i class="fas fa-user"></i> Mes statistiques</a>
         </button>
+        {% else %}
+        <button class="button">
+            <a href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> Connexion</a>
+        </button>
+        <button class="button">
+            <a href="{{ path('app_register') }}"> <i class="fas fa-user"></i> Créer un compte</a>
+        </button>
+        {% endif %}
+
     </nav>
 
     <div id="logo-container">
-        <img id="logo" src="{{ asset("images/big_gra.png") }}" alt="Logo">
+        <img id="logo" src="{{ asset('images/big_gra.png') }}" alt="Logo">
         <a href="{{ path('home') }}" id="app-title">Ptero Dactyl<span class="blink">_</span></a>
     </div>
 

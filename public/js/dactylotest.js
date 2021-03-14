@@ -29,24 +29,24 @@ class SpanObject {
     }
   }
 
-  getChar() {
+  getChar () {
     return this.char
   }
 
-  getColor() {
+  getColor () {
     return this.element.style.color
   }
 
-  setChar(char) {
+  setChar (char) {
     this.char = char
     this.element.innerText = char
   }
 
-  setColor(color) {
+  setColor (color) {
     this.element.style.color = color
   }
 
-  setCursor(bool) {
+  setCursor (bool) {
     if (bool) {
       this.element.classList.add('cursor-blink')
     } else {
@@ -54,7 +54,7 @@ class SpanObject {
     }
   }
 
-  detach() {
+  detach () {
     this.container.removeChild(this.element)
   }
 }
@@ -73,58 +73,58 @@ class SpanManager {
     this.parentNode.appendChild(document.createElement('span'))
   }
 
-  getElement() {
+  getElement () {
     return this.parentNode
   }
 
-  append(span) {
+  append (span) {
     this.spans.push(span)
   }
 
-  insertLast(value) {
+  insertLast (value) {
     this.append(new SpanObject(this.parentNode, value))
     this.maxCurdorIndex += 1
   }
 
-  insertCharAt(char, index) {
+  insertCharAt (char, index) {
     this.spans.splice(index, 0, new SpanObject(this.parentNode, char, index))
     this.maxCurdorIndex += 1
   }
 
-  removeLast() {
+  removeLast () {
     this.spans.pop().detach()
     this.maxCurdorIndex -= 1
   }
 
-  setCharAt(char, index) {
+  setCharAt (char, index) {
     this.spans[index].setChar(char)
   }
 
-  getCursorIndex() {
+  getCursorIndex () {
     return this.cursorIndex
   }
 
-  placeCursor(index) {
+  placeCursor (index) {
     if (index < 0 || index >= this.spans.length) { return }
     this.spans[index].setCursor(true)
     this.cursorIndex = index
   }
 
-  removeCursor() {
+  removeCursor () {
     if (this.cursorIndex < 0 || this.cursorIndex >= this.spans.length) { return }
     this.spans[this.cursorIndex].setCursor(false)
     // No cursor on the text => cursorIndex === -1
     this.cursorIndex = -1
   }
 
-  moveCursorRight() {
+  moveCursorRight () {
     if (this.cursorIndex >= this.maxCurdorIndex) { return }
     const index = this.cursorIndex + 1
     this.removeCursor()
     this.placeCursor(index)
   }
 
-  moveCursorLeft() {
+  moveCursorLeft () {
     if (this.cursorIndex === 0) { return }
     const index = this.cursorIndex - 1
     this.removeCursor()
@@ -150,7 +150,7 @@ class DataManager {
 
   // Initialise un tableau avec toutes les combinaisons de couples de lettre
   // de l'alphabet.
-  initializeKeyComb() {
+  initializeKeyComb () {
     const arr = []
     for (let i = 97; i <= 122; i++) {
       for (let j = 97; j <= 122; j++) {
@@ -161,7 +161,7 @@ class DataManager {
   }
 
   // formate un json (par defaut) pour stocker les donnees a sauvegarder
-  getData() {
+  getData () {
     return {
       time: this.time,
       character_errors: this.errChar,
@@ -172,7 +172,7 @@ class DataManager {
     }
   }
 
-  sendData() {
+  sendData () {
     const target = '/benchmark/save' // cible de la requete
     const content = JSON.stringify(this.getData())
     // requete avec jquery
@@ -184,7 +184,7 @@ class DataManager {
       })
   }
 
-  computeWordTimes() {
+  computeWordTimes () {
     const res = []
     let prev = 0
     this.wordTimes.forEach(function (val) {
@@ -194,16 +194,16 @@ class DataManager {
     return res
   }
 
-  incFalseChar() {
+  incFalseChar () {
     this.errChar++
   }
 
-  incFalseWords() {
+  incFalseWords () {
     this.numberOfFalseWord++
   }
 
   // "": empty string means punctuation
-  addMistake(word) {
+  addMistake (word) {
     this.incFalseChar()
     if (this.sameMis) {
       ++this.mistakes[word][this.mistakes[word].length - 1]
@@ -217,16 +217,16 @@ class DataManager {
     this.errCharPrev = this.errChar
   }
 
-  resetMis() {
+  resetMis () {
     this.sameMis = false
   }
 
-  addWordTime() {
+  addWordTime () {
     this.wordTimes.push(this.time)
   }
 
   // prend en parametre 2 LETTRES
-  addKeyComb(a, b) {
+  addKeyComb (a, b) {
     this.keyComb[a + b].push(this.time - this.lastTime)
     this.lastTime = this.time
   }
@@ -234,14 +234,14 @@ class DataManager {
   // Controle du timer
   //  au 100e de seconde pre car c'est le plus petit interval possible pour
   //  setInterval()
-  startTimer() {
+  startTimer () {
     const myData = this
     this.timer = setInterval(function () {
       myData.time += 10
     }, 10)
   }
 
-  stopTimer() {
+  stopTimer () {
     clearInterval(this.timer)
   }
 }
@@ -264,46 +264,46 @@ class DactyloTestModel {
     this.currWord = this.referenceText.slice(0, this.findNextSpace())
   }
 
-  getReferenceTextLength() {
+  getReferenceTextLength () {
     return this.referenceText.length
   }
 
-  getUserTextLength() {
+  getUserTextLength () {
     return this.userText.length
   }
 
-  isFinished() {
+  isFinished () {
     return this.getUserTextLength() === this.getReferenceTextLength()
   }
 
-  getReferenceText() {
+  getReferenceText () {
     return this.referenceText
   }
 
-  getUserText() {
+  getUserText () {
     return this.userText
   }
 
-  getCurrWord() {
+  getCurrWord () {
     return this.currWord
   }
 
-  getCursorIndex() {
+  getCursorIndex () {
     return this.cursorIndex
   }
 
-  isInputCorrect(c) {
+  isInputCorrect (c) {
     console.log(this.referenceText[this.cursorIndex])
     console.log(c)
     return c === this.referenceText[this.cursorIndex]
   }
 
-  isLastInputCorrect() {
+  isLastInputCorrect () {
     return this.userText.charAt(this.cursorIndex - 1) ===
       this.referenceText.charAt(this.cursorIndex - 1)
   }
 
-  findLastSpace() {
+  findLastSpace () {
     for (let i = this.cursorIndex - 1; i > 0; i--) {
       if (this.referenceText.charAt(i) === ' ') {
         return i
@@ -312,7 +312,7 @@ class DactyloTestModel {
     return -1
   }
 
-  delAt() {
+  delAt () {
     if (this.cursorIndex === -1) { return }
     if (this.currChar === ' ') {
       const lastSpace = this.findLastSpace()
@@ -327,7 +327,7 @@ class DactyloTestModel {
     this.maxCurdorIndex--
   }
 
-  findNextSpace() {
+  findNextSpace () {
     for (let i = this.cursorIndex + 1; i < this.referenceText.length; i++) {
       if (!/\w|\d/.test(this.referenceText.charAt(i))) {
         return i
@@ -336,7 +336,7 @@ class DactyloTestModel {
     return -1
   }
 
-  setLastInput(input) {
+  setLastInput (input) {
     if (!/\w|\d/.test(input)) {
       const nextSpace = this.findNextSpace()
       this.currWord = this.referenceText.slice(this.cursorIndex + 1,
@@ -350,12 +350,12 @@ class DactyloTestModel {
     this.maxCurdorIndex++
   }
 
-  moveCursorLeft() {
+  moveCursorLeft () {
     if (this.cursorIndex < 0) { return }
     this.cursorIndex--
   }
 
-  findNextSpace2() {
+  findNextSpace2 () {
     for (let i = this.cursorIndex + 2; i < this.referenceText.length; i++) {
       if (!/\w|\d/.test(this.referenceText.charAt(i))) {
         return i
@@ -364,7 +364,7 @@ class DactyloTestModel {
     return -1
   }
 
-  setLastInput2(input) {
+  setLastInput2 (input) {
     if (this.cursorIndex < this.referenceText.length) {
       if (!/\d|\w/.test(this.referenceText.charAt(this.cursorIndex + 1))) {
         this.currWord = this.referenceText.charAt(this.cursorIndex + 1)
@@ -395,7 +395,7 @@ class Benchmark {
     this.initialize()
   }
 
-  initialize() {
+  initialize () {
     for (const c of this.referenceText) {
       this.textContainer.insertLast(c)
     }
@@ -486,7 +486,7 @@ class Exercise {
     this.initialize()
   }
 
-  initialize() {
+  initialize () {
     for (const c of this.model.getReferenceText()) {
       this.textContainer.insertLast(c)
     }

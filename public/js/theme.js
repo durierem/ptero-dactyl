@@ -1,5 +1,7 @@
 'use strict'
 
+import * as cookie from './cookie.js'
+
 class ThemeManager {
   constructor (theme) {
     this.current = theme
@@ -25,7 +27,7 @@ class ThemeManager {
     // Switch de thème
     const newTheme = ((this.current === 'light') ? 'dark' : 'light')
     // On actualise le cookie theme sur le thème choisi
-    setCookie('theme', newTheme)
+    cookie.setCookie('theme', newTheme)
     // On affiche le thème choisi
     this.setCurrent(newTheme)
   }
@@ -37,7 +39,7 @@ class ThemeManager {
 }
 
 // Thème par defaut en argument du constructeur
-const cookieTheme = getCookie('theme')
+const cookieTheme = cookie.getCookie('theme')
 
 // Si un thème préféré est enregistré dans les cookies
 // on le selectionne, sinon on affiche le thème light par défaut

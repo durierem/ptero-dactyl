@@ -13,7 +13,9 @@ class DactylotestController extends AbstractController
      */
     public function benchmark(): Response
     {
-        return $this->render('dactylotest.html.twig');
+        return $this->render('dactylotest.html.twig', [
+            'dactylotest_type' => 'benchmark',
+        ]);
     }
 
     /**
@@ -21,6 +23,8 @@ class DactylotestController extends AbstractController
      */
     public function exercise(): Response
     {
-        return $this->render('dactylotest.html.twig');
+        return $this->render('dactylotest.html.twig', [
+            'dactylotest_type' => 'exercise',
+        ]);
     }
 }

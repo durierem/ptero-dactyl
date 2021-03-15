@@ -24,6 +24,18 @@ export class DactyloTestModel {
     return this.userText.length
   }
 
+  setUserValidText () {
+    this.userValidText = this.userText
+  }
+
+  canSetUserValidText (Sting) {
+    return this.userValidText < this.userText && this.userText === this.referenceText.slice(0, this.userText.length)
+  }
+
+  isUserTextValid () {
+    return this.userText === this.referenceText.slice(0, this.userText.length)
+  }
+
   isFinished () {
     return this.getUserTextLength() === this.getReferenceTextLength()
   }
@@ -72,7 +84,7 @@ export class DactyloTestModel {
         this.cursorIndex - 1)
     }
     this.currChar = this.userText[this.cursorIndex - 2]
-    const fHalf = this.userText.slice(0, this.cursorIndex - 1)
+    const fHalf = this.userText.slice(0, this.cursorIndex)
     const sHalf = this.userText.slice(this.cursorIndex + 1)
     this.userText = fHalf + sHalf
     this.cursorIndex--
@@ -95,8 +107,8 @@ export class DactyloTestModel {
         nextSpace === -1 ? this.referenceText.length - 1 : nextSpace)
     }
     this.currChar = input
-    const fHalf = this.userText.slice(0, this.cursorIndex)
-    const sHalf = this.userText.slice(this.cursorIndex)
+    const fHalf = this.userText.slice(0, this.cursorIndex + 1)
+    const sHalf = this.userText.slice(this.cursorIndex + 1)
     this.userText = fHalf + input + sHalf
     this.cursorIndex++
     this.maxCurdorIndex++
@@ -105,6 +117,11 @@ export class DactyloTestModel {
   moveCursorLeft () {
     if (this.cursorIndex < 0) { return }
     this.cursorIndex--
+  }
+
+  moveCursorRight () {
+    if (this.cursorIndex === this.userText.length - 1) { return }
+    this.cursorIndex++
   }
 
   findNextSpace2 () {

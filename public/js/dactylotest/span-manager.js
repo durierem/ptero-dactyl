@@ -8,7 +8,7 @@ export class SpanManager {
     this.spans = []
     this.spanList = parentNode.children
     this.cursorIndex = -1
-    this.maxCurdorIndex = -1
+    this.maxCursorIndex = -1
 
     // Première span qui sert de curseur.
     this.parentNode.appendChild(document.createElement('span'))
@@ -24,17 +24,23 @@ export class SpanManager {
 
   insertLast (value) {
     this.append(new Span(this.parentNode, value))
-    this.maxCurdorIndex += 1
+    this.maxCursorIndex += 1
   }
 
   insertCharAt (char, index) {
     this.spans.splice(index, 0, new Span(this.parentNode, char, index))
-    this.maxCurdorIndex += 1
+    this.maxCursorIndex += 1
+  }
+
+  removeCharAt (index) {
+    this.spans[index].detach()
+    this.spans.splice(index, 1)
+    this.maxCursorIndex -= 1
   }
 
   removeLast () {
     this.spans.pop().detach()
-    this.maxCurdorIndex -= 1
+    this.maxCursorIndex -= 1
   }
 
   setCharAt (char, index) {
@@ -59,7 +65,7 @@ export class SpanManager {
   }
 
   moveCursorRight () {
-    if (this.cursorIndex >= this.maxCurdorIndex) { return }
+    if (this.cursorIndex >= this.maxCursorIndex) { return }
     const index = this.cursorIndex + 1
     this.removeCursor()
     this.placeCursor(index)

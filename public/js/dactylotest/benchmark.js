@@ -23,6 +23,7 @@ class Benchmark {
     this.mis = false
     this.currSpanIndex = 0
     this.inputZone.insertLast('')
+    this.inputZone.moveCursorRight()
 
     this.inputZone.getElement().addEventListener('click', () => {
       this.inputZone.placeCursor(this.model.getCursorIndex())
@@ -51,23 +52,36 @@ class Benchmark {
 
       if (c === 'Backspace') {
         if (this.inputZone.cursorIndex > 0) {
-          this.currSpanIndex -= 1
-          this.inputZone.removeLast()
+          this.inputZone.removeCharAt(this.model.getCursorIndex())
           this.model.delAt()
-          this.inputZone.setCharAt('', this.model.getCursorIndex())
           this.inputZone.moveCursorLeft()
+          if (!this.model.isUserTextValid()) {
+            this.inputZone.getElement().style.backgroundColor = 'red'
+          } else {
+            this.inputZone.getElement().style.backgroundColor = 'white'
+          }
         }
       } else {
-        this.inputZone.setCharAt(c, this.currSpanIndex)
         this.model.setLastInput(c)
-        if (this.model.isLastInputCorrect()) {
-          this.inputZone.spans[this.currSpanIndex].setColor('var(--light-fg)')
+
+        if (this.model.getCursorIndex() === this.model.maxCurdorIndex) {
+          this.inputZone.setCharAt(c, this.model.getCursorIndex())
+        } else {
+          this.inputZone.insertCharAt(c, this.model.getCursorIndex())
+        }
+
+        if (this.model.isUserTextValid()) {
+          if (this.model.canSetUserValidText()) {
+            this.model.setUserValidText()
+          }
+
+          this.inputZone.getElement().style.backgroundColor = 'white'
           if (c === ' ') {
             this.data.resetMis()
             this.data.addWordTime()
           }
         } else {
-          this.inputZone.spans[this.currSpanIndex].setColor('var(--error)')
+          this.inputZone.getElement().style.backgroundColor = 'red'
           if (!this.mis) {
             this.mis = true
             this.data.addMistake(this.model.getCurrWord())
@@ -77,9 +91,6 @@ class Benchmark {
         this.inputZone.insertLast('')
         this.inputZone.moveCursorRight()
         this.mis = false
-
-        this.model.setLastInput(c)
-        this.currSpanIndex += 1
       }
 
       if (this.model.isFinished()) {

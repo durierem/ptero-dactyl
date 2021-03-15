@@ -14,7 +14,7 @@
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 
     <button class="button start-button">
-        <a href="{{ path('benchmark') }}"><i class="fas fa-play"></i> Démarrer une série</a>
+        <a href="{{ path('benchmark') }}"><i class="bi bi-caret-right"></i>Démarrer</a>
     </button>
 
     {% else %}
@@ -38,14 +38,16 @@
     </ul>
 
     <p>
-        Dans le cadre de ce projet, il est nécessaire d'effectuer une collecte et une analyse de données
+        Dans le cadre de ce projet, il est nécessaire d'effectuer une <strong>collecte et une analyse de
+            données</strong>
         sur un échantillon d'utilisateurs afin de pouvoir déterminer quel type d'exercice correspond le
         mieux à un utilisateur donné, en fonction de ses résultats aux benchmarks. C'est ici, cher
         visiteur, que vous intervenez :)
     </p>
 
     <p>
-        En créant un compte (temporaire) et en vous connectant, vous accéderez à une série de tests dont
+        En créant un compte (temporaire) et en vous connectant, vous accéderez à une <strong>série de tests</strong>
+        dont
         la durée totale ne devrait pas dépasser 5 min :
     </p>
 

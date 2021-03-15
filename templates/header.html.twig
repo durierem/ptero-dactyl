@@ -2,17 +2,17 @@
     <nav>
         {% if app.user %}
         <button class="button">
-            <a href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+            <a href="{{ path('app_logout') }}"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
         </button>
         <button class="button">
-            <a href="#"><i class="fas fa-user"></i> Mes statistiques ({{ app.user.username }})</a>
+            <a href="#"><i class="bi bi-person"></i> Mes statistiques ({{ app.user.username }})</a>
         </button>
         {% else %}
         <button class="button">
-            <a href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> Connexion</a>
+            <a href="{{ path('app_login') }}"><i class="bi bi-box-arrow-in-right"></i> Connexion</a>
         </button>
         <button class="button">
-            <a href="{{ path('app_register') }}"> <i class="fas fa-user"></i> Créer un compte</a>
+            <a href="{{ path('app_register') }}"><i class="bi bi-person-plus"></i> Créer un compte</a>
         </button>
         {% endif %}
     </nav>

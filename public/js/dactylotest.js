@@ -19,9 +19,6 @@ class SpanObject {
     this.innerHTML = this.element.innerHTML
     this.element.innerText = char
     const referenceNode = index === null ? null : this.container.childNodes.item(index)
-    console.log('index')
-    console.log(index)
-    console.log(referenceNode)
     container.insertBefore(this.element, referenceNode)
 
     if (cursor) {
@@ -67,7 +64,7 @@ class SpanManager {
     this.spans = []
     this.spanList = parentNode.children
     this.cursorIndex = -1
-    this.maxCurdorIndex = -1
+    this.maxCursorIndex = -1
 
     // Première span qui sert de curseur.
     this.parentNode.appendChild(document.createElement('span'))
@@ -83,17 +80,23 @@ class SpanManager {
 
   insertLast (value) {
     this.append(new SpanObject(this.parentNode, value))
-    this.maxCurdorIndex += 1
+    this.maxCursorIndex += 1
   }
 
   insertCharAt (char, index) {
     this.spans.splice(index, 0, new SpanObject(this.parentNode, char, index))
-    this.maxCurdorIndex += 1
+    this.maxCursorIndex += 1
+  }
+
+  removeCharAt (index) {
+    this.spans[index].detach()
+    this.spans.splice(index, 1)
+    this.maxCursorIndex -= 1
   }
 
   removeLast () {
     this.spans.pop().detach()
-    this.maxCurdorIndex -= 1
+    this.maxCursorIndex -= 1
   }
 
   setCharAt (char, index) {
@@ -118,7 +121,7 @@ class SpanManager {
   }
 
   moveCursorRight () {
-    if (this.cursorIndex >= this.maxCurdorIndex) { return }
+    if (this.cursorIndex >= this.maxCursorIndex) { return }
     const index = this.cursorIndex + 1
     this.removeCursor()
     this.placeCursor(index)
@@ -252,16 +255,29 @@ class DactyloTestModel {
   constructor (referenceText) {
     // super()
     this.referenceText = referenceText
+    this.userValidText = ''
     this.userText = ''
 
-    // this.currChar = this.referenceText.charAt(0)
-    // this.cursorIndex = 0
-    // this.currWord = this.referenceText.slice(0, this.findNextSpace())
-
-    this.currChar = null
+    this.currChar = this.referenceText.charAt(0)
     this.cursorIndex = -1
-    this.maxCurdorIndex = -1
     this.currWord = this.referenceText.slice(0, this.findNextSpace())
+
+    //this.currChar = null
+    //this.cursorIndex = -1
+    //this.maxCurdorIndex = -1
+    //this.currWord = this.referenceText.slice(0, this.findNextSpace())
+  }
+
+  setUserValidText() {
+    this.userValidText = this.userText
+  }
+
+  canSetUserValidText(Sting) {
+    return this.userValidText < this.userText && this.userText === this.referenceText.slice(0,this.userText.length)
+  }
+
+  isUserTextValid() {
+    return this.userText === this.referenceText.slice(0,this.userText.length)
   }
 
   getReferenceTextLength () {
@@ -293,8 +309,6 @@ class DactyloTestModel {
   }
 
   isInputCorrect (c) {
-    console.log(this.referenceText[this.cursorIndex])
-    console.log(c)
     return c === this.referenceText[this.cursorIndex]
   }
 
@@ -320,7 +334,7 @@ class DactyloTestModel {
         this.cursorIndex - 1)
     }
     this.currChar = this.userText[this.cursorIndex - 2]
-    const fHalf = this.userText.slice(0, this.cursorIndex - 1)
+    const fHalf = this.userText.slice(0, this.cursorIndex)
     const sHalf = this.userText.slice(this.cursorIndex + 1)
     this.userText = fHalf + sHalf
     this.cursorIndex--
@@ -343,8 +357,8 @@ class DactyloTestModel {
         nextSpace === -1 ? this.referenceText.length - 1 : nextSpace)
     }
     this.currChar = input
-    const fHalf = this.userText.slice(0, this.cursorIndex)
-    const sHalf = this.userText.slice(this.cursorIndex)
+    const fHalf = this.userText.slice(0, this.cursorIndex + 1)
+    const sHalf = this.userText.slice(this.cursorIndex + 1)
     this.userText = fHalf + input + sHalf
     this.cursorIndex++
     this.maxCurdorIndex++
@@ -353,6 +367,11 @@ class DactyloTestModel {
   moveCursorLeft () {
     if (this.cursorIndex < 0) { return }
     this.cursorIndex--
+  }
+
+  moveCursorRight () {
+    if (this.cursorIndex == this.userText.length - 1) { return }
+    this.cursorIndex++
   }
 
   findNextSpace2 () {
@@ -401,13 +420,12 @@ class Benchmark {
     }
 
     this.mis = false
-    this.currSpanIndex = 0
     this.inputZone.insertLast('')
+    this.inputZone.moveCursorRight()
 
     this.inputZone.getElement().addEventListener('click', () => {
       this.inputZone.placeCursor(this.model.getCursorIndex())
       this.data.startTimer() // pas sur d'ici
-      console.log(this.model.getCurrWord())
     })
 
     this.inputZone.getElement().addEventListener('keydown', (e) => {
@@ -431,23 +449,36 @@ class Benchmark {
 
       if (c === 'Backspace') {
         if (this.inputZone.cursorIndex > 0) {
-          this.currSpanIndex -= 1
-          this.inputZone.removeLast()
+          this.inputZone.removeCharAt(this.model.getCursorIndex())
           this.model.delAt()
-          this.inputZone.setCharAt('', this.model.getCursorIndex())
           this.inputZone.moveCursorLeft()
+          if(!this.model.isUserTextValid()){
+            this.inputZone.getElement().style.backgroundColor = 'red'
+          } else {
+            this.inputZone.getElement().style.backgroundColor = 'white'
+          }
         }
       } else {
-        this.inputZone.setCharAt(c, this.currSpanIndex)
         this.model.setLastInput(c)
-        if (this.model.isLastInputCorrect()) {
-          this.inputZone.spans[this.currSpanIndex].setColor('var(--light-fg)')
+
+        if (this.model.getCursorIndex() === this.model.maxCurdorIndex){
+          this.inputZone.setCharAt(c, this.model.getCursorIndex())
+        } else {
+          this.inputZone.insertCharAt(c, this.model.getCursorIndex())
+        }
+
+        if (this.model.isUserTextValid()) {
+          if(this.model.canSetUserValidText()) {
+            this.model.setUserValidText()
+          }
+
+          this.inputZone.getElement().style.backgroundColor = 'white'
           if (c === ' ') {
             this.data.resetMis()
             this.data.addWordTime()
           }
         } else {
-          this.inputZone.spans[this.currSpanIndex].setColor('var(--error)')
+          this.inputZone.getElement().style.backgroundColor = 'red'
           if (!this.mis) {
             this.mis = true
             this.data.addMistake(this.model.getCurrWord())
@@ -457,9 +488,6 @@ class Benchmark {
         this.inputZone.insertLast('')
         this.inputZone.moveCursorRight()
         this.mis = false
-
-        this.model.setLastInput(c)
-        this.currSpanIndex += 1
       }
 
       if (this.model.isFinished()) {
@@ -523,6 +551,7 @@ class Exercise {
         }
         // on ajoute le caractere avec la bonne couleur
         this.inputZone.setCharAt(c, this.model.getCursorIndex())
+        console.log(this.mis);
         this.inputZone.spans[this.model.getCursorIndex()].setColor(this.mis
           ? 'var(--error)'
           : 'var(--light-fg)')
@@ -544,5 +573,5 @@ class Exercise {
 
 // -------------------------------------------------------------------------- //
 
-const text = 'Put all speaking, her69 speaking delicate recurred possible.'
-const benchmark = new Exercise(text)
+const text = 'Put\' all speaking, her69 speaking delicate recurred possible.'
+const benchmark = new Benchmark(text)

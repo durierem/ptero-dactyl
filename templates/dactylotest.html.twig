@@ -21,5 +21,10 @@
     </div>
 </div>
 
-<script type="text/javascript" src="{{ asset('js/dactylotest.js') }}"></script>
+{% if dactylotest_type == 'benchmark' %}
+<script type="module" type="text/javascript" src="{{ asset('js/dactylotest/benchmark.js') }}"></script>
+{% elseif dactylotest_type == 'exercise' %}
+<script type="module" type="text/javascript" src="{{ asset('js/dactylotest/exercise.js') }}"></script>
+{% endif %}
+
 {% endblock %}

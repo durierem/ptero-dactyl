@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Text;
+use DateTime;
 use App\Entity\Benchmark;
 use App\Repository\TextRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,9 +30,11 @@ class PrivateApiController extends AbstractController
         $benchmark = new Benchmark();
         $benchmark->setData($decoded);
         $benchmark->setUser($this->getUser());
+        $benchmark->setCreatedAt(new DateTime('now'));
 
         $entityManager->persist($benchmark);
         $entityManager->flush();
+
         return new Response("done");
     }
 

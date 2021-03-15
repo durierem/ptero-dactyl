@@ -113,7 +113,7 @@ button a:visited {
 }
 
 .red-switcher {
-    color: var(--yellow);
+    color: var(--orange);
 }
 
 .red-switcher:hover {
@@ -125,7 +125,7 @@ button a:visited {
 }
 
 .blue-switcher:hover {
-    color: var(--yellow);
+    color: var(--orange);
 }
 
 #main-content-container {
@@ -141,6 +141,8 @@ button a:visited {
     margin: 20px;
 }
 
+
 strong {
-    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-color:  var(--accent);
 }

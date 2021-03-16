@@ -10,6 +10,7 @@ class Exercise {
   constructor (referenceText) {
     this.data = new DataManager()
     this.model = new DactyloTestModel(referenceText)
+    this.model.cursorIndex += 1
     this.textContainer = new SpanManager(document.getElementById('text-container'))
     this.inputZone = new SpanManager(document.getElementById('virtual-user-input'))
     this.mis = false
@@ -48,7 +49,9 @@ class Exercise {
         }
         this.data.incFalseChar()
       } else {
-        if (!/\w|\d/.test(c)) {
+        if (!/\w|\d/.test(c)
+            || !/\d|\w/.test(this.model.getReferenceText()
+                            .charAt(this.model.getCursorIndex() + 1))) {
           this.data.resetMis()
           this.data.addWordTime()
         }
@@ -73,5 +76,16 @@ class Exercise {
   }
 }
 
-const text = 'Put all speaking, her69 speaking delicate recurred possible.'
-const benchmark = new Exercise(text)
+const defaultText = 'Put all speaking, her69 speaking delicate recurred possible.'
+var benchmark;
+$(document).ready(() => {
+  let target = '/text/random'
+  $.get(target)
+  .done((data) => {
+    benchmark = new Exercise(data)
+  })
+  .fail(() => {
+    console.log('Can\'t reach text database.')
+    benchmark = new Exercise(defaultText)
+  })
+})

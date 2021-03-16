@@ -28,7 +28,7 @@ export class DactyloTestModel {
     this.userValidText = this.userText
   }
 
-  canSetUserValidText (Sting) {
+  canSetUserValidText () {
     return this.userValidText < this.userText && this.userText === this.referenceText.slice(0, this.userText.length)
   }
 

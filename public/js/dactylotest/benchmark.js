@@ -109,4 +109,5 @@ class Benchmark {
 }
 
 const text = "La grotte d’Aguzou s'ouvre sur le flanc nord-ouest du pic d'Aguzou. Elle se situe dans le département de l'Aude, aux confins de l'Ariège, entre les villes d'Axat et d'Usson, au sud de Quillan, sur la commune de Escouloubre."
-const benchmark = new Benchmark(text)
+const defaultText = 'Put all speaking, her69 speaking delicate recurred possible.'
+const benchmark = new Benchmark(defaultText)

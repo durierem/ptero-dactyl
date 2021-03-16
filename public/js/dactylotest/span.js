@@ -12,9 +12,6 @@ export class Span {
     this.innerHTML = this.element.innerHTML
     this.element.innerText = char
     const referenceNode = index === null ? null : this.container.childNodes.item(index)
-    console.log('index')
-    console.log(index)
-    console.log(referenceNode)
     container.insertBefore(this.element, referenceNode)
 
     if (cursor) {

@@ -101,17 +101,22 @@ export class DactyloTestModel {
   }
 
   setLastInput (input) {
-    if (!/\w|\d/.test(input)) {
-      const nextSpace = this.findNextSpace()
-      this.currWord = this.referenceText.slice(this.cursorIndex + 1,
-        nextSpace === -1 ? this.referenceText.length - 1 : nextSpace)
-    }
-    this.currChar = input
     const fHalf = this.userText.slice(0, this.cursorIndex + 1)
     const sHalf = this.userText.slice(this.cursorIndex + 1)
     this.userText = fHalf + input + sHalf
     this.cursorIndex++
     this.maxCurdorIndex++
+    this.currChar = input
+    if (!/\w|\d/.test(input)) {
+      const nextSpace = this.findNextSpace()
+      this.currWord = this.referenceText.slice(this.cursorIndex + 1,
+        nextSpace === -1 ? this.referenceText.length - 1 : nextSpace)
+        console.log('---currword---')
+        console.log(this.cursorIndex + 1)
+        console.log(nextSpace)
+        console.log(this.referenceText.slice(this.cursorIndex + 1,
+          nextSpace === -1 ? this.referenceText.length - 1 : nextSpace))
+    }
   }
 
   moveCursorLeft () {

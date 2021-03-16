@@ -20,15 +20,15 @@ class Benchmark {
       this.textContainer.insertLast(c)
     }
 
+    this.lastChar = ' '
     this.mis = false
     this.currSpanIndex = 0
     this.inputZone.insertLast('')
     this.inputZone.moveCursorRight()
 
     this.inputZone.getElement().addEventListener('click', () => {
-      this.inputZone.placeCursor(this.model.getCursorIndex())
+      this.inputZone.placeCursor(this.model.getCursorIndex() + 1)
       this.data.startTimer() // pas sur d'ici
-      console.log(this.model.getCurrWord())
     })
 
     this.inputZone.getElement().addEventListener('keydown', (e) => {
@@ -62,7 +62,10 @@ class Benchmark {
           }
         }
       } else {
+
         this.model.setLastInput(c)
+        console.log('---')
+        console.log(this.model.getCurrWord())
 
         if (this.model.getCursorIndex() === this.model.maxCurdorIndex) {
           this.inputZone.setCharAt(c, this.model.getCursorIndex())
@@ -73,13 +76,17 @@ class Benchmark {
         if (this.model.isUserTextValid()) {
           if (this.model.canSetUserValidText()) {
             this.model.setUserValidText()
+            if (c === ' ') {
+              this.data.resetMis()
+              this.data.addWordTime()
+            }
+            console.log('--data--')
+            console.log(c.toLowerCase())
+            console.log(this.lastChar)
+            this.data.addKeyComb(this.lastChar,c.toLowerCase())
+            this.lastChar = c.toLowerCase()
           }
-
           this.inputZone.getElement().style.backgroundColor = 'white'
-          if (c === ' ') {
-            this.data.resetMis()
-            this.data.addWordTime()
-          }
         } else {
           this.inputZone.getElement().style.backgroundColor = 'red'
           if (!this.mis) {
@@ -88,7 +95,6 @@ class Benchmark {
           }
         }
         // Et on ajoute une nouvelle span curseur
-        this.inputZone.insertLast('')
         this.inputZone.moveCursorRight()
         this.mis = false
       }

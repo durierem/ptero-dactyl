@@ -1,6 +1,7 @@
-.start-button {
+#start-button {
     font-size: 4em;
     text-decoration: none;
+    padding: 5px;
 }
 
 #main-content-container {

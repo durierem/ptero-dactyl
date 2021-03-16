@@ -20,12 +20,9 @@
     {{ form_start(registrationForm) }}
     {{ form_row(registrationForm.username, {
         label: 'Nom d\'utilisateur',
-        attr : { class: 'area'}
     }) }}
     {{ form_row(registrationForm.plainPassword, {
-        label: 'Mot de passe',
-        attr: { class: 'area' },
-        compound: false
+        label: 'Mot de passe'
     }) }}
 
     <button type="submit" class="button"><i class="bi bi-person-plus"></i> Créer un compte</button>

@@ -11,7 +11,7 @@
 {% include "header.html.twig" %}
 
 <div id="main-content-container">
-    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+    {% if app.user %}
 
     <button class="button start-button">
         <a href="{{ path('benchmark') }}"><i class="bi bi-caret-right"></i>Démarrer</a>
@@ -27,7 +27,7 @@
     </p>
     <ul>
         <li>
-            Les <strong>benchmark</strong> sont des tests de dactylographie standards dans lesquel
+            Les <strong>benchmark</strong> sont des tests de dactylographie standards dans lesquels
             l'utilisateur recopie un texte court. Au cours de l'activité, des statistiques sont
             collectées, telles que le nombre de mots par minute et le nombre d'erreurs.
         </li>
@@ -60,6 +60,8 @@
     </ol>
 
     <p>Bon courage, et merci pour votre participation !</p>
+
+    <button class="button"><i class="bi bi-person-plus"></i> Nouveau compte</button>
 
     {% endif %}
 </div>

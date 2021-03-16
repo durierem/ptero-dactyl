@@ -1,0 +1,83 @@
+header {
+    height: 80px;
+    background-color: var(--dark-bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 0 10px black;
+}
+
+nav {
+    flex: 1;
+    display: flex;
+    flex-flow: row no-wrap;
+    justify-content: flex-start;
+}
+
+button a,
+button a:visited {
+    color: var(--dark-fg);
+    text-decoration: none;
+}
+
+#logo-container {
+    flex: 2;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#logo {
+    height: 80px;
+}
+
+@media all and (max-width: 1024px) {
+    #app-title, #app-title:active, #app-title:hover, #app-title:visited {
+        display: none;
+    }
+}
+
+#app-title, #app-title:active, #app-title:hover, #app-title:visited {
+    color: #282828;
+    font-family: "Iosevka Etoile Extrabold", serif;
+    font-size: 3em;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: var(--dark-fg);
+    text-decoration: none;
+}
+
+#theme-switcher-container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#theme-switcher {
+    border:none;
+    background: none;
+    font-size: 1em;
+    margin: 20px;
+    transition-duration: 0.1s;
+}
+
+#theme-switcher:hover {
+    cursor: pointer;
+    transform: scale(1.5) rotate(-45deg);
+}
+
+.red-switcher {
+    color: var(--orange);
+}
+
+.red-switcher:hover {
+    color: var(--blue);
+}
+
+.blue-switcher {
+    color: var(--blue);
+}
+
+.blue-switcher:hover {
+    color: var(--orange);
+}

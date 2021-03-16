@@ -10,8 +10,16 @@
     width: 800px;
     height: 150px;
     resize: none;
-    text-align: left;
     user-select: none;
-    overflow: wrap;
     font-family: "Iosevka Slab Regular";
+    display: flex;
+    flex-flow: row wrap;
+    align-content: flex-start;
 }
+
+#virtual-user-input > span,
+#text-container > span {
+    width: 1ch;
+    height: 1.3em;
+}
+

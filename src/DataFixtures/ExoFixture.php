@@ -18,17 +18,17 @@ class ExoFixture extends Fixture
         $manager->persist((new Exercise())->setTag("trigramme")->setContent("lle ill lli lle ell ele lel ili ill lii lil ili"));
 
         $manager->persist(
-            (new Exercise())->setTag("ponct")
-                            ->setContent("Oh l'Amérique ! États unis d'Amérique... \"À l'ouest se trouvent les \"Mines d'Argent\".
-                                          Jamais, je ne pourrai te rendre 5€, la monnaie de ta pièce. Éxactement. Cette dette jamais
-                                          ne finira. L'Amiral, Kasparov et son chien débatèrent... Des heures durant !
-                                          Ça je n'en doutais point. Mais ? Qu'est ce ?! Condition ternaire : { vrai : faux ? boolean }"));
+        (new Exercise())->setTag("ponct")
+                        ->setContent("Oh l'Amérique ! États unis d'Amérique... \"À l'ouest se trouvent les \"Mines d'Argent\".
+                                      Jamais, je ne pourrai te rendre 5€, la monnaie de ta pièce. Éxactement. Cette dette jamais
+                                      ne finira. L'Amiral, Kasparov et son chien débatèrent... Des heures durant !
+                                      Ça je n'en doutais point. Mais ? Qu'est ce ?! Condition ternaire : { vrai : faux ? boolean }"));
         $manager->persist(
-            (new Exercise())->setTag("ponct")
-                            ->setContent("Le milieu, la terre, l'enfant ; tout n'est peut-être pas 
-                                          tel qu'il est dit : un esprit ? Non ! Un fantôme... 
-                                          La maison mère disait \"haha je ne crois pas\", en dieu ? Peut être ! 
-                                          Rien de tel qu'une (immense !) conjoncture ésothérie, d'une bien pensance : pesante."));
+        (new Exercise())->setTag("ponct")
+                        ->setContent("Le milieu, la terre, l'enfant ; tout n'est peut-être pas 
+                                      tel qu'il est dit : un esprit ? Non ! Un fantôme... 
+                                      La maison mère disait \"haha je ne crois pas\", en dieu ? Peut être ! 
+                                      Rien de tel qu'une (immense !) conjoncture ésothérie, d'une bien pensance : pesante."));
         $manager->persist(
         (new Exercise())->setTag("ponct")
                         ->setContent("Ce text, est un texte fait ! pour vous faire travailler... les ponctuations.

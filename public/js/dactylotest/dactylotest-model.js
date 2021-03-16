@@ -4,6 +4,7 @@ export class DactyloTestModel {
   constructor (referenceText) {
     // super()
     this.referenceText = referenceText
+    this.userValidText = ''
     this.userText = ''
 
     // this.currChar = this.referenceText.charAt(0)
@@ -12,7 +13,6 @@ export class DactyloTestModel {
 
     this.currChar = null
     this.cursorIndex = -1
-    this.maxCurdorIndex = -1
     this.currWord = this.referenceText.slice(0, this.findNextSpace())
   }
 

@@ -41,6 +41,8 @@ class Benchmark {
     this.inputZone.getElement().addEventListener('keydown', (e) => {
       const c = e.key
 
+
+
       // Quand l'utilisateur appuie sur une fléche on bouge le cursor du model
       // et de la vu, les fonctions gère les problèmes de dépassement d'index
       if (c === 'ArrowRight') {
@@ -99,7 +101,7 @@ class Benchmark {
         // est placer le curseur, cette partie est un peu complexe et est
         // peut-etre source de bug
         this.model.setLastInput(c)
-
+        console.log(this.model.cursorIndex)
         // cette partie du code est un peu manuelle est surement facilement
         // améliorable, si on est à la fin du text de l'utilisateur, on
         // ajoute une span + character à la fin, sinon on insert une span
@@ -109,8 +111,12 @@ class Benchmark {
           console.log('re')
           this.inputZone.setCharAt(c, this.model.getCursorIndex())
         } else {
+<<<<<<< Updated upstream
           console.log('tu')
           this.inputZone.insertCharAt(c, this.model.getCursorIndex())
+=======
+          this.inputZone.insertCharAt(c, this.model.getCursorIndex() + 1)
+>>>>>>> Stashed changes
         }
 
         // model.isUserTextValid() test si le texte de l'utilisateur est
@@ -162,11 +168,16 @@ class Benchmark {
             this.data.addMistake(this.model.getCurrWord())
           }
         }
+        this.inputZone.insertLast('')
         // On bouge le curseurr à droite car on à écrit un character
         this.inputZone.insertLast('')
         this.inputZone.moveCursorRight()
         // On reset le mis (à voir avec Rémi le truc du mis me perturbe un peu)
         this.mis = false
+
+        console.log('---debut---')
+        console.log(this.model.getCurrWord())
+
       }
 
       // si userText === referenceText c'est la fin !

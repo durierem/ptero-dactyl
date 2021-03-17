@@ -8,7 +8,7 @@ export class SpanManager {
     this.spans = []
     this.spanList = parentNode.children
     this.cursorIndex = -1
-    this.maxCursorIndex = -1
+    this.maxCurdorIndex = -1
 
     // Première span qui sert de curseur.
     this.parentNode.appendChild(document.createElement('span'))

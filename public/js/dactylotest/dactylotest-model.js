@@ -8,11 +8,10 @@ export class DactyloTestModel {
     this.userText = ''
 
     // this.currChar = this.referenceText.charAt(0)
-    // this.cursorIndex = 0
-    // this.currWord = this.referenceText.slice(0, this.findNextSpace())
 
     this.currChar = null
     this.cursorIndex = -1
+    this.maxCursorIndex = -1
     this.currWord = this.referenceText.slice(0, this.findNextSpace())
   }
 
@@ -86,7 +85,7 @@ export class DactyloTestModel {
     const sHalf = this.userText.slice(this.cursorIndex + 1)
     this.userText = fHalf + sHalf
     this.cursorIndex--
-    this.maxCurdorIndex--
+    this.maxCursorIndex--
   }
 
   findNextSpace () {
@@ -103,7 +102,7 @@ export class DactyloTestModel {
     const sHalf = this.userText.slice(this.cursorIndex + 1)
     this.userText = fHalf + input + sHalf
     this.cursorIndex++
-    this.maxCurdorIndex++
+    this.maxCursorIndex++
     this.currChar = input
     if (!/\w|\d/.test(input)) {
       const nextSpace = this.findNextSpace()
@@ -146,5 +145,6 @@ export class DactyloTestModel {
     const sHalf = this.userText.slice(this.cursorIndex)
     this.userText = fHalf + input + sHalf
     this.cursorIndex++
+    this.maxCursorIndex++
   }
 }

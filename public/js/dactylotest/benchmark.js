@@ -84,7 +84,7 @@ class Benchmark {
           } else {
             // si oui on doit quand même passer en blanc, dans certain cas, le
             // texte n'étais pas bon mais effacer un character le rend bon
-            this.inputZone.getElement().style.backgroundColor = 'white'
+            this.inputZone.getElement().style.backgroundColor = 'var(--light-bg-secondary)'
           }
         }
       // cas des character valide
@@ -105,9 +105,11 @@ class Benchmark {
         // ajoute une span + character à la fin, sinon on insert une span
         // + un character entre 2 span
         // les 2 méthodes ne touches pas au curseur du spanManager (inputZone)
-        if (this.model.getCursorIndex() === this.model.maxCurdorIndex) {
+        if (this.model.getCursorIndex() === this.model.maxCursorIndex) {
+          console.log('re')
           this.inputZone.setCharAt(c, this.model.getCursorIndex())
         } else {
+          console.log('tu')
           this.inputZone.insertCharAt(c, this.model.getCursorIndex())
         }
 
@@ -147,7 +149,7 @@ class Benchmark {
             this.lastChar = c.toLowerCase()
           }
           // model.canSetUserValidText() est valide, le texte est blanc
-          this.inputZone.getElement().style.backgroundColor = 'white'
+            this.inputZone.getElement().style.backgroundColor = 'var(--light-bg-secondary)'
         } else {
           // model.canSetUserValidText() est invalide, le texte est rouge
           this.inputZone.getElement().style.backgroundColor = 'red'
@@ -161,6 +163,7 @@ class Benchmark {
           }
         }
         // On bouge le curseurr à droite car on à écrit un character
+        this.inputZone.insertLast('')
         this.inputZone.moveCursorRight()
         // On reset le mis (à voir avec Rémi le truc du mis me perturbe un peu)
         this.mis = false

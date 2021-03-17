@@ -73,6 +73,7 @@ export class DataManager {
 
   // "": empty string means punctuation
   addMistake (word) {
+    console.log('\"' + word + '\"')
     this.incFalseChar()
     if (this.sameMis) {
       ++this.mistakes[word][this.mistakes[word].length - 1]

@@ -66,6 +66,7 @@ class Exercise {
         this.inputZone.moveCursorRight()
         // on met a jour le modele
         this.model.setLastInput2(c)
+        this.model.setUserValidText()
         if (this.model.isFinished()) {
           this.data.stopTimer()
           console.log('FINISHED!', this.data.getData())
@@ -77,7 +78,7 @@ class Exercise {
 }
 
 const defaultText = 'Put all speaking, her69 speaking delicate recurred possible.'
-var benchmark;
+let benchmark;
 $(document).ready(() => {
   let target = '/text/random'
   $.get(target)

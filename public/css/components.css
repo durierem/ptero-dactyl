@@ -51,12 +51,12 @@
 /* Ajoute un effet de clignotement type curseur */
 .cursor-blink {
     animation: cursor-blink 1s step-start infinite;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: var(--light-fg);
     color: var(--light-fg);
 }
 @keyframes cursor-blink {
     50% {
-        background-color: rgba(0, 0, 0, 100);
+        background-color: var(--light-bg-secondary);
         color: var(--light-bg-secondary);
     }
 }

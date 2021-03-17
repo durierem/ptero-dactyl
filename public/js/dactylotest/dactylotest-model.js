@@ -6,18 +6,12 @@ export class DactyloTestModel {
     this.referenceText = referenceText
     this.userValidText = ''
     this.userText = ''
-    this.maxCurdorIndex = -1
-
     // this.currChar = this.referenceText.charAt(0)
 
     this.currChar = null
     this.cursorIndex = -1
-<<<<<<< Updated upstream
     this.maxCursorIndex = -1
-    this.currWord = this.referenceText.slice(0, this.findNextSpace())
-=======
     this.currWord = this.referenceText.slice(0, this.findNextSpace(0))
->>>>>>> Stashed changes
   }
 
   getReferenceTextLength () {

@@ -21,8 +21,8 @@ export class DataManager {
   'p','q','r','s','t','u','v','w','x','y','z','é','è','-',':','ç',' ','\'',',',
   '0','1','2','3','4','5','6','7','8','9','.']
     const arr = []
-    for (let i = 0 ; i <= allKey.length;i++) {
-      for (let j = 0 ; j <= allKey.length;j++) {
+    for (let i = 0 ; i < allKey.length; i++) {
+      for (let j = 0 ; j < allKey.length; j++) {
         arr[allKey[i] + allKey[j]] = []
       }
     }

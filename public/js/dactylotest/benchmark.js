@@ -41,22 +41,6 @@ class Benchmark {
     this.inputZone.getElement().addEventListener('keydown', (e) => {
       const c = e.key
 
-
-
-      // Quand l'utilisateur appuie sur une fléche on bouge le cursor du model
-      // et de la vu, les fonctions gère les problèmes de dépassement d'index
-      if (c === 'ArrowRight') {
-        this.model.moveCursorRight()
-        this.inputZone.moveCursorRight()
-        return
-      }
-
-      if (c === 'ArrowLeft') {
-        this.model.moveCursorLeft()
-        this.inputZone.moveCursorLeft()
-        return
-      }
-
       if (!/Backspace|^.$/.test(c)) {
         return
       }
@@ -111,12 +95,7 @@ class Benchmark {
           console.log('re')
           this.inputZone.setCharAt(c, this.model.getCursorIndex())
         } else {
-<<<<<<< Updated upstream
-          console.log('tu')
-          this.inputZone.insertCharAt(c, this.model.getCursorIndex())
-=======
           this.inputZone.insertCharAt(c, this.model.getCursorIndex() + 1)
->>>>>>> Stashed changes
         }
 
         // model.isUserTextValid() test si le texte de l'utilisateur est

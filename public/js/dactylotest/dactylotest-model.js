@@ -37,7 +37,7 @@ export class DactyloTestModel {
   }
 
   isFinished () {
-    return this.getUserTextLength() === this.getReferenceTextLength()
+    return this.getUserText() === this.getReferenceText()
   }
 
   getReferenceText () {
@@ -57,8 +57,6 @@ export class DactyloTestModel {
   }
 
   isInputCorrect (c) {
-    console.log(this.referenceText[this.cursorIndex])
-    console.log(c)
     return c === this.referenceText[this.cursorIndex]
   }
 

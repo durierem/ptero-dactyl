@@ -82,7 +82,7 @@ $(document).ready(() => {
   let target = '/text/random'
   $.get(target)
   .done((data) => {
-    benchmark = new Exercise(data)
+    benchmark = new Exercise(defaultText)
   })
   .fail(() => {
     console.log('Can\'t reach text database.')

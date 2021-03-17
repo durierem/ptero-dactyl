@@ -63,3 +63,12 @@ strong {
     text-decoration: underline;
     text-decoration-color:  var(--accent);
 }
+
+button {
+    font-size: inherit;
+}
+
+a.button, a.button:visited {
+    text-decoration: none;
+    color: var(--dark-fg);
+}

@@ -14,12 +14,6 @@ nav {
     justify-content: flex-start;
 }
 
-button a,
-button a:visited {
-    color: var(--dark-fg);
-    text-decoration: none;
-}
-
 #logo-container {
     flex: 2;
     height: 100%;

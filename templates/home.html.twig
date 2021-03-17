@@ -13,9 +13,7 @@
 <div id="main-content-container">
     {% if app.user %}
 
-    <button class="button start-button">
-        <a href="{{ path('benchmark') }}"><i class="bi bi-caret-right"></i>Démarrer</a>
-    </button>
+    <a id="start-button" class="button" href="{{ path('benchmark') }}"><i class="bi bi-caret-right"></i>Démarrer</a>
 
     {% else %}
 
@@ -61,7 +59,7 @@
 
     <p>Bon courage, et merci pour votre participation !</p>
 
-    <button class="button"><i class="bi bi-person-plus"></i> Nouveau compte</button>
+    <a class="button" href="{{ path('app_register') }}" ><i class="bi bi-person-plus"></i> Nouveau compte</a>
 
     {% endif %}
 </div>

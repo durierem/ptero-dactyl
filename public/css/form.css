@@ -19,17 +19,12 @@ form > div > input {
     background-color: var(--light-bg-secondary);
     color: var(--light-fg);
     text-align: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 5px 0 5px 5px;
     margin-top: 5px;
     border: 2px solid var(--light-bg-secondary);
     border-radius: 5px 5px 5px 5px;
     overflow: auto;
     width: 100%;
     text-align: left;
-}
-
-form > div > label {
-    flex-grow: 2;
-    text-align: right;
+    font-size: 1em;
 }

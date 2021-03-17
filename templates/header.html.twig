@@ -1,19 +1,11 @@
 <header>
     <nav>
         {% if app.user %}
-        <button class="button">
-            <a href="{{ path('app_logout') }}"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
-        </button>
-        <button class="button">
-            <a href="#"><i class="bi bi-person"></i> Mes statistiques ({{ app.user.username }})</a>
-        </button>
+            <a class="button" href="{{ path('app_logout') }}"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
+            <a class="button" href="#"><i class="bi bi-person"></i> Mes statistiques ({{ app.user.username }})</a>
         {% else %}
-        <button class="button">
-            <a href="{{ path('app_login') }}"><i class="bi bi-box-arrow-in-right"></i> Connexion</a>
-        </button>
-        <button class="button">
-            <a href="{{ path('app_register') }}"><i class="bi bi-person-plus"></i> Nouveau compte</a>
-        </button>
+            <a class="button" href="{{ path('app_login') }}"><i class="bi bi-box-arrow-in-right"></i> Connexion</a>
+            <a class="button" href="{{ path('app_register') }}"><i class="bi bi-person-plus"></i> Nouveau compte</a>
         {% endif %}
     </nav>
 

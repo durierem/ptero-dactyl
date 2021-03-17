@@ -111,11 +111,6 @@ export class DactyloTestModel {
       const nextSpace = this.findNextSpace()
       this.currWord = this.referenceText.slice(this.cursorIndex + 1,
         nextSpace === -1 ? this.referenceText.length - 1 : nextSpace)
-        console.log('---currword---')
-        console.log(this.cursorIndex + 1)
-        console.log(nextSpace)
-        console.log(this.referenceText.slice(this.cursorIndex + 1,
-          nextSpace === -1 ? this.referenceText.length - 1 : nextSpace))
     }
   }
 

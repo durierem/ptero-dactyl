@@ -27,6 +27,8 @@ class TextRepository extends ServiceEntityRepository
     {
         $entityManager = $this->getEntityManager();
 
+        // Impossible d'utiliser rand() avec les builders fournis
+        // => on utilise une requête et un mapping manuel :/
         $sql = 'SELECT * FROM text ORDER BY rand() LIMIT 1';
 
         $rsm = new ResultSetMappingBuilder($entityManager);

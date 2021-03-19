@@ -6,7 +6,6 @@ export class DataManager {
     this.time = 0 // temps en ms
     this.lastTime = 0 // temps en ms
     this.errChar = 0
-    this.errCharPrev = 0
     this.numberOfFalseWord = 0
     this.sameMis = false
     this.mistakes = []
@@ -44,7 +43,7 @@ export class DataManager {
   computeWordTimes () {
     const res = []
     let prev = 0
-    this.wordTimes.forEach(function (val) {
+    this.wordTimes.forEach((val) => {
       res.push(val - prev)
       prev = val
     })
@@ -69,16 +68,16 @@ export class DataManager {
   addMistake (word) {
     console.log('\"' + word + '\"')
     this.incFalseChar()
-    if (this.sameMis) {
-      ++this.mistakes[word][this.mistakes[word].length - 1]
-    } else if (this.mistakes[word] === undefined) {
-      this.mistakes[word] = [this.errChar - this.errCharPrev]
+    if (this.mistakes[word] === undefined) {
+      this.mistakes[word] = [1]
       this.incFalseWords()
+    } else if (this.sameMis) {
+      let temp = this.mistakes[word].pop()
+      this.mistakes[word].push(temp + 1)
     } else {
-      this.mistakes[word].push(this.errChar - this.errCharPrev)
+      this.mistakes[word].push(1)
     }
     this.sameMis = true
-    this.errCharPrev = this.errChar
   }
 
   resetMis () {

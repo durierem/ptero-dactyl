@@ -4,14 +4,12 @@ export class DactyloTestModel {
   constructor (referenceText) {
     // super()
     this.referenceText = referenceText
-    this.userValidText = ''
     this.userText = ''
 
     // this.currChar = this.referenceText.charAt(0)
 
     this.currChar = null
     this.cursorIndex = 0
-    this.maxCursorIndex = 0
     this.currWord = this.referenceText.slice(0, this.findNextSpace(0))
   }
 
@@ -34,27 +32,23 @@ export class DactyloTestModel {
 
   findFirst () {
     for (let i = this.cursorIndex; i < this.referenceText.length; i++) {
-      if (!/\w|\d/.test(this.referenceText.charAt(i))) {
-        if (/\w|\d/.test(this.referenceText.charAt(i + 1))) {
-          return i
-        }
+      if (!/\w|\d/.test(this.referenceText.charAt(i))
+         && /\w|\d/.test(this.referenceText.charAt(i + 1))) {
+          return i + 1
       }
     }
     return -1
   }
 
-  setUserValidText () {
+  setCurrentWord () {
     if (!/\w|\d/.test(this.currChar)) {
+      // debut du prochain mot
       const first = this.findFirst()
+      // fin du prochain mot
       const nextSpace = this.findNextSpace(first)
-      this.currWord = this.referenceText.slice(first === -1 ? this.cursorIndex + 1 : first + 1,
+      this.currWord = this.referenceText.slice(first === -1 ? this.cursorIndex + 1 : first,
         nextSpace === -1 ? this.referenceText.length - 1 : nextSpace)
     }
-    this.userValidText = this.userText
-  }
-
-  canSetUserValidText () {
-    return this.userValidText < this.userText && this.userText === this.referenceText.slice(0, this.userText.length)
   }
 
   isUserTextValid () {
@@ -110,44 +104,6 @@ export class DactyloTestModel {
     this.userText += input
     this.currChar = this.userText[this.userText.length - 1]
     this.cursorIndex++
-    this.maxCursorIndex++
     this.currChar = input
-  }
-
-  moveCursorLeft () {
-    if (this.cursorIndex < 0) { return }
-    this.cursorIndex--
-  }
-
-  moveCursorRight () {
-    if (this.cursorIndex === this.userText.length - 1) { return }
-    this.cursorIndex++
-  }
-
-  findNextSpaceEx () {
-    for (let i = this.cursorIndex + 2; i < this.referenceText.length; i++) {
-      if (!/\w|\d/.test(this.referenceText.charAt(i))) {
-        return i
-      }
-    }
-    return -1
-  }
-
-  setLastInputEx (input) {
-    if (this.cursorIndex < this.referenceText.length) {
-      if (!/\d|\w/.test(this.referenceText.charAt(this.cursorIndex + 1))) {
-        this.currWord = this.referenceText.charAt(this.cursorIndex + 1)
-      } else if (!/\d|\w/.test(this.referenceText.charAt(this.cursorIndex - 1))) {
-        const nextSpace = this.findNextSpaceEx()
-        this.currWord = this.referenceText.slice(this.cursorIndex,
-          nextSpace === -1 ? this.referenceText.length - 1 : nextSpace)
-      }
-    }
-    this.currChar = input
-    const fHalf = this.userText.slice(0, this.cursorIndex)
-    const sHalf = this.userText.slice(this.cursorIndex)
-    this.userText = fHalf + input + sHalf
-    this.cursorIndex++
-    this.maxCursorIndex++
   }
 }

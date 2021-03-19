@@ -36,9 +36,9 @@ class PrivateApiController extends AbstractController
         $entityManager->persist($benchmark);
         $entityManager->flush();
 
-        $this->addFlash('benchDone', 'vos données ont été sauvegardees.');
+        $this->addFlash('benchDone', 'vos données ont été sauvegardées.');
 
-        return $this->redirectToRoute('/');
+        return $this->redirectToRoute('home');
     }
 
     /**
@@ -50,9 +50,15 @@ class PrivateApiController extends AbstractController
             throw new HttpException(403, "Unauthorized request: private API");
         }
 
-        $text = $textRepository->findRandom();
+        $prevIds = $request->request->get('bDone');
 
-        return new Response($text->getContent());
+        $decoded = json_decode($prevIds, true);
+        $decoded = $decoded == null ? [] : $decoded;
+
+        $text = $textRepository->findRandom($decoded);
+
+        return $this->json(["id"=>$text->getId(),
+                            "content"=>$text->getContent()]);
     }
 
     /**

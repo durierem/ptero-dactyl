@@ -74,18 +74,32 @@ const defaultText = 'Put all speaking, her69 speaking delicate recurred possible
 let exercise = null
 $(document).ready(() => {
   let target = '/exercise/getone'
-  let last = sessionStorage.getItem('last')
+  // premier essai
   if (sessionStorage.getItem('currentEx') === null) {
+    let last = sessionStorage.getItem('last')
     $.post(target, {last: last})
-    .done((data) => {
-      sessionStorage.setItem('last', data.tag)
-      sessionStorage.setItem('currentEx', data.content)
-      exercise = new Exercise(defaultText)
-    })
-    .fail(() => {
-      console.log('Can\'t reach text database.')
-      exercise = new Exercise(defaultText)
-    })
+      .done((data) => {
+        // ex 1/2
+        if (last === null) {
+          let jason = sessionStorage.getItem('bench')
+          jason.ex1 = data.tag
+          sessionStorage.setItem('bench', jason)
+          sessionStorage.setItem('last', data.tag)
+        // ex 2/2
+        } else {
+          sessionStorage.removeItem('last')
+          let jason = sessionStorage.getItem('bench')
+          jason.ex2 = data.tag
+          sessionStorage.setItem('bench', jason)
+        }
+        sessionStorage.setItem('currentEx', data.content)
+        exercise = new Exercise(defaultText)
+      })
+      .fail(() => {
+        console.log('Can\'t reach text database.')
+        exercise = new Exercise(defaultText)
+      })
+  // deuxieme essai
   } else {
     //exercise = new Exercise(sessionStorage.getItem('currentEx'))
     exercise = new Exercise(defaultText)

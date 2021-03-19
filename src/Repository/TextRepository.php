@@ -23,13 +23,17 @@ class TextRepository extends ServiceEntityRepository
     /**
      * @return Text Returns a randomly selected Text
      */
-    public function findRandom(): Text
+    public function findRandom(Array $prevIds): Text
     {
         $entityManager = $this->getEntityManager();
 
+        $ids = implode(',', array_values($prevIds));
+        if ($ids == '') {
+          $ids = '-1';
+        }
         // Impossible d'utiliser rand() avec les builders fournis
         // => on utilise une requête et un mapping manuel :/
-        $sql = 'SELECT * FROM text ORDER BY rand() LIMIT 1';
+        $sql = "SELECT * FROM text WHERE id NOT IN ($ids) ORDER BY rand() LIMIT 1";
 
         $rsm = new ResultSetMappingBuilder($entityManager);
         $rsm->addRootEntityFromClassMetadata('App\Entity\Text', 't');

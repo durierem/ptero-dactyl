@@ -54,43 +54,45 @@ class Benchmark {
         if (!this.model.isUserTextValid()) {
           this.data.addMistake(this.model.getCurrWord())
         } else {
-          if (!/\d|\w/.test(c)) {
+          const isEndOfWord = !/\d|\w/.test(this.model.getReferenceText()
+                        .charAt(currentUserText().length - 2))
+          if (isEndOfWord) {
+            this.data.resetMis()
             this.data.addWordTime()
+            this.model.setCurrentWord()
           }
         }
-
-        // On reset le mis (à voir avec Rémi le truc du mis me perturbe un peu)
-        this.wordAlreadyEncountered = false
       }
 
       if (this.model.isUserTextValid()) {
         this.inputZone.getElement().style.backgroundColor = 'var(--light-bg-secondary)'
       } else {
-        this.inputZone.getElement().style.backgroundColor = 'var(--red)'
+        this.inputZone.getElement().style.backgroundColor = 'var(--error)'
       }
 
-      // si userText === referenceText c'est la fin !
       if (this.model.isFinished()) {
-        this.data.addWordTime()
         console.log(this.data.getData())
 
         /*
-         * se sert des variable de sessions pour deduire combien de
+         * Se sert des variable de sessions pour deduire combien de
          * benchmark l'utilisateur doit faire et faire suivre les donnees
          * jusqu'a la sauvegarde
          */
+        // Premier benchmark on cree les donnees
         if (sessionStorage.getItem('order') === null) {
           sessionStorage.setItem('order', 1)
           const data = this.data.getData()
           sessionStorage.setItem('bench', JSON.stringify(data))
           location.assign('/dactylotest/exercise')
+        // 2e benchmark on ajoute des donnees
         } else if (sessionStorage.getItem('order') === 1) {
           sessionStorage.setItem('order', 2)
-          let prevData = JSON.parse(sessionStorage.getItem('bench'))
+          const prevData = JSON.parse(sessionStorage.getItem('bench'))
           const jason = {bench1: prevData,
-                       bench2: this.data.getData()}
-          sessionStorage.setItem('bench', jason)
+                         bench2: this.data.getData()}
+          sessionStorage.setItem('bench', JSON.stringify(jason))
           location.assign('/dactylotest/exercise')
+        // 3e benchmark on ajoute les dernieres donnees et on envoie en bdd
         } else {
           sessionStorage.removeItem('order')
           let jason = JSON.parse(sessionStorage.getItem('bench'))
@@ -106,6 +108,27 @@ class Benchmark {
   }
 }
 
-const text = "La grotte d’Aguzou s'ouvre sur le flanc nord-ouest du pic d'Aguzou. Elle se situe dans le département de l'Aude, aux confins de l'Ariège, entre les villes d'Axat et d'Usson, au sud de Quillan, sur la commune de Escouloubre."
 const defaultText = 'Put all speaking, her69 speaking delicate recurred possible.'
-const benchmark = new Benchmark(defaultText)
+let benchmark = null
+$(document).ready(() => {
+  let target = '/text/random'
+  let prevIds = JSON.parse(sessionStorage.getItem('prev'))
+  $.post(target, { bDone: JSON.stringify(prevIds) })
+    .done((data) => {
+      if (prevIds === null) {
+        prevIds = {b1: data.id}
+        sessionStorage.setItem('prev', JSON.stringify(prevIds))
+      } else if (prevIds.b2 === null){
+        prevIds.b2 = data.id
+        sessionStorage.setItem('prev', JSON.stringify(prevIds))
+      } else {
+        sessionStorage.removeItem('prev')
+      }
+      //benchmark = new Benchmark(data.text)
+      benchmark = new Benchmark(defaultText)
+    })
+    .fail(() => {
+      console.log('Can\'t reach text database.')
+      benchmark = new Benchmark(defaultText)
+    })
+})

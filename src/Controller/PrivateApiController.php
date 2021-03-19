@@ -92,24 +92,28 @@ class PrivateApiController extends AbstractController
 
         $text = $textRepository->findRandom($decoded);
 
-        return $this->json(["id"=>$text->getId(),
-                            "content"=>$text->getContent()]);
+        return $this->json([
+            "id" => $text->getId(),
+            "content" => $text->getContent()
+        ]);
     }
 
     /**
      * @Route("/exercise/getone", name="get_exercise")
      */
-    public function exercise(Request $request, ExerciseRepository $exerciseRepository): Response
+    public function exercise(Request $request, ExerciseRepository $exerciseRepository, SessionInterface $session): Response
     {
         if (!$request->isXmlHttpRequest()) {
             throw new HttpException(403, "Unauthorized request: private API");
         }
 
-        $last = $request->request->get('last');
-
+        $last = $session->get('last');
         $exercise = $exerciseRepository->findExercise($last);
+        $session->set('last', $exercise->getTag());
 
-        return $this->json(["tag"=>$exercise->getTag(),
-                            "content"=>$exercise->getContent()]);
+        return $this->json([
+            "tag" => $exercise->getTag(),
+            "content" => $exercise->getContent()
+        ]);
     }
 }

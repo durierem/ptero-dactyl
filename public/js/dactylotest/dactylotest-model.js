@@ -9,8 +9,8 @@ export class DactyloTestModel {
     // this.currChar = this.referenceText.charAt(0)
 
     this.currChar = null
-    this.cursorIndex = -1
-    this.maxCursorIndex = -1
+    this.cursorIndex = 0
+    this.maxCursorIndex = 0
     this.currWord = this.referenceText.slice(0, this.findNextSpace(0))
   }
 
@@ -23,7 +23,7 @@ export class DactyloTestModel {
   }
 
   findNextSpace (index) {
-    for (let i = index + 1; i < this.referenceText.length; i++) {
+    for (let i = index; i < this.referenceText.length; i++) {
       if (!/\w|\d/.test(this.referenceText.charAt(i))) {
         return i
       }
@@ -31,8 +31,8 @@ export class DactyloTestModel {
     return -1
   }
 
-  findFirst() {
-    for (let i = this.cursorIndex; i < this.referenceText.length; i++ ) {
+  findFirst () {
+    for (let i = this.cursorIndex; i < this.referenceText.length; i++) {
       if (!/\w|\d/.test(this.referenceText.charAt(i))) {
         if (/\w|\d/.test(this.referenceText.charAt(i + 1))) {
           return i
@@ -105,28 +105,17 @@ export class DactyloTestModel {
     return -1
   }
 
-  delAt () {
-    if (this.cursorIndex === -1) { return }
-    // if (this.currChar === ' ') {
-    //   const lastSpace = this.findLastSpace()
-    //   this.currWord = this.referenceText.slice(lastSpace === -1 ? 0 : lastSpace,
-    //     this.cursorIndex - 1)
-    // }
-    this.currChar = this.userText[this.cursorIndex - 2]
-    const fHalf = this.userText.slice(0, this.cursorIndex)
-    const sHalf = this.userText.slice(this.cursorIndex + 1)
-    this.userText = fHalf + sHalf
-    this.cursorIndex--
-    this.maxCursorIndex--
+  deleteLastInput () {
+    if (this.userText.length <= 0) { return }
+    this.userText = this.userText.slice(0, this.userText.length - 1)
+    this.currChar = this.userText[this.userText.length - 1]
+    this.cursorIndex -= 1
   }
 
   setLastInput (input) {
-    const fHalf = this.userText.slice(0, this.cursorIndex + 1)
-    const sHalf = this.userText.slice(this.cursorIndex + 1)
-    this.userText = fHalf + input + sHalf
+    this.userText += input
+    this.currChar = this.userText[this.userText.length - 1]
     this.cursorIndex++
-    this.maxCursorIndex++
-    this.currChar = input
     // if (!/\w|\d/.test(input)) {
     //   const nextSpace = this.findNextSpace()
     //   this.currWord = this.referenceText.slice(this.cursorIndex + 1,

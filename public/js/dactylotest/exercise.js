@@ -49,9 +49,12 @@ class Exercise {
         }
         this.data.incFalseChar()
       } else {
-        if (!/\w|\d/.test(c)
-            || !/\d|\w/.test(this.model.getReferenceText()
-                            .charAt(this.model.getCursorIndex() + 1))) {
+        const isDigitOrLetter = /\w|\d/.test(c)
+        const nextRefChar = this.model.getReferenceText()
+          .charAt(this.model.getCursorIndex() + 1)
+        const isNextDigitOrLetter = /\d|\w/.test(nextRefChar)
+
+        if (!isDigitOrLetter || !isNextDigitOrLetter) {
           this.data.resetMis()
           this.data.addWordTime()
         }
@@ -78,15 +81,15 @@ class Exercise {
 }
 
 const defaultText = 'Put all speaking, her69 speaking delicate recurred possible.'
-let benchmark;
+export let benchmark
 $(document).ready(() => {
-  let target = '/text/random'
+  const target = '/text/random'
   $.get(target)
-  .done((data) => {
-    benchmark = new Exercise(defaultText)
-  })
-  .fail(() => {
-    console.log('Can\'t reach text database.')
-    benchmark = new Exercise(defaultText)
-  })
+    .done((data) => {
+      benchmark = new Exercise(data)
+    })
+    .fail(() => {
+      console.log('Can\'t reach text database.')
+      benchmark = new Exercise(defaultText)
+    })
 })

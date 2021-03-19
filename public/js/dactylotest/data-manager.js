@@ -17,12 +17,12 @@ export class DataManager {
   // Initialise un tableau avec toutes les combinaisons de couples de lettre
   // de l'alphabet.
   initializeKeyComb () {
-    const allKey = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o',
-  'p','q','r','s','t','u','v','w','x','y','z','é','è','-',':','ç',' ','\'',',',
-  '0','1','2','3','4','5','6','7','8','9','.']
+    const allKey = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+      'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'é', 'è', '-', ':', 'ç', ' ', '\'', ',',
+      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.']
     const arr = []
-    for (let i = 0 ; i < allKey.length; i++) {
-      for (let j = 0 ; j < allKey.length; j++) {
+    for (let i = 0; i < allKey.length; i++) {
+      for (let j = 0; j < allKey.length; j++) {
         arr[allKey[i] + allKey[j]] = []
       }
     }
@@ -72,6 +72,12 @@ export class DataManager {
   }
 
   // "": empty string means punctuation
+
+  /**
+   * Ajoute le mot actuel à la liste des erreurs. Si le mot existe déjà dans
+   * la liste des erreurs, incrémente le nombre d'erreurs associées à ce mot.
+   * @param {string} word Le mot actuel
+   */
   addMistake (word) {
     console.log('\"' + word + '\"')
     this.incFalseChar()

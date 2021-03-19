@@ -15,6 +15,12 @@
 
     <a id="start-button" class="button" href="{{ path('benchmark') }}"><i class="bi bi-caret-right"></i>Démarrer</a>
 
+    {% for message in app.flashes('benchDone') %}
+        <div class="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     {% else %}
 
     <h1>Qu'est-ce que Ptero Dactyl ?</h1>

@@ -5,6 +5,7 @@ namespace App\Controller;
 use DateTime;
 use App\Entity\Benchmark;
 use App\Repository\TextRepository;
+use App\Repository\ExerciseRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -70,7 +71,9 @@ class PrivateApiController extends AbstractController
         $entityManager->persist($benchmark);
         $entityManager->flush();
 
-        return new Response("done");
+        $this->addFlash('benchDone', 'vos données ont été sauvegardées.');
+
+        return $this->redirectToRoute('home');
     }
 
     /**
@@ -82,8 +85,31 @@ class PrivateApiController extends AbstractController
             throw new HttpException(403, "Unauthorized request: private API");
         }
 
-        $text = $textRepository->findRandom();
+        $prevIds = $request->request->get('bDone');
 
-        return new Response($text->getContent());
+        $decoded = json_decode($prevIds, true);
+        $decoded = $decoded == null ? [] : $decoded;
+
+        $text = $textRepository->findRandom($decoded);
+
+        return $this->json(["id"=>$text->getId(),
+                            "content"=>$text->getContent()]);
+    }
+
+    /**
+     * @Route("/exercise/getone", name="get_exercise")
+     */
+    public function exercise(Request $request, ExerciseRepository $exerciseRepository): Response
+    {
+        if (!$request->isXmlHttpRequest()) {
+            throw new HttpException(403, "Unauthorized request: private API");
+        }
+
+        $last = $request->request->get('last');
+
+        $exercise = $exerciseRepository->findExercise($last);
+
+        return $this->json(["tag"=>$exercise->getTag(),
+                            "content"=>$exercise->getContent()]);
     }
 }

@@ -45,6 +45,7 @@ export class Span {
   }
 
   detach () {
-    this.container.removeChild(this.element)
+    const children = this.container.childNodes
+    this.container.removeChild(children[children.length - 2])
   }
 }

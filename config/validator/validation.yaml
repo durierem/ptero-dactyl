@@ -1,0 +1,14 @@
+# Fichier des contraintes sur les propiétés.
+
+# Les contraintes sur username sont définies ici
+# Les contraintes sur password sont dans RegistrationFormType
+# car plainPassword n'est pas une propriété de User. Par mesure de sécurité, il en est mieux ainsi.
+App\Entity\User:
+    properties:
+        username:
+            - NotNull: ~
+            - Length:
+                min: 5
+                max: 20
+                minMessage: "Votre nom d'utilisateur doit faire plus de {{ limit }} charactères."
+                maxMessage: "Votre nom d'utilisateur ne doit pas dépasser {{ limit }} charactères."

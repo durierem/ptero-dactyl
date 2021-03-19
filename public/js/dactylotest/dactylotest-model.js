@@ -6,6 +6,7 @@ export class DactyloTestModel {
     this.referenceText = referenceText
     this.userValidText = ''
     this.userText = ''
+
     // this.currChar = this.referenceText.charAt(0)
 
     this.currChar = null
@@ -49,13 +50,6 @@ export class DactyloTestModel {
       this.currWord = this.referenceText.slice(first === -1 ? this.cursorIndex + 1 : first + 1,
         nextSpace === -1 ? this.referenceText.length - 1 : nextSpace)
     }
-    // if (!/\w|\d/.test(this.currChar)) {
-    //   this.currWord = this.currChar
-    // } else if (!/\w|\d/.test(this.userText[this.userText.length - 2])) {
-    //   const nextSpace = this.findNextSpace(this.getCursorIndex())
-    //   this.currWord = this.referenceText.slice(this.cursorIndex,
-    //       nextSpace === -1 ? this.referenceText.length - 1 : nextSpace)
-    // }
     this.userValidText = this.userText
   }
 
@@ -116,21 +110,8 @@ export class DactyloTestModel {
     this.userText += input
     this.currChar = this.userText[this.userText.length - 1]
     this.cursorIndex++
-    // if (!/\w|\d/.test(input)) {
-    //   const nextSpace = this.findNextSpace()
-    //   this.currWord = this.referenceText.slice(this.cursorIndex + 1,
-    //     nextSpace === -1 ? this.referenceText.length - 1 : nextSpace)
-    // }
-    //
-    // if (this.cursorIndex < this.referenceText.length) {
-    //   if (!/\d|\w/.test(this.referenceText.charAt(this.cursorIndex + 1))) {
-    //     this.currWord = this.referenceText.charAt(this.cursorIndex + 1)
-    //   } else if (!/\d|\w/.test(this.referenceText.charAt(this.cursorIndex - 1))) {
-    //     const nextSpace = this.findNextSpace2()
-    //     this.currWord = this.referenceText.slice(this.cursorIndex,
-    //       nextSpace === -1 ? this.referenceText.length - 1 : nextSpace)
-    //   }
-    // }
+    this.maxCursorIndex++
+    this.currChar = input
   }
 
   moveCursorLeft () {
@@ -143,7 +124,7 @@ export class DactyloTestModel {
     this.cursorIndex++
   }
 
-  findNextSpace2 () {
+  findNextSpaceEx () {
     for (let i = this.cursorIndex + 2; i < this.referenceText.length; i++) {
       if (!/\w|\d/.test(this.referenceText.charAt(i))) {
         return i
@@ -152,12 +133,12 @@ export class DactyloTestModel {
     return -1
   }
 
-  setLastInput2 (input) {
+  setLastInputEx (input) {
     if (this.cursorIndex < this.referenceText.length) {
       if (!/\d|\w/.test(this.referenceText.charAt(this.cursorIndex + 1))) {
         this.currWord = this.referenceText.charAt(this.cursorIndex + 1)
       } else if (!/\d|\w/.test(this.referenceText.charAt(this.cursorIndex - 1))) {
-        const nextSpace = this.findNextSpace2()
+        const nextSpace = this.findNextSpaceEx()
         this.currWord = this.referenceText.slice(this.cursorIndex,
           nextSpace === -1 ? this.referenceText.length - 1 : nextSpace)
       }

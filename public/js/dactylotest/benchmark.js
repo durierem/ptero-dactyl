@@ -13,14 +13,13 @@ class Benchmark {
     this.textContainer = new SpanManager(document.getElementById('text-container'))
     this.inputZone = new SpanManager(document.getElementById('virtual-user-input'))
     this.firstInput = true
-    this.wordAlreadyEncountered = false
     this.lastChar = ' '
     this.initialize()
   }
 
   initialize () {
     // On insère le texte de référence dans la zone qui lui est dédiée
-    for (const c of this.referenceText) {
+    for (const c of this.model.getReferenceText()) {
       this.textContainer.insertLast(c)
     }
 
@@ -46,20 +45,19 @@ class Benchmark {
       const currentUserText = () => { return this.model.getUserText() }
 
       if (c === 'Backspace') {
-        console.log('BACKSPACE')
         if (currentUserText().length > 0) {
           this.model.deleteLastInput()
           this.inputZone.removeCharAt(currentUserText().length)
         }
       } else {
-        console.log('INSERTION DE : ' + c + ' (index : ' + this.model.cursorIndex + ')')
         this.model.setLastInput(c)
         this.inputZone.insertCharAt(c, currentUserText().length - 1)
 
         if (!this.model.isUserTextValid()) {
-          if (!this.wordAlreadyEncountered) {
-            this.wordAlreadyEncountered = true
-            this.data.addMistake(this.model.getCurrWord())
+          this.data.addMistake(this.model.getCurrWord())
+        } else {
+          if (!/\d|\w/.test(c)) {
+            this.data.addWordTime()
           }
         }
 
@@ -73,14 +71,38 @@ class Benchmark {
         this.inputZone.getElement().style.backgroundColor = 'var(--red)'
       }
 
-      console.log('model.cursorIndex = ' + this.model.cursorIndex)
-      console.log('inputZone.cursorIndex = ' + this.inputZone.cursorIndex)
-
       // si userText === referenceText c'est la fin !
       if (this.model.isFinished()) {
         this.data.addWordTime()
-        console.log('THE END')
         console.log(this.data.getData())
+
+        /*
+         * se sert des variable de sessions pour deduire combien de
+         * benchmark l'utilisateur doit faire et faire suivre les donnees
+         * jusqu'a la sauvegarde
+         */
+        if (sessionStorage.getItem('order') === null) {
+          sessionStorage.setItem('order', 1)
+          const data = this.data.getData()
+          sessionStorage.setItem('bench', JSON.stringify(data))
+          location.assign('/dactylotest/exercise')
+        } else if (sessionStorage.getItem('order') === 1) {
+          sessionStorage.setItem('order', 2)
+          let prevData = JSON.parse(sessionStorage.getItem('bench'))
+          const jason = {bench1: prevData,
+                       bench2: this.data.getData()}
+          sessionStorage.setItem('bench', jason)
+          location.assign('/dactylotest/exercise')
+        } else {
+          sessionStorage.removeItem('order')
+          let jason = JSON.parse(sessionStorage.getItem('bench'))
+          jason.bench3 = this.data.getData()
+          const target = '/dactylotest/save'
+          $.post(target, { data: JSON.stringify(jason) })
+            .fail((data) => {
+              console.log('Couldn\'t save data: ' + data)
+            })
+        }
       }
     })
   }

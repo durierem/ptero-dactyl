@@ -41,18 +41,6 @@ export class DataManager {
     }
   }
 
-  sendData () {
-    const target = '/dactylotest/save' // cible de la requete
-    const content = JSON.stringify(this.getData())
-    // requete avec jquery
-    // on peut stocker l'objet jquery dans une variable si on veut utiliser
-    // ses methodes plus tard [.done(), .fail(), .always()]
-    $.post(target, { data: content })
-      .done(function (data) {
-        console.log('response: ' + data)
-      })
-  }
-
   computeWordTimes () {
     const res = []
     let prev = 0
@@ -111,9 +99,8 @@ export class DataManager {
   //  au 100e de seconde pre car c'est le plus petit interval possible pour
   //  setInterval()
   startTimer () {
-    const myData = this
-    this.timer = setInterval(function () {
-      myData.time += 10
+    this.timer = setInterval(() => {
+      this.time += 10
     }, 10)
   }
 

@@ -1,40 +1,31 @@
 'use strict'
 
-import { DataManager } from './data-manager.js'
 import { SpanManager } from './span-manager.js'
 import { DactyloTestModel } from './dactylotest-model.js'
 
-// Exercise: Insere slmt les caracteres s'ils sont corrects,
-//  rouge: erreur / normal: bon
 class Exercise {
   constructor (referenceText) {
-    this.data = new DataManager()
     this.model = new DactyloTestModel(referenceText)
-    this.model.cursorIndex += 1
     this.textContainer = new SpanManager(document.getElementById('text-container'))
     this.inputZone = new SpanManager(document.getElementById('virtual-user-input'))
+    // cette variable servira de memoire pour savoir de quelle couleur
+    // on doit afficher le caractere que l'on insere
     this.mis = false
-    this.firstInput = true
     this.initialize()
   }
 
   initialize () {
+    // On insère le texte de référence dans la zone qui lui est dédiée
     for (const c of this.model.getReferenceText()) {
       this.textContainer.insertLast(c)
     }
 
-    this.inputZone.insertLast('')
-    this.currSpanIndex = this.model.getCursorIndex()
-
     this.inputZone.getElement().addEventListener('click', () => {
-      this.inputZone.placeCursor(this.model.getCursorIndex())
+      this.inputZone.insertLast('')
+      this.inputZone.placeCursor(0)
     })
 
     this.inputZone.getElement().addEventListener('keydown', (e) => {
-      if (this.firstInput) {
-        this.data.startTimer()
-        this.firstInput = false
-      }
 
       const c = e.key
 
@@ -42,54 +33,62 @@ class Exercise {
         return
       }
 
-      if (!this.model.isInputCorrect(c)) {
-        if (!this.mis) {
-          this.mis = true
-          this.data.addMistake(this.model.getCurrWord())
-        }
-        this.data.incFalseChar()
-      } else {
-        const isDigitOrLetter = /\w|\d/.test(c)
-        const nextRefChar = this.model.getReferenceText()
-          .charAt(this.model.getCursorIndex() + 1)
-        const isNextDigitOrLetter = /\d|\w/.test(nextRefChar)
+      const lastCharIndex = () => { return this.model.getUserTextLength() - 1 }
 
-        if (!isDigitOrLetter || !isNextDigitOrLetter) {
-          this.data.resetMis()
-          this.data.addWordTime()
-        }
+      if (!this.model.isInputCorrect(c)) {
+        this.mis = true
+      } else {
         // on ajoute le caractere avec la bonne couleur
-        this.inputZone.setCharAt(c, this.model.getCursorIndex())
-        this.inputZone.spans[this.model.getCursorIndex()].setColor(this.mis
-          ? 'var(--error)'
-          : 'var(--light-fg)')
+        // 'mis' defini la couleur: si l'utilisateur a fait une faute a cet
+        // endroit on l'affiche comme une erreur
+        this.model.setLastInput(c)
+        this.inputZone.insertCharAt(c, lastCharIndex())
+        this.inputZone.spans[lastCharIndex()].setColor(this.mis
+                 ? 'var(--error)'
+                 : 'var(--light-fg)')
         this.mis = false
-        // on avance le curseur
-        this.inputZone.insertLast('')
-        this.inputZone.moveCursorRight()
-        // on met a jour le modele
-        this.model.setLastInput2(c)
-        this.model.setUserValidText()
+
+        /*
+         * ici on controle ou en est l'utilisateur dans la chaine des tests
+         * on le renvoie donc soit vers un autre exercice, soit vers le
+         * benchmark suivant
+         */
         if (this.model.isFinished()) {
-          this.data.stopTimer()
-          console.log('FINISHED!', this.data.getData())
-          this.data.sendData()
+          console.log('FINISHED')
+          if (sessionStorage.getItem('redo') === null) {
+            sessionStorage.setItem('redo', 'ayaya')
+            location.reload()
+          } else {
+            sessionStorage.removeItem('redo')
+            sessionStorage.removeItem('currentEx')
+            location.assign('/dactylotest/benchmark')
+          }
         }
       }
     })
   }
 }
 
+
 const defaultText = 'Put all speaking, her69 speaking delicate recurred possible.'
-export let benchmark
+let exercise = null
 $(document).ready(() => {
-  const target = '/text/random'
-  $.get(target)
+  let target = '/exercise/getone'
+  let last = sessionStorage.getItem('last')
+  if (sessionStorage.getItem('currentEx') === null) {
+    $.post(target, {last: last})
     .done((data) => {
-      benchmark = new Exercise(data)
+      sessionStorage.setItem('last', data.tag)
+      sessionStorage.setItem('currentEx', data.content)
+      exercise = new Exercise(defaultText)
     })
     .fail(() => {
       console.log('Can\'t reach text database.')
-      benchmark = new Exercise(defaultText)
+      exercise = new Exercise(defaultText)
     })
+  } else {
+    //exercise = new Exercise(sessionStorage.getItem('currentEx'))
+    exercise = new Exercise(defaultText)
+  }
 })
+

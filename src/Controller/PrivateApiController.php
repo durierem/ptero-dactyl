@@ -5,6 +5,7 @@ namespace App\Controller;
 use DateTime;
 use App\Entity\Benchmark;
 use App\Repository\TextRepository;
+use App\Repository\ExerciseRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,7 +36,9 @@ class PrivateApiController extends AbstractController
         $entityManager->persist($benchmark);
         $entityManager->flush();
 
-        return new Response("done");
+        $this->addFlash('benchDone', 'vos données ont été sauvegardees.');
+
+        return $this->redirectToRoute('/');
     }
 
     /**
@@ -50,5 +53,22 @@ class PrivateApiController extends AbstractController
         $text = $textRepository->findRandom();
 
         return new Response($text->getContent());
+    }
+
+    /**
+     * @Route("/exercise/getone", name="get_exercise")
+     */
+    public function exercise(Request $request, ExerciseRepository $exerciseRepository): Response
+    {
+        if (!$request->isXmlHttpRequest()) {
+            throw new HttpException(403, "Unauthorized request: private API");
+        }
+
+        $last = $request->request->get('last');
+
+        $exercise = $exerciseRepository->findExercise($last);
+
+        return $this->json(["tag"=>$exercise->getTag(),
+                            "content"=>$exercise->getContent()]);
     }
 }

@@ -55,7 +55,10 @@ class Benchmark {
           this.data.addMistake(this.model.getCurrWord())
         } else {
           const isEndOfWord = !/\d|\w/.test(this.model.getReferenceText()
-                        .charAt(currentUserText().length - 2))
+                        .charAt(currentUserText().length))
+          console.log(isEndOfWord,
+                      this.model.getReferenceText()
+                        .charAt(currentUserText().length))
           if (isEndOfWord) {
             this.data.resetMis()
             this.data.addWordTime()

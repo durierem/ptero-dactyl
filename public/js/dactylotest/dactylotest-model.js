@@ -41,14 +41,13 @@ export class DactyloTestModel {
   }
 
   setCurrentWord () {
-    if (!/\w|\d/.test(this.currChar)) {
-      // debut du prochain mot
-      const first = this.findFirst()
-      // fin du prochain mot
-      const nextSpace = this.findNextSpace(first)
-      this.currWord = this.referenceText.slice(first === -1 ? this.cursorIndex + 1 : first,
-        nextSpace === -1 ? this.referenceText.length - 1 : nextSpace)
-    }
+    // debut du prochain mot
+    const first = this.findFirst()
+    // fin du prochain mot
+    const nextSpace = this.findNextSpace(first)
+    this.currWord = this.referenceText.slice(first === -1 ? this.cursorIndex + 1 : first,
+      nextSpace === -1 ? this.referenceText.length - 1 : nextSpace)
+    console.log(this.currWord)
   }
 
   isUserTextValid () {

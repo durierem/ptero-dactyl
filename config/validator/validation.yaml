@@ -10,5 +10,5 @@ App\Entity\User:
             - Length:
                 min: 5
                 max: 20
-                minMessage: "Votre nom d'utilisateur doit faire plus de {{ limit }} charactères."
-                maxMessage: "Votre nom d'utilisateur ne doit pas dépasser {{ limit }} charactères."
+                minMessage: "Votre nom d'utilisateur doit faire plus de {{ limit }} caractères."
+                maxMessage: "Votre nom d'utilisateur ne doit pas dépasser {{ limit }} caractères."

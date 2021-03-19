@@ -6,8 +6,6 @@ import { DactyloTestModel } from './dactylotest-model.js'
 
 class Benchmark {
   constructor (referenceText) {
-    this.referenceText = referenceText
-
     this.model = new DactyloTestModel(referenceText)
     this.data = new DataManager()
     this.textContainer = new SpanManager(document.getElementById('text-container'))

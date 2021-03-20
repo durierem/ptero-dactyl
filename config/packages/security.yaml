@@ -45,3 +45,8 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/dactylotest, roles: ROLE_USER }
+        
+        # Restriction par adresse ip 
+        # https://symfony.com/doc/current/security/access_control.html#matching-access-control-by-ip
+        - { path: '^/api', roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1}
+        - { path: '^/api', roles: ROLE_NO_ACCESS }

@@ -64,7 +64,7 @@ class Exercise {
 const defaultText = 'Put all'
 let exercise = null
 $(document).ready(() => {
-  const target = '/get/new_exercise'
+  const target = '/api/get/new_exercise'
   $.get(target)
     .done((data) => {
       console.log(data)

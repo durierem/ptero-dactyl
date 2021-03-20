@@ -78,7 +78,7 @@ class Benchmark {
       if (this.model.isFinished()) {
         console.log(this.data.getData())
         const jason = this.data.getData()
-        const target = '/send/benchdata'
+        const target = '/api/send/benchdata'
         $.post(target, { data: JSON.stringify(jason) })
           .done(() => {
             window.location.assign('/dactylotest/session?isFinished=true')
@@ -118,7 +118,7 @@ class Benchmark {
 const defaultText = 'Put all'
 let benchmark = null
 $(document).ready(() => {
-  const target = '/get/rdm_text'
+  const target = '/api/get/rdm_text'
   $.get(target)
     .done((data) => {
       console.log(data)

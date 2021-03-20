@@ -54,7 +54,7 @@ class PrivateApiController extends AbstractController
     }
 
     /**
-     * @Route("/send/benchdata", name="save_dactylotest")
+     * @Route("/api/send/benchdata", name="save_dactylotest")
      */
     public function save(Request $request, SessionInterface $session): Response
     {
@@ -98,7 +98,7 @@ class PrivateApiController extends AbstractController
     }
 
     /**
-     * @Route("/get/rdm_text", name="get_random_text")
+     * @Route("/api/get/rdm_text", name="get_random_text")
      */
     public function random(Request $request, TextRepository $textRepository, SessionInterface $session): Response
     {
@@ -117,7 +117,7 @@ class PrivateApiController extends AbstractController
     }
 
     /**
-     * @Route("/get/new_exercise", name="get_exercise")
+     * @Route("/api/get/new_exercise", name="get_exercise")
      */
     public function exercise(Request $request, ExerciseRepository $exerciseRepository, SessionInterface $session): Response
     {

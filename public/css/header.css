@@ -25,7 +25,6 @@ nav {
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
-    text-overflow: hidden;
 }
 
 #nav-opener-container {
@@ -66,7 +65,7 @@ nav > a:hover {
     height: 80px;
 }
 
-@media all and (max-width: 650px) {
+@media all and (max-width: 600px) {
     #app-title, #app-title:active, #app-title:hover, #app-title:visited {
         display: none;
     }

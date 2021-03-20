@@ -94,8 +94,12 @@ class PrivateApiController extends AbstractController
 
             $this->addFlash(
                 'benchDone',
-                'Les données de votre test ont été sauvegardées. Merci de ' .
-                    'votre participation, n\'hésitez par à recommencer !'
+                'Les données de votre test ont été sauvegardées.'
+            );
+
+            $this->addFlash(
+                'benchDone',
+                'Merci de votre participation ! N\'hésitez pas à recommencer :)'
             );
         }
         return new Response("etape validee");

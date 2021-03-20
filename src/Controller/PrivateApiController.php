@@ -92,7 +92,11 @@ class PrivateApiController extends AbstractController
             $session->remove('prev');
             $session->remove('last');
 
-            $this->addFlash('benchDone', 'vos données ont été sauvegardées.');
+            $this->addFlash(
+                'benchDone',
+                'Les données de votre test ont été sauvegardées. Merci de ' .
+                    'votre participation, n\'hésitez par à recommencer !'
+            );
         }
         return new Response("etape validee");
     }

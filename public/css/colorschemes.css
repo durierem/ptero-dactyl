@@ -1,5 +1,5 @@
 .light {
-    --red: #FF0000;
+    --red: #FD9595;
     --green: #5D924F;
     --orange: #FE7F2D;
     --blue: #53A8EC;
@@ -18,7 +18,7 @@
 }
 
 .dark {
-    --red: #FF0000;
+    --red: #A10000;
     --green: #5D924F;
     --orange: #FE7F2D;
     --blue: #53A8EC;

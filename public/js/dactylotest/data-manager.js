@@ -11,6 +11,7 @@ export class DataManager {
     this.mistakes = []
     this.wordTimes = []
     this.keyComb = []
+    this.timer = 0
   }
 
   // formate un json (par defaut) pour stocker les donnees a sauvegarder
@@ -101,15 +102,23 @@ export class DataManager {
   }
 
   // Controle du timer
-  //  au 100e de seconde pre car c'est le plus petit interval possible pour
+  //  au 100e de seconde pres car c'est le plus petit interval possible pour
   //  setInterval()
   startTimer () {
+    if (this.timer != 0) { return }
+    console.log('start')
     this.timer = setInterval(() => {
-      this.time += 10
+        this.time += 10
     }, 10)
+  }
+
+  getTime () {
+      return this.time
   }
 
   stopTimer () {
     clearInterval(this.timer)
+    this.timer = 0
+    console.log('stop')
   }
 }

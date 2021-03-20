@@ -15,6 +15,8 @@ class Benchmark {
     this.isMouseOver = false
     this.isInputInhibited = true
     this.lastChar = ' '
+    this.chrono = document.getElementById('chrono')
+    this.chronoStarted = false
     this.initialize()
   }
 
@@ -27,8 +29,15 @@ class Benchmark {
     this.handleFocus()
 
     this.inputZone.getElement().addEventListener('keydown', (e) => {
-      if (this.firstInput) {
+      if (!this.chronoStarted) {
+        this.chronoStarted = true
         this.data.startTimer()
+        setInterval(() => {
+            let t = this.data.getTime()
+            this.chrono.innerHTML = String(Math.floor((t/60000)%60)).padStart(2, '0') + ":" + // Minutes
+                                    String(Math.floor((t/1000)%60)).padStart(2, '0') + ":" + // Secondes
+                                    t%1000                                                   // MiliSecs
+        }, 10)
       }
 
       const c = e.key
@@ -107,9 +116,11 @@ class Benchmark {
           this.inputZone.insertLast('')
         }
         this.inputZone.placeCursor(this.model.getUserText().length)
+        this.data.startTimer()
       } else {
         this.inputZone.removeCursor()
         this.isInputInhibited = false
+        this.data.stopTimer()
       }
     })
   }

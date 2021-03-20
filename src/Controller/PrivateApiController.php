@@ -122,9 +122,16 @@ class PrivateApiController extends AbstractController
             throw new HttpException(403, "Unauthorized request: private API");
         }
 
+        if ($session->has('currEx')) {
+          $currEx = $session->get('currEx');
+          $session->remove('currEx');
+          return new Response($currEx);
+        }
+
         $last = $session->get('last', '');
         $exercise = $exerciseRepository->findExercise($last);
         $session->set('last', $exercise->getTag());
+        $session->set('currEx', $exercise->getContent());
 
         if ($session->get('step') == 1) {
           $data = $session->get('data');

@@ -66,23 +66,15 @@ class Exercise {
 const defaultText = 'Put all speaking, her69 speaking delicate recurred possible.'
 let exercise = null
 $(document).ready(() => {
-  // premier essai
-  if (sessionStorage.getItem('currentEx') === null) {
-    let target = '/get/new_exercise'
-    $.get(target)
-      .done((data) => {
-        sessionStorage.setItem('currentEx', data)
-        exercise = new Exercise(defaultText)
-      })
-      .fail(() => {
-        console.log('Can\'t reach text database.')
-        exercise = new Exercise(defaultText)
-      })
-  // deuxieme essai
-  } else {
-    //exercise = new Exercise(sessionStorage.getItem('currentEx'))
-    sessionStorage.removeItem('currentEx')
-    exercise = new Exercise(defaultText)
-  }
+  let target = '/get/new_exercise'
+  $.get(target)
+    .done((data) => {
+      console.log(data)
+      exercise = new Exercise(defaultText)
+    })
+    .fail(() => {
+      console.log('Can\'t reach text database.')
+      exercise = new Exercise(defaultText)
+    })
 })
 

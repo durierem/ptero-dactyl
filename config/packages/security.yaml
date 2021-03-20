@@ -48,5 +48,6 @@ security:
         
         # Restriction par adresse ip 
         # https://symfony.com/doc/current/security/access_control.html#matching-access-control-by-ip
-        - { path: '^/api', roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1}
-        - { path: '^/api', roles: ROLE_NO_ACCESS }
+        # Je crois que 10.130.163.208 est l'adresse du server de l'Université
+        - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY, ips: [10.130.163.208, 127.0.0.1, ::1] }
+        - { path: ^/api, roles: ROLE_NO_ACCESS }

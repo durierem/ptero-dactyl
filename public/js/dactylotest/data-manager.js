@@ -63,7 +63,7 @@ export class DataManager {
       idx = this.mistakes.length - 1
     }
     if (this.sameMis) {
-      let temp = this.mistakes[idx].pop()
+      const temp = this.mistakes[idx].pop()
       this.mistakes[idx].push(temp + 1)
     } else {
       this.incFalseWords()
@@ -84,7 +84,7 @@ export class DataManager {
    * Ajoute le temps entre deux touches a la liste des combinaisons,
    * si la combinaison existe deja, lui ajoute une valeur supplementaire
    * @param {char} first premier caractere
-   *        {char} second second caractere
+   * @param {char} second second caractere
    */
   addKeyComb (a, b) {
     let idx = -1

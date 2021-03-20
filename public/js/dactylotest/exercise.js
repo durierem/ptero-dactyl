@@ -11,6 +11,10 @@ class Exercise {
     // cette variable servira de memoire pour savoir de quelle couleur
     // on doit afficher le caractere que l'on insere
     this.mis = false
+    this.isFirstInput = true
+    this.isFocused = true
+    this.isInputAllowed = true
+    this.isMouseOver = false
     this.initialize()
   }
 
@@ -20,12 +24,17 @@ class Exercise {
       this.textContainer.insertLast(c)
     }
 
-    this.inputZone.getElement().addEventListener('click', () => {
-      this.inputZone.insertLast('')
-      this.inputZone.placeCursor(0)
-    })
+    this.handleFocus()
 
-    this.inputZone.getElement().addEventListener('keydown', (e) => {
+    this.inputZone.insertLast('')
+    this.inputZone.placeCursor(0)
+    this.isInputAllowed = true
+
+    document.body.addEventListener('keydown', (e) => {
+      if (!this.isInputAllowed) {
+        return
+      }
+
       const c = e.key
 
       if (!/^.$/.test(c)) {
@@ -53,9 +62,30 @@ class Exercise {
          * benchmark suivant
          */
         if (this.model.isFinished()) {
+          this.isInputAllowed = false
+          this.inputZone.getElement().innerHTML = 'FINI'
           console.log('FINISHED')
           window.location.assign('/dactylotest/session?isFinished=true')
         }
+      }
+    })
+  }
+
+  handleFocus () {
+    this.inputZone.getElement().addEventListener('mouseover', () => {
+      this.isMouseOver = true
+    })
+    this.inputZone.getElement().addEventListener('mouseleave', () => {
+      this.isMouseOver = false
+    })
+
+    document.body.addEventListener('click', () => {
+      if (this.isMouseOver) {
+        this.inputZone.placeCursor(this.model.getUserText().length)
+        this.isInputAllowed = true
+      } else {
+        this.inputZone.removeCursor()
+        this.isInputAllowed = false
       }
     })
   }

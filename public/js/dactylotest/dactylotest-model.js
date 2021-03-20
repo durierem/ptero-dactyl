@@ -32,9 +32,9 @@ export class DactyloTestModel {
 
   findFirst () {
     for (let i = this.cursorIndex; i < this.referenceText.length; i++) {
-      if (!/\w|\d/.test(this.referenceText.charAt(i))
-         && /\w|\d/.test(this.referenceText.charAt(i + 1))) {
-          return i + 1
+      if (!/\w|\d/.test(this.referenceText.charAt(i)) &&
+         /\w|\d/.test(this.referenceText.charAt(i + 1))) {
+        return i + 1
       }
     }
     return -1

@@ -10,10 +10,10 @@ class Benchmark {
     this.data = new DataManager()
     this.textContainer = new SpanManager(document.getElementById('text-container'))
     this.inputZone = new SpanManager(document.getElementById('virtual-user-input'))
-    this.firstInput = true
-    this.isFocused = false
+    this.isFirstInput = true
+    this.isFocused = true
+    this.isInputAllowed = true
     this.isMouseOver = false
-    this.isInputInhibited = true
     this.lastChar = ' '
     this.chrono = document.getElementById('chrono')
     this.chronoStarted = false
@@ -28,15 +28,23 @@ class Benchmark {
 
     this.handleFocus()
 
-    this.inputZone.getElement().addEventListener('keydown', (e) => {
+    this.inputZone.insertLast('')
+    this.inputZone.placeCursor(0)
+    this.isInputAllowed = true
+
+    document.body.addEventListener('keydown', (e) => {
+      if (!this.isInputAllowed) {
+        return
+      }
+
       if (!this.chronoStarted) {
         this.chronoStarted = true
         this.data.startTimer()
         setInterval(() => {
-            let t = this.data.getTime()
-            this.chrono.innerHTML = String(Math.floor((t/60000)%60)).padStart(2, '0') + ":" + // Minutes
-                                    String(Math.floor((t/1000)%60)).padStart(2, '0') + ":" + // Secondes
-                                    t%1000                                                   // MiliSecs
+          const t = this.data.getTime()
+          this.chrono.innerHTML = String(Math.floor((t / 60000) % 60)).padStart(2, '0') + ':' + // Minutes
+                                  String(Math.floor((t / 1000) % 60)).padStart(2, '0') + ':' + // Secondes
+                                  t % 1000 // MiliSecs
         }, 10)
       }
 
@@ -53,14 +61,15 @@ class Benchmark {
       if (c === 'Backspace') {
         if (currentUserText().length > 0) {
           this.model.deleteLastInput()
-          this.inputZone.removeCharAt(currentUserText().length)
+          this.inputZone.removeLast()
         }
       } else {
-        if (this.firstInput) {
-          this.firstInput = false
-        } else {
-          this.data.addKeyComb(this.lastChar, c)
+        if (this.isFirstInput) {
+          this.isFirstInput = false
+          this.data.startTimer()
         }
+
+        this.data.addKeyComb(this.lastChar, c)
         this.lastChar = c
         this.model.setLastInput(c)
         this.inputZone.insertCharAt(c, currentUserText().length - 1)
@@ -85,6 +94,9 @@ class Benchmark {
       }
 
       if (this.model.isFinished()) {
+        this.isInputAllowed = false
+        this.inputZone.getElement().innerHTML = 'FINI'
+        this.data.stopTimer()
         console.log(this.data.getData())
         const jason = this.data.getData()
         const target = '/api/send/benchdata'
@@ -96,14 +108,14 @@ class Benchmark {
             // on redirige vers la page d'accueil avec un parametre erreur
             // car la sauvegarde a echoue
             window.location.assign('/?error=true')
-            console.log('Couldn\'t save data: ' + data)
+            console.log('Couldn\'t save data: ' + JSON.parse(data))
           })
       }
     })
   }
 
   handleFocus () {
-    this.inputZone.getElement().addEventListener('mouseenter', () => {
+    this.inputZone.getElement().addEventListener('mouseover', () => {
       this.isMouseOver = true
     })
     this.inputZone.getElement().addEventListener('mouseleave', () => {
@@ -112,11 +124,9 @@ class Benchmark {
 
     document.body.addEventListener('click', () => {
       if (this.isMouseOver) {
-        if (this.firstInput) {
-          this.inputZone.insertLast('')
-        }
         this.inputZone.placeCursor(this.model.getUserText().length)
         this.data.startTimer()
+        this.isInputAllowed = true
       } else {
         this.inputZone.removeCursor()
         this.isInputInhibited = false

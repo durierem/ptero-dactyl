@@ -1,7 +1,7 @@
 <script src="{{ asset('js/nav.js') }}"></script>
 
 <nav id="nav">
-    <a href="javascript:void(0)" onclick="closeNav()"><i class="bi bi-x"></i></a>
+    {# <a href="javascript:void(0)" onclick="closeNav()"><i class="bi bi-x"></i></a> #}
     <a href="{{ path('home') }}"><i class="bi bi-house"></i> Accueil</a>
     {% if app.user %}
     <a href="#"><i class="bi bi-person"></i> Mes statistiques ({{ app.user.username }})</a>

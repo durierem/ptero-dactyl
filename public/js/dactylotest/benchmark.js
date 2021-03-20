@@ -52,7 +52,6 @@ class Benchmark {
         } else {
           this.data.addKeyComb(this.lastChar, c)
         }
-        console.log(this.lastChar + ' - ' + c)
         this.lastChar = c
         this.model.setLastInput(c)
         this.inputZone.insertCharAt(c, currentUserText().length - 1)
@@ -81,42 +80,18 @@ class Benchmark {
 
       if (this.model.isFinished()) {
         console.log(this.data.getData())
-        sessionStorage.setItem('dataB', this.data.getData())
-        sessionStorage.setItem('dataS', JSON.stringify(this.data.getData()))
-
-        /*
-         * Se sert des variable de sessions pour deduire combien de
-         * benchmark l'utilisateur doit faire et faire suivre les donnees
-         * jusqu'a la sauvegarde
-         */
-        // Premier benchmark on cree les donnees
-        if (sessionStorage.getItem('order') === null) {
-          sessionStorage.setItem('order', 1)
-          const data = this.data.getData()
-          sessionStorage.setItem('bench', JSON.stringify(data))
-          location.assign('/dactylotest/exercise')
-          // 2e benchmark on ajoute des donnees
-        } else if (sessionStorage.getItem('order') === 1) {
-          sessionStorage.setItem('order', 2)
-          const prevData = JSON.parse(sessionStorage.getItem('bench'))
-          const jason = {
-            bench1: prevData,
-            bench2: this.data.getData()
-          }
-          sessionStorage.setItem('bench', JSON.stringify(jason))
-          location.assign('/dactylotest/exercise')
-          // 3e benchmark on ajoute les dernieres donnees et on envoie en bdd
-        } else {
-          sessionStorage.removeItem('order')
-          const jason = JSON.parse(sessionStorage.getItem('bench'))
-          jason.bench3 = this.data.getData()
-          const target = '/dactylotest/save'
-          $.post(target, { data: JSON.stringify(jason) })
-            .fail((data) => {
-              console.log('Couldn\'t save data: ' + data)
-            })
-        }
-        location.assign('/dactylotest/session')
+        let jason = this.data.getData()
+        const target = '/send/benchdata'
+        $.post(target, { data: JSON.stringify(jason) })
+          .done(() => {
+            location.assign('/dactylotest/session')
+          })
+          .fail((data) => {
+            // on redirige vers la page d'accueil avec un parametre erreur
+            // car la sauvegarde a echoue
+            location.assign('/?error=true')
+            console.log('Couldn\'t save data: ' + data)
+          })
       }
     })
   }

@@ -52,28 +52,46 @@ class PrivateApiController extends AbstractController
     /**
      * @Route("/send/benchdata", name="save_dactylotest")
      */
-    public function save(Request $request): Response
+    public function save(Request $request, SessionInterface $session): Response
     {
         if (!$request->isXmlHttpRequest()) {
             throw new HttpException(403, "Unauthorized request: private API");
         }
 
-        $data = $request->request->get('data');
-        $decoded = json_decode($data, true);
+        $newData = $request->request->get('data');
+        $newData = json_decode($newData, true);
 
-        $entityManager = $this->getDoctrine()->getManager();
+        $prevData = $session->get('data', []);
+        $currStep = $session->get('step');
 
-        $benchmark = new Benchmark();
-        $benchmark->setData($decoded);
-        $benchmark->setUser($this->getUser());
-        $benchmark->setCreatedAt(new DateTime('now'));
+        if ($currStep == 0) {
+          $newData = array_merge($prevData, Array("b1"=>$newData));
+          $session->set('data', $newData);
+        } else if ($currStep == 3) {
+          $newData = array_merge($prevData, Array("b2"=>$newData));
+          $session->set('data', $newData);
+        } else {
+          $finalData = array_merge($prevData, Array("b3"=>$newData));
 
-        $entityManager->persist($benchmark);
-        $entityManager->flush();
+          $entityManager = $this->getDoctrine()->getManager();
 
-        $this->addFlash('benchDone', 'vos données ont été sauvegardées.');
+          $benchmark = new Benchmark();
+          $benchmark->setData($finalData);
+          $benchmark->setUser($this->getUser());
+          $benchmark->setCreatedAt(new DateTime('now'));
 
-        return $this->redirectToRoute('home');
+          $entityManager->persist($benchmark);
+          $entityManager->flush();
+
+          // reset everything
+          $session->remove('data');
+          $session->remove('prev');
+          $session->remove('last');
+
+          $this->addFlash('benchDone', 'vos données ont été sauvegardées.');
+
+        }
+        return new Response("etape validee");
     }
 
     /**

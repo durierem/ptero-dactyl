@@ -10,3 +10,10 @@
     margin: auto;
     text-align: justify;
 }
+
+/* Boutons connexion/nouveau compte */
+#main-content-container:last-of-type div {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}

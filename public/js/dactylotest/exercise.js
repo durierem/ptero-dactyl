@@ -26,7 +26,6 @@ class Exercise {
     })
 
     this.inputZone.getElement().addEventListener('keydown', (e) => {
-
       const c = e.key
 
       if (!/^.$/.test(c)) {
@@ -44,8 +43,8 @@ class Exercise {
         this.model.setLastInput(c)
         this.inputZone.insertCharAt(c, lastCharIndex())
         this.inputZone.spans[lastCharIndex()].setColor(this.mis
-                 ? 'var(--error)'
-                 : 'var(--light-fg)')
+          ? 'var(--error)'
+          : 'var(--light-fg)')
         this.mis = false
 
         /*
@@ -55,18 +54,17 @@ class Exercise {
          */
         if (this.model.isFinished()) {
           console.log('FINISHED')
-          location.assign('/dactylotest/session')
+          window.location.assign('/dactylotest/session?isFinished=true')
         }
       }
     })
   }
 }
 
-
-const defaultText = 'Put all speaking, her69 speaking delicate recurred possible.'
+const defaultText = 'Put all'
 let exercise = null
 $(document).ready(() => {
-  let target = '/get/new_exercise'
+  const target = '/get/new_exercise'
   $.get(target)
     .done((data) => {
       console.log(data)
@@ -77,4 +75,3 @@ $(document).ready(() => {
       exercise = new Exercise(defaultText)
     })
 })
-

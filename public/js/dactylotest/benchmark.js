@@ -77,16 +77,16 @@ class Benchmark {
 
       if (this.model.isFinished()) {
         console.log(this.data.getData())
-        let jason = this.data.getData()
+        const jason = this.data.getData()
         const target = '/send/benchdata'
         $.post(target, { data: JSON.stringify(jason) })
           .done(() => {
-            location.assign('/dactylotest/session')
+            window.location.assign('/dactylotest/session?isFinished=true')
           })
           .fail((data) => {
             // on redirige vers la page d'accueil avec un parametre erreur
             // car la sauvegarde a echoue
-            location.assign('/?error=true')
+            window.location.assign('/?error=true')
             console.log('Couldn\'t save data: ' + data)
           })
       }
@@ -115,7 +115,7 @@ class Benchmark {
   }
 }
 
-const defaultText = 'Put all speaking, her69 speaking delicate recurred possible.'
+const defaultText = 'Put all'
 let benchmark = null
 $(document).ready(() => {
   const target = '/get/rdm_text'

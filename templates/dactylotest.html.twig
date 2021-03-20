@@ -13,6 +13,8 @@
 <div id="main-content-container">
     <div id="dactylotest-container">
 
+        <p>Étape {{ app.session.get('step') + 1 }} / 7</p>
+
         <div id="text-container" class="area"></div>
         {# <textarea id="user-input" hidden></textarea> #}
         <div id="virtual-user-input" tabindex="1" class="area"></div>

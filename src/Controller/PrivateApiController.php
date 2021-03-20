@@ -6,6 +6,7 @@ use DateTime;
 use App\Entity\Benchmark;
 use App\Repository\TextRepository;
 use App\Repository\ExerciseRepository;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,21 +27,24 @@ class PrivateApiController extends AbstractController
         self::BENCHMARK,
         self::EXERCISE,
         self::EXERCISE,
-        self::BENCHMARK,
-        self::END
+        self::BENCHMARK
     ];
 
     /**
      * @Route("/dactylotest/session", name="session")
      */
-    public function session(SessionInterface $session)
+    public function session(Request $request, SessionInterface $session)
     {
-        $currentStep = $session->get('step', -1);
+        $currentStep = $session->get('step', 0);
 
-        $nextStep = $currentStep + 1;
+        if ($currentStep >= sizeof($this->sequence) - 1) {
+            $session->remove('step');
+            return $this->redirectToRoute('home');
+        }
 
-        if ($nextStep >= count($this->sequence)) {
-            $nextStep = 0;
+        $nextStep = $currentStep;
+        if ($request->query->get('isFinished', 'false') === 'true') {
+            $nextStep += 1;
         }
 
         $session->set('step', $nextStep);
@@ -65,31 +69,30 @@ class PrivateApiController extends AbstractController
         $currStep = $session->get('step');
 
         if ($currStep == 0) {
-          $newData = array_merge($prevData, Array("b1"=>$newData));
-          $session->set('data', $newData);
+            $newData = array_merge($prevData, array("b1" => $newData));
+            $session->set('data', $newData);
         } else if ($currStep == 3) {
-          $newData = array_merge($prevData, Array("b2"=>$newData));
-          $session->set('data', $newData);
+            $newData = array_merge($prevData, array("b2" => $newData));
+            $session->set('data', $newData);
         } else {
-          $finalData = array_merge($prevData, Array("b3"=>$newData));
+            $finalData = array_merge($prevData, array("b3" => $newData));
 
-          $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->getDoctrine()->getManager();
 
-          $benchmark = new Benchmark();
-          $benchmark->setData($finalData);
-          $benchmark->setUser($this->getUser());
-          $benchmark->setCreatedAt(new DateTime('now'));
+            $benchmark = new Benchmark();
+            $benchmark->setData($finalData);
+            $benchmark->setUser($this->getUser());
+            $benchmark->setCreatedAt(new DateTime('now'));
 
-          $entityManager->persist($benchmark);
-          $entityManager->flush();
+            $entityManager->persist($benchmark);
+            $entityManager->flush();
 
-          // reset everything
-          $session->remove('data');
-          $session->remove('prev');
-          $session->remove('last');
+            // reset everything
+            $session->remove('data');
+            $session->remove('prev');
+            $session->remove('last');
 
-          $this->addFlash('benchDone', 'vos données ont été sauvegardées.');
-
+            $this->addFlash('benchDone', 'vos données ont été sauvegardées.');
         }
         return new Response("etape validee");
     }
@@ -123,9 +126,9 @@ class PrivateApiController extends AbstractController
         }
 
         if ($session->has('currEx')) {
-          $currEx = $session->get('currEx');
-          $session->remove('currEx');
-          return new Response($currEx);
+            $currEx = $session->get('currEx');
+            $session->remove('currEx');
+            return new Response($currEx);
         }
 
         $last = $session->get('last', '');
@@ -134,13 +137,13 @@ class PrivateApiController extends AbstractController
         $session->set('currEx', $exercise->getContent());
 
         if ($session->get('step') == 1) {
-          $data = $session->get('data');
-          $data["ex1"] = $exercise->getTag();
-          $session->set('data', $data);
+            $data = $session->get('data');
+            $data["ex1"] = $exercise->getTag();
+            $session->set('data', $data);
         } else {
-          $data = $session->get('data');
-          $data["ex2"] = $exercise->getTag();
-          $session->set('data', $data);
+            $data = $session->get('data');
+            $data["ex2"] = $exercise->getTag();
+            $session->set('data', $data);
         }
 
         return new Response($exercise->getContent());

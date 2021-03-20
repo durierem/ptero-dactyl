@@ -13,7 +13,14 @@
 <div id="main-content-container">
     {% if app.user %}
 
-    <a id="start-button" class="button" href="{{ path('session') }}"><i class="bi bi-caret-right"></i>Démarrer</a>
+    <a id="start-button" class="button" href="{{ path('session') }}">
+        <i class="bi bi-caret-right"></i>
+        {% if app.session.get('step') == 0 or app.session.get('step') == 7 %}
+            Démarrer
+        {% else %}
+            Reprendre
+        {% endif %}
+    </a>
 
     {% for message in app.flashes('benchDone') %}
         <div class="alert">
@@ -65,7 +72,16 @@
 
     <p>Bon courage, et merci pour votre participation !</p>
 
-    <a class="button" href="{{ path('app_register') }}" ><i class="bi bi-person-plus"></i> Nouveau compte</a>
+    <div>
+        <a class="button" href="{{ path('app_login') }}">
+            <i class="bi bi-box-arrow-in-right"></i>
+            Connexion
+        </a>
+        <a class="button" href="{{ path('app_register') }}">
+            <i class="bi bi-person-plus"></i>
+            Nouveau compte
+        </a>
+    </div>
 
     {% endif %}
 </div>

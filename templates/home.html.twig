@@ -13,7 +13,7 @@
 <div id="main-content-container">
     {% if app.user %}
 
-    <a id="start-button" class="button" href="{{ path('benchmark') }}"><i class="bi bi-caret-right"></i>Démarrer</a>
+    <a id="start-button" class="button" href="{{ path('session') }}"><i class="bi bi-caret-right"></i>Démarrer</a>
 
     {% for message in app.flashes('benchDone') %}
         <div class="alert">

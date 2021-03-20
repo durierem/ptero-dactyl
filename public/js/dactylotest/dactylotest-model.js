@@ -47,7 +47,6 @@ export class DactyloTestModel {
     const nextSpace = this.findNextSpace(first)
     this.currWord = this.referenceText.slice(first === -1 ? this.cursorIndex + 1 : first,
       nextSpace === -1 ? this.referenceText.length - 1 : nextSpace)
-    console.log(this.currWord)
   }
 
   isUserTextValid () {

@@ -55,14 +55,7 @@ class Exercise {
          */
         if (this.model.isFinished()) {
           console.log('FINISHED')
-          if (sessionStorage.getItem('redo') === null) {
-            sessionStorage.setItem('redo', 'ayaya')
-            location.reload()
-          } else {
-            sessionStorage.removeItem('redo')
-            sessionStorage.removeItem('currentEx')
-            location.assign('/dactylotest/benchmark')
-          }
+          location.assign('/dactylotest/session')
         }
       }
     })
@@ -73,26 +66,12 @@ class Exercise {
 const defaultText = 'Put all speaking, her69 speaking delicate recurred possible.'
 let exercise = null
 $(document).ready(() => {
-  let target = '/exercise/getone'
   // premier essai
   if (sessionStorage.getItem('currentEx') === null) {
-    let last = sessionStorage.getItem('last')
-    $.post(target, {last: last})
+    let target = '/get/new_exercise'
+    $.get(target)
       .done((data) => {
-        // ex 1/2
-        if (last === null) {
-          let jason = sessionStorage.getItem('bench')
-          jason.ex1 = data.tag
-          sessionStorage.setItem('bench', jason)
-          sessionStorage.setItem('last', data.tag)
-        // ex 2/2
-        } else {
-          sessionStorage.removeItem('last')
-          let jason = sessionStorage.getItem('bench')
-          jason.ex2 = data.tag
-          sessionStorage.setItem('bench', jason)
-        }
-        sessionStorage.setItem('currentEx', data.content)
+        sessionStorage.setItem('currentEx', data)
         exercise = new Exercise(defaultText)
       })
       .fail(() => {
@@ -102,6 +81,7 @@ $(document).ready(() => {
   // deuxieme essai
   } else {
     //exercise = new Exercise(sessionStorage.getItem('currentEx'))
+    sessionStorage.removeItem('currentEx')
     exercise = new Exercise(defaultText)
   }
 })

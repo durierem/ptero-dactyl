@@ -10,22 +10,7 @@ export class DataManager {
     this.sameMis = false
     this.mistakes = []
     this.wordTimes = []
-    this.keyComb = this.initializeKeyComb()
-  }
-
-  // Initialise un tableau avec toutes les combinaisons de couples de lettre
-  // de l'alphabet.
-  initializeKeyComb () {
-    const allKey = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-      'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'é', 'è', '-', ':', 'ç', ' ', '\'', ',',
-      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.']
-    const arr = []
-    for (let i = 0; i < allKey.length; i++) {
-      for (let j = 0; j < allKey.length; j++) {
-        arr[allKey[i] + allKey[j]] = []
-      }
-    }
-    return arr
+    this.keyComb = []
   }
 
   // formate un json (par defaut) pour stocker les donnees a sauvegarder
@@ -36,7 +21,7 @@ export class DataManager {
       nb_false_word: this.numberOfFalseWord,
       word_errors: this.mistakes,
       word_times: this.computeWordTimes(),
-      key_cobinations: this.keyComb
+      key_combinations: this.keyComb
     }
   }
 
@@ -57,8 +42,6 @@ export class DataManager {
   incFalseWords () {
     this.numberOfFalseWord++
   }
-
-  // "": empty string means punctuation
 
   /**
    * Ajoute le mot actuel à la liste des erreurs. Si le mot existe déjà dans
@@ -90,7 +73,17 @@ export class DataManager {
 
   // prend en parametre 2 LETTRES
   addKeyComb (a, b) {
-    this.keyComb[a + b].push(this.time - this.lastTime)
+    let idx = -1
+    this.keyComb.find((value, index) => {
+      if (value.indexOf(a + '' + b) != -1) {
+        idx = index
+      }
+    })
+    if (idx === -1) {
+      this.keyComb.push([a + '' + b])
+      idx = this.keyComb.length - 1
+    }
+    this.keyComb[idx].push(this.time - this.lastTime)
     this.lastTime = this.time
   }
 

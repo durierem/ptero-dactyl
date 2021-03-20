@@ -29,7 +29,6 @@ class Benchmark {
     this.inputZone.getElement().addEventListener('keydown', (e) => {
       if (this.firstInput) {
         this.data.startTimer()
-        this.firstInput = false
       }
 
       const c = e.key
@@ -48,6 +47,13 @@ class Benchmark {
           this.inputZone.removeCharAt(currentUserText().length)
         }
       } else {
+        if (this.firstInput) {
+          this.firstInput = false
+        } else {
+          this.data.addKeyComb(this.lastChar, c)
+        }
+        console.log(this.lastChar + ' - ' + c)
+        this.lastChar = c
         this.model.setLastInput(c)
         this.inputZone.insertCharAt(c, currentUserText().length - 1)
 
@@ -75,6 +81,8 @@ class Benchmark {
 
       if (this.model.isFinished()) {
         console.log(this.data.getData())
+        sessionStorage.setItem('dataB', this.data.getData())
+        sessionStorage.setItem('dataS', JSON.stringify(this.data.getData()))
 
         /*
          * Se sert des variable de sessions pour deduire combien de
@@ -108,6 +116,7 @@ class Benchmark {
               console.log('Couldn\'t save data: ' + data)
             })
         }
+        location.assign('/dactylotest/session')
       }
     })
   }
@@ -137,20 +146,10 @@ class Benchmark {
 const defaultText = 'Put all speaking, her69 speaking delicate recurred possible.'
 let benchmark = null
 $(document).ready(() => {
-  const target = '/text/random'
-  let prevIds = JSON.parse(sessionStorage.getItem('prev'))
-  $.post(target, { bDone: JSON.stringify(prevIds) })
+  const target = '/get/rdm_text'
+  $.get(target)
     .done((data) => {
-      if (prevIds === null) {
-        prevIds = { b1: data.id }
-        sessionStorage.setItem('prev', JSON.stringify(prevIds))
-      } else if (prevIds.b2 === null) {
-        prevIds.b2 = data.id
-        sessionStorage.setItem('prev', JSON.stringify(prevIds))
-      } else {
-        sessionStorage.removeItem('prev')
-      }
-      // benchmark = new Benchmark(data.text)
+      // benchmark = new Benchmark(data)
       benchmark = new Benchmark(defaultText)
     })
     .fail(() => {

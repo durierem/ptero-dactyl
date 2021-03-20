@@ -17,7 +17,7 @@ class PrivateApiController extends AbstractController
 {
     const BENCHMARK = 'benchmark';
     const EXERCISE = 'exercise';
-    const END = 'save_dactylotest';
+    const END = 'home';
 
     private $sequence = [
         self::BENCHMARK,
@@ -31,7 +31,7 @@ class PrivateApiController extends AbstractController
     ];
 
     /**
-     * @Route("/dactylotest/session")
+     * @Route("/dactylotest/session", name="session")
      */
     public function session(SessionInterface $session)
     {
@@ -50,7 +50,7 @@ class PrivateApiController extends AbstractController
     }
 
     /**
-     * @Route("/dactylotest/save", name="save_dactylotest")
+     * @Route("/send/benchdata", name="save_dactylotest")
      */
     public function save(Request $request): Response
     {
@@ -77,29 +77,26 @@ class PrivateApiController extends AbstractController
     }
 
     /**
-     * @Route("/text/random", name="random_text")
+     * @Route("/get/rdm_text", name="get_random_text")
      */
-    public function random(Request $request, TextRepository $textRepository): Response
+    public function random(Request $request, TextRepository $textRepository, SessionInterface $session): Response
     {
         if (!$request->isXmlHttpRequest()) {
             throw new HttpException(403, "Unauthorized request: private API");
         }
 
-        $prevIds = $request->request->get('bDone');
+        $prevIds = $session->get('prev', []);
 
-        $decoded = json_decode($prevIds, true);
-        $decoded = $decoded == null ? [] : $decoded;
+        $text = $textRepository->findRandom($prevIds);
 
-        $text = $textRepository->findRandom($decoded);
+        array_push($prevIds, $text->getId());
+        $session->set('prev', $prevIds);
 
-        return $this->json([
-            "id" => $text->getId(),
-            "content" => $text->getContent()
-        ]);
+        return new Response($text->getContent());
     }
 
     /**
-     * @Route("/exercise/getone", name="get_exercise")
+     * @Route("/get/new_exercise", name="get_exercise")
      */
     public function exercise(Request $request, ExerciseRepository $exerciseRepository, SessionInterface $session): Response
     {
@@ -107,13 +104,20 @@ class PrivateApiController extends AbstractController
             throw new HttpException(403, "Unauthorized request: private API");
         }
 
-        $last = $session->get('last');
+        $last = $session->get('last', '');
         $exercise = $exerciseRepository->findExercise($last);
         $session->set('last', $exercise->getTag());
 
-        return $this->json([
-            "tag" => $exercise->getTag(),
-            "content" => $exercise->getContent()
-        ]);
+        if ($session->get('step') == 1) {
+          $data = $session->get('data');
+          $data["ex1"] = $exercise->getTag();
+          $session->set('data', $data);
+        } else {
+          $data = $session->get('data');
+          $data["ex2"] = $exercise->getTag();
+          $session->set('data', $data);
+        }
+
+        return new Response($exercise->getContent());
     }
 }

@@ -61,9 +61,6 @@ class Benchmark {
         } else {
           const isEndOfWord = !/\d|\w/.test(this.model.getReferenceText()
             .charAt(currentUserText().length))
-          console.log(isEndOfWord,
-            this.model.getReferenceText()
-              .charAt(currentUserText().length))
           if (isEndOfWord) {
             this.data.resetMis()
             this.data.addWordTime()
@@ -124,6 +121,7 @@ $(document).ready(() => {
   const target = '/get/rdm_text'
   $.get(target)
     .done((data) => {
+      console.log(data)
       // benchmark = new Benchmark(data)
       benchmark = new Benchmark(defaultText)
     })

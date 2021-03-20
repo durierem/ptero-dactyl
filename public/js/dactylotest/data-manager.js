@@ -49,16 +49,24 @@ export class DataManager {
    * @param {string} word Le mot actuel
    */
   addMistake (word) {
-    console.log('\"' + word + '\"')
+    console.log('mistakes', word)
     this.incFalseChar()
-    if (this.mistakes[word] === undefined) {
-      this.mistakes[word] = [1]
-      this.incFalseWords()
-    } else if (this.sameMis) {
-      let temp = this.mistakes[word].pop()
-      this.mistakes[word].push(temp + 1)
+    let idx = -1
+    this.mistakes.find((value, index) => {
+      if (value.indexOf(word) != -1) {
+        idx = index
+      }
+    })
+    if (idx === -1) {
+      this.mistakes.push([word])
+      idx = this.mistakes.length - 1
+    }
+    if (this.sameMis) {
+      let temp = this.mistakes[idx].pop()
+      this.mistakes[idx].push(temp + 1)
     } else {
-      this.mistakes[word].push(1)
+      this.incFalseWords()
+      this.mistakes[idx].push(1)
     }
     this.sameMis = true
   }
@@ -71,7 +79,12 @@ export class DataManager {
     this.wordTimes.push(this.time)
   }
 
-  // prend en parametre 2 LETTRES
+  /**
+   * Ajoute le temps entre deux touches a la liste des combinaisons,
+   * si la combinaison existe deja, lui ajoute une valeur supplementaire
+   * @param {char} first premier caractere
+   *        {char} second second caractere
+   */
   addKeyComb (a, b) {
     let idx = -1
     this.keyComb.find((value, index) => {

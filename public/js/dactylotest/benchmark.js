@@ -129,7 +129,7 @@ class Benchmark {
         this.isInputAllowed = true
       } else {
         this.inputZone.removeCursor()
-        this.isInputInhibited = false
+        this.isInputAllowed = false
         this.data.stopTimer()
       }
     })

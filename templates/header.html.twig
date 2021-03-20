@@ -1,14 +1,21 @@
-<header>
-    <nav>
-        {% if app.user %}
-            <a class="button" href="{{ path('app_logout') }}"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
-            <a class="button" href="#"><i class="bi bi-person"></i> Mes statistiques ({{ app.user.username }})</a>
-        {% else %}
-            <a class="button" href="{{ path('app_login') }}"><i class="bi bi-box-arrow-in-right"></i> Connexion</a>
-            <a class="button" href="{{ path('app_register') }}"><i class="bi bi-person-plus"></i> Nouveau compte</a>
-        {% endif %}
-    </nav>
+<script src="{{ asset('js/nav.js') }}"></script>
 
+<nav id="nav">
+    <a href="javascript:void(0)" onclick="closeNav()"><i class="bi bi-x"></i></a>
+    <a href="{{ path('home') }}"><i class="bi bi-house"></i> Accueil</a>
+    {% if app.user %}
+    <a href="{{ path('app_logout') }}"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
+    <a href="#"><i class="bi bi-person"></i> Mes statistiques ({{ app.user.username }})</a>
+    {% else %}
+    <a href="{{ path('app_login') }}"><i class="bi bi-box-arrow-in-right"></i> Connexion</a>
+    <a href="{{ path('app_register') }}"><i class="bi bi-person-plus"></i> Nouveau compte</a>
+    {% endif %}
+</nav>
+
+<header id="header">
+    <div id="nav-opener-container">
+        <a id="nav-opener" href="javascript:void(0)" onclick="openNav()"><i class="bi bi-list"></i> Menu</a>
+    </div>
     <div id="logo-container">
         <a href="{{ path('home') }}"><img id="logo" src="{{ asset('images/big_gra.png') }}" alt="Logo"></a>
         <a href="{{ path('home') }}" id="app-title">Ptero Dactyl<span class="blink">_</span></a>

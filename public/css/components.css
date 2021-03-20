@@ -12,13 +12,14 @@
     border-radius: 5px 5px 5px 5px;
     transition-duration: 0.1s;
     min-width: 100px;
+    box-shadow: 0 0 5px #000000;
 }
 .button:hover {
     background-color: var(--dark-bg-secondary);
     border-color: var(--accent);
-    transform: scale(1.10);
     box-shadow: 0 0 10px var(--accent);
     cursor: pointer;
+    transform: scale(1.1);
 }
 
 /* Définit une zone de texte ou d'information mise en évidence */

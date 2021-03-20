@@ -26,5 +26,5 @@ form > div > input {
     overflow: auto;
     width: 100%;
     text-align: left;
-    font-size: 1em;
+    font-size: inherit;
 }

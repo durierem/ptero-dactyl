@@ -12,37 +12,44 @@
 
     <div id="main-content-container">
 
-        <h1>{{ app.user.username }}</h1>
+        <div id="user-infos">
+            <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+            </svg>
+            <h1>{{ app.user.username }}</h1>
+        </div>
 
-        <div id="user-panel-container">
+
             {% if dataTable == [] %}
                 <p>Aucune données</p>
             {% else %}
-                <table>
-                    <caption>Vos derniers tests</caption>
-                    <thead>
+                <div id="rounded-table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan=4><i class="bi bi-spellcheck"></i> Série de tests</th>
+                            </tr>
+                            <tr>
+                                <th><i class="bi bi-calendar-date"></i> Date</th>
+                                <th><i class="bi bi-speedometer2"></i> Mots / minute</th>
+                                <th><i class="bi bi-x"></i> Total de fautes</th>
+                                <th><i class="bi bi-exclamation-circle"></i> Total de mots manqués</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    {% for bench in dataTable %}
                         <tr>
-                            <th rowspan=2><i class="bi bi-calendar-date"></i> Date</th>
-                            <th colspan=3><i class="bi bi-spellcheck"></i> Benchmark</th>
+                        <td>{{bench['created_at']}}</td>
+                        <td>{{bench['data']['wpm']}}</td>
+                        <td>{{bench['data']['misChar']}}</td>
+                        <td>{{bench['data']['misWord']}}</td>
                         </tr>
-                        <tr>
-                            <th><i class="bi bi-speedometer2"></i> Mots / minute</th>
-                            <th><i class="bi bi-x"></i> Total de fautes</th>
-                            <th><i class="bi bi-exclamation-circle"></i> Total de mots manqués</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                {% for bench in dataTable %}
-                    <tr>
-                      <td>{{bench['created_at']}}</td>
-                      <td>{{bench['data']['wpm']}}</td>
-                      <td>{{bench['data']['misChar']}}</td>
-                      <td>{{bench['data']['misWord']}}</td>
-                    </tr>
-                {% endfor %}
-                    </tbody>
-                </table>
+                    {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             {% endif %}
-        </div>
+
     </div>
 {% endblock %}

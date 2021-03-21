@@ -12,7 +12,7 @@
     border-radius: 5px 5px 5px 5px;
     transition-duration: 0.1s;
     min-width: 100px;
-    box-shadow: 0 0 5px #000000;
+    box-shadow: 0 0 10px var(--dark-bg-primary);
 }
 .button:hover {
     background-color: var(--dark-bg-secondary);

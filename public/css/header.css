@@ -5,7 +5,7 @@ header {
     display: flex;
     align-items: stretch;
     justify-content: space-between;
-    box-shadow: 0 0 10px #000000;
+    box-shadow: 0 0 10px var(--dark-bg-primary);
     transition: margin-left 0.5s;
 }
 
@@ -20,7 +20,7 @@ nav {
     overflow-x: hidden;
     padding-top: 15px;
     transition: 0.2s;
-    box-shadow: 0px 80px 10px #000000;
+    box-shadow: 0px 80px 10px var(--dark-bg-primary);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

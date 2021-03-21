@@ -1,10 +1,20 @@
-caption {
-    margin: 20px;
+#user-infos {
+    transform: translateY(-100px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
 }
 
 table {
     border-collapse: collapse;
     box-shadow: 0 0 20px var(--dark-bg-primary);
+}
+
+#rounded-table-container {
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 0 10px var(--dark-bg-primary);
 }
 
 th {
@@ -30,7 +40,6 @@ tr:nth-child(even) {
 
 tr:nth-child(even) > td {
     border-right: 1px solid var(--light-bg-secondary);
-    border-left: 1px solid var(--light-bg-secondary);
 }
 
 tr:nth-child(odd) {
@@ -38,7 +47,6 @@ tr:nth-child(odd) {
 }
 
 tr:nth-child(odd) > td {
-    border-left: 1px solid var(--light-bg-primary);
     border-right: 1px solid var(--light-bg-primary);
 }
 

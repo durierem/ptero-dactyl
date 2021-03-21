@@ -106,7 +106,6 @@ export class DataManager {
   //  setInterval()
   startTimer () {
     if (this.timer != 0) { return }
-    console.log('start')
     this.timer = setInterval(() => {
         this.time += 10
     }, 10)
@@ -119,6 +118,5 @@ export class DataManager {
   stopTimer () {
     clearInterval(this.timer)
     this.timer = 0
-    console.log('stop')
   }
 }

@@ -6,11 +6,9 @@
 export class Span {
   constructor (container, char, index = null, cursor = false) {
     this.container = container
-    this.char = char
-
     this.element = document.createElement('span')
-    this.innerHTML = this.element.innerHTML
     this.element.innerText = char
+
     const referenceNode = index === null ? null : this.container.childNodes.item(index)
     container.insertBefore(this.element, referenceNode)
 
@@ -20,7 +18,7 @@ export class Span {
   }
 
   getChar () {
-    return this.char
+    this.element.innerText
   }
 
   getColor () {
@@ -28,7 +26,6 @@ export class Span {
   }
 
   setChar (char) {
-    this.char = char
     this.element.innerText = char
   }
 

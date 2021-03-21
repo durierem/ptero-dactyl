@@ -18,7 +18,7 @@ export class Span {
   }
 
   getChar () {
-    this.element.innerText
+    return this.element.innerText
   }
 
   getColor () {
@@ -35,14 +35,15 @@ export class Span {
 
   setCursor (bool) {
     if (bool) {
-      this.element.classList.add('cursor-blink')
+      this.element.classList.add('active-cursor')
+      this.element.classList.remove('inactive-cursor')
     } else {
-      this.element.classList.remove('cursor-blink')
+      this.element.classList.remove('active-cursor')
+      this.element.classList.add('inactive-cursor')
     }
   }
 
   detach () {
-    const children = this.container.childNodes
-    this.container.removeChild(children[children.length - 2])
+    this.container.removeChild(this.element)
   }
 }

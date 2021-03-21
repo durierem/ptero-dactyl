@@ -35,7 +35,7 @@ class Benchmark {
 
     this.handleFocus()
 
-    this.inputZone.insertLast('')
+    this.inputZone.insertLast('█')
     this.inputZone.placeCursor(0)
     this.isInputAllowed = true
 
@@ -44,12 +44,8 @@ class Benchmark {
         return
       }
 
-      if (!this.chronoStarted) {
-        this.chronoStarted = true
-        this.data.startTimer()
-      }
-
       const c = e.key
+      const currentUserText = () => { return this.model.getUserText() }
 
       // Bloque les touches spéciales (ArrowLeft, Escape, etc) et laisse
       // passer uniquement Backspace pour autoriser l'effacement.
@@ -57,12 +53,20 @@ class Benchmark {
         return
       }
 
-      const currentUserText = () => { return this.model.getUserText() }
+      // Empêche la saisie de plusieurs espaces à la suite (bug random ?)
+      if (c === ' ' && currentUserText()[currentUserText().length - 1] === ' ') {
+        return
+      }
+
+      if (!this.chronoStarted) {
+        this.chronoStarted = true
+        this.data.startTimer()
+      }
 
       if (c === 'Backspace') {
         if (currentUserText().length > 0) {
-          this.model.deleteLastInput()
-          this.inputZone.removeLast()
+          this.model.deleteLastInput() // => longueur du texte diminuée de 1
+          this.inputZone.removeCharAt(currentUserText().length)
         }
       } else {
         if (this.isFirstInput) {
@@ -125,10 +129,12 @@ class Benchmark {
 
     document.body.addEventListener('click', () => {
       if (this.isMouseOver) {
+        console.log('set cursor')
         this.inputZone.placeCursor(this.model.getUserText().length)
         this.data.startTimer()
         this.isInputAllowed = true
       } else {
+        console.log('remove cursor')
         this.inputZone.removeCursor()
         this.isInputAllowed = false
         this.data.stopTimer()

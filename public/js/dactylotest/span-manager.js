@@ -7,7 +7,6 @@ export class SpanManager {
     this.parentNode = parentNode
     this.spans = []
     this.spanList = parentNode.children
-    this.cursorIndex = 0
     this.maxCursorIndex = 0
   }
 
@@ -17,23 +16,33 @@ export class SpanManager {
 
   insertLast (char) {
     this.spans.push(new Span(this.parentNode, char))
-    this.maxCursorIndex += 1
   }
 
   insertCharAt (char, index) {
+    console.log('avant')
+    this.inspect()
+
     this.spans.splice(index, 0, new Span(this.parentNode, char, index))
-    this.cursorIndex += 1
+
+    console.log('après')
+    this.inspect()
   }
 
   removeCharAt (index) {
+    console.log('avant')
+    this.inspect()
+
+    console.log(index)
+
     this.spans[index].detach()
     this.spans.splice(index, 1)
-    this.cursorIndex -= 1
+
+    console.log('après')
+    this.inspect()
   }
 
   removeLast () {
     this.spans.pop().detach()
-    this.maxCursorIndex -= 1
   }
 
   setCharAt (char, index) {
@@ -47,25 +56,18 @@ export class SpanManager {
   placeCursor (index) {
     if (index < 0 || index >= this.spans.length) { return }
     this.spans[index].setCursor(true)
-    this.cursorIndex = index
   }
 
   removeCursor () {
-    if (this.cursorIndex < 0 || this.cursorIndex >= this.spans.length) { return }
-    this.spans[this.cursorIndex].setCursor(false)
-    // No cursor on the text => cursorIndex === -1
-    this.cursorIndex = -1
+    this.spans[this.spans.length - 1].setCursor(false)
   }
 
-  moveCursorRight () {
-    if (this.cursorIndex >= this.maxCursorIndex) { return }
-    this.removeCursor()
-    this.placeCursor(this.cursorIndex + 1)
-  }
-
-  moveCursorLeft () {
-    if (this.cursorIndex <= 0) { return }
-    this.removeCursor()
-    this.placeCursor(this.cursorIndex - 1)
+  inspect () {
+    let str = '[ '
+    for (let i = 0; i < this.spans.length; i++) {
+      str += this.spans[i].getChar() + ', '
+    }
+    str += ']'
+    console.log(str)
   }
 }

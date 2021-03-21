@@ -50,16 +50,18 @@
 }
 
 /* Ajoute un effet de clignotement type curseur */
-.cursor-blink {
+.active-cursor {
     animation: cursor-blink 1s step-start infinite;
-    background-color: var(--light-bg-secondary);
-    opacity: 0;
+    opacity: 100;
 }
 @keyframes cursor-blink {
     50% {
-        background-color: var(--light-fg);
-        opacity: 100;
+        opacity: 0;
     }
+}
+
+.inactive-cursor {
+    opacity: 0;
 }
 
 /* Cache un élément. L'élément est toujours rendu dans la page. */

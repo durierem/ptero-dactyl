@@ -13,13 +13,4 @@
     user-select: none;
     font-family: "Iosevka Slab Regular";
     text-align: left;
-    /* display: flex;
-    flex-flow: row wrap;
-    align-content: flex-start; */
-}
-
-#virtual-user-input > span,
-#text-container > span {
-    width: 1ch;
-    height: 1em;
 }

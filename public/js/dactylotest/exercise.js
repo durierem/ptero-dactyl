@@ -26,7 +26,7 @@ class Exercise {
 
     this.handleFocus()
 
-    this.inputZone.insertLast('')
+    this.inputZone.insertLast('█')
     this.inputZone.placeCursor(0)
     this.isInputAllowed = true
 

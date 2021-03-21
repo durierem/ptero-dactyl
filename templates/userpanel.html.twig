@@ -1,39 +1,34 @@
 {% extends "base.html.twig" %}
 
-{% block title %}User Panel{% endblock %}
+{% block title %}{{ app.user.username }}{% endblock %}
 
-{% block stylesheets %}{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ asset('css/userpanel.css') }}">
+{% endblock %}
 
 {% block body %}
 
     {% include "header.html.twig" %}
 
     <div id="main-content-container">
+
+        <h1>{{ app.user.username }}</h1>
+
         <div id="user-panel-container">
             {% if dataTable == [] %}
-                <p>No data yet</p>
-                <br>
-                <a id="start-button" class="button" href="{{ path('session') }}">
-                    <i class="bi bi-caret-right"></i>
-                    {% if app.session.get('step') == 0 or app.session.get('step') == 7 %}
-                        Démarrer
-                    {% else %}
-                        Reprendre
-                    {% endif %}
-                </a>
+                <p>Aucune données</p>
             {% else %}
                 <table>
-                    <caption> Vos derniers dactylo'</caption>
+                    <caption>Vos derniers tests</caption>
                     <thead>
                         <tr>
-                            <th rowspan=2>Date</th>
-                            <th colspan=3>Bench</th>
-                            <th rowspan=2>Ex</th>
+                            <th rowspan=2><i class="bi bi-calendar-date"></i> Date</th>
+                            <th colspan=3><i class="bi bi-spellcheck"></i> Benchmark</th>
                         </tr>
                         <tr>
-                            <th>Mots / minute</th>
-                            <th>Caracteres faux</th>
-                            <th>Mots faux</th>
+                            <th><i class="bi bi-speedometer2"></i> Mots / minute</th>
+                            <th><i class="bi bi-x"></i> Total de fautes</th>
+                            <th><i class="bi bi-exclamation-circle"></i> Total de mots manqués</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -43,12 +38,6 @@
                       <td>{{bench['data']['wpm']}}</td>
                       <td>{{bench['data']['misChar']}}</td>
                       <td>{{bench['data']['misWord']}}</td>
-                      <td>
-                          <ul>
-                              <li>{{bench['data']['ex1'] }}</li>
-                              <li>{{ bench['data']['ex2']}}</li>
-                          </ul>
-                      </td>
                     </tr>
                 {% endfor %}
                     </tbody>

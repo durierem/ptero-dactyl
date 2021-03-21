@@ -27,11 +27,11 @@ class Benchmark {
     }
 
     setInterval(() => {
-          const t = this.data.getTime()
-          this.chrono.innerHTML = String(Math.floor((t / 60000) % 60)).padStart(2, '0') + ':' + // Minutes
+      const t = this.data.getTime()
+      this.chrono.innerHTML = String(Math.floor((t / 60000) % 60)).padStart(2, '0') + ':' + // Minutes
                                   String(Math.floor((t / 1000) % 60)).padStart(2, '0') + ':' + // Secondes
-                                  String(t % 1000).padEnd(3, '0'); // MiliSecs
-        }, 10)
+                                  String(t % 1000).padEnd(3, '0') // MiliSecs
+    }, 10)
 
     this.handleFocus()
 

@@ -18,7 +18,6 @@ export class SpanManager {
   insertLast (char) {
     this.spans.push(new Span(this.parentNode, char))
     this.maxCursorIndex += 1
-    this.maxCharOnLine += 1;
   }
 
   insertCharAt (char, index) {

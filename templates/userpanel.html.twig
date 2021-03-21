@@ -1,0 +1,59 @@
+{% extends "base.html.twig" %}
+
+{% block title %}User Panel{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+
+    {% include "header.html.twig" %}
+
+    <div id="main-content-container">
+        <div id="user-panel-container">
+            {% if dataTable == [] %}
+                <p>No data yet</p>
+                <br>
+                <a id="start-button" class="button" href="{{ path('session') }}">
+                    <i class="bi bi-caret-right"></i>
+                    {% if app.session.get('step') == 0 or app.session.get('step') == 7 %}
+                        Démarrer
+                    {% else %}
+                        Reprendre
+                    {% endif %}
+                </a>
+            {% else %}
+                <table>
+                    <caption> Vos derniers dactylo'</caption>
+                    <thead>
+                        <tr>
+                            <th rowspan=2>Date</th>
+                            <th colspan=3>Bench</th>
+                            <th rowspan=2>Ex</th>
+                        </tr>
+                        <tr>
+                            <th>Mots / minute</th>
+                            <th>Caracteres faux</th>
+                            <th>Mots faux</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                {% for bench in dataTable %}
+                    <tr>
+                      <td>{{bench['created_at']}}</td>
+                      <td>{{bench['data']['wpm']}}</td>
+                      <td>{{bench['data']['misChar']}}</td>
+                      <td>{{bench['data']['misWord']}}</td>
+                      <td>
+                          <ul>
+                              <li>{{bench['data']['ex1'] }}</li>
+                              <li>{{ bench['data']['ex2']}}</li>
+                          </ul>
+                      </td>
+                    </tr>
+                {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -21,8 +21,8 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', TextType::class)
-            
+            ->add('username', TextType::class, [ 'attr' => ['autocomplete' => 'username']])
+
             //RepeatedType pour ajouter une confirmation du mot de passe
             //https://symfony.com/doc/current/reference/forms/types/repeated.html#example-usage
             ->add('plainPassword', RepeatedType::class, [
@@ -30,7 +30,8 @@ class RegistrationFormType extends AbstractType
                 // this is read and encoded in the controller
                 'type' => PasswordType::class,
                 'required' => true,
-                'options' => ['attr' => ['class' => 'password-field']],
+                'options' => ['attr' => ['class' => 'password-field',
+                                         'autocomplete' => 'new-password']],
                 'first_options'  => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Confirmation du mot de passe'],
                 'invalid_message' => 'Les mots de passe ne correspondent pas.',

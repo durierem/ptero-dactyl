@@ -19,6 +19,18 @@ class BenchmarkRepository extends ServiceEntityRepository
         parent::__construct($registry, Benchmark::class);
     }
 
+    public function getUserData(int $userId): ?Array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u.data', 'u.created_at')
+            ->andWhere('u.user = :uid')
+            ->setParameter('uid', $userId)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
     // /**
     //  * @return Benchmark[] Returns an array of Benchmark objects
     //  */

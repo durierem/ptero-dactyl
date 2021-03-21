@@ -14,9 +14,9 @@ class Benchmark {
     this.isFocused = true
     this.isInputAllowed = true
     this.isMouseOver = false
-    this.lastChar = ' '
     this.chrono = document.getElementById('chrono')
     this.chronoStarted = false
+    this.lastChar = null
     this.initialize()
   }
 

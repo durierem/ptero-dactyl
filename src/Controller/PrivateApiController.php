@@ -6,7 +6,6 @@ use DateTime;
 use App\Entity\Benchmark;
 use App\Repository\TextRepository;
 use App\Repository\ExerciseRepository;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

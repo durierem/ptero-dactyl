@@ -24,12 +24,13 @@ class ExerciseRepository extends ServiceEntityRepository
      */
     public function findExercise(String $last): ?Exercise
     {
-        return $this->createQueryBuilder('e')
+        $exercises = $this->createQueryBuilder('e')
             ->andWhere('e.tag <> :val')
             ->setParameter('val', $last)
             ->getQuery()
-            ->getResult()[0]
-        ;
+            ->getResult();
+
+        return $exercises[random_int(0, count($exercises) - 1)];
     }
 
     // /**

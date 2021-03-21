@@ -11,6 +11,13 @@
 {% include "header.html.twig" %}
 
 <div id="main-content-container">
+
+    {% if dactylotest_type == 'benchmark' %}
+        <h1>Benchmark</h1>
+    {% elseif dactylotest_type == 'exercise' %}
+        <h1>Exercice</h1>
+    {% endif %}
+
     <div id="dactylotest-container">
 
         <p>Étape {{ app.session.get('step') + 1 }} / 7</p>

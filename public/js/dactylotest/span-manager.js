@@ -9,10 +9,6 @@ export class SpanManager {
     this.spanList = parentNode.children
     this.cursorIndex = 0
     this.maxCursorIndex = 0
-
-    this.maxCharOnLine = 40
-    this.currCharOnLine = 0
-    this.deltaChar = 5;
   }
 
   getElement () {

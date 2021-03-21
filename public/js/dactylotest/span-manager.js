@@ -9,6 +9,10 @@ export class SpanManager {
     this.spanList = parentNode.children
     this.cursorIndex = 0
     this.maxCursorIndex = 0
+
+    this.maxCharOnLine = 40
+    this.currCharOnLine = 0
+    this.deltaChar = 5;
   }
 
   getElement () {
@@ -18,6 +22,7 @@ export class SpanManager {
   insertLast (char) {
     this.spans.push(new Span(this.parentNode, char))
     this.maxCursorIndex += 1
+    this.maxCharOnLine += 1;
   }
 
   insertCharAt (char, index) {

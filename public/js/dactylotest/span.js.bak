@@ -1,0 +1,65 @@
+'use strict'
+
+export class Node {
+    constructor (container, tag, index = null) {
+        this.container = container
+    
+        this.element = document.createElement(tag)
+        const referenceNode = index === null ? null : this.container.childNodes.item(index)
+        container.insertBefore(this.element, referenceNode)
+      }
+
+      getTag () {
+        return this.tag
+      }
+    
+      detach () {
+        const children = this.container.childNodes
+        this.container.removeChild(children[children.length - 2])
+      }
+}
+
+export class Br extends Node {
+    constructor(container) {
+        super(container, 'br')
+    }
+}
+
+// Une SpanObject est l'encapsulation Objet d'un objet HTML span.
+// Une SpanObject est ratachée à un conteneur de span donné par container.
+// Une SpanObject contiendra 1 caractère donné par char. Ce caratctère est modifiable.
+export class Span extends Node {
+  constructor (container, char, index = null, cursor = false) {
+    super(container, 'span', index)
+
+    this.element.innerHTML = char
+
+    if (cursor) {
+      this.setCursor(true)
+    }
+  }
+
+  getChar () {
+    return this.element.innerHTML
+  }
+
+  getColor () {
+    return this.element.style.color
+  }
+
+  setChar (char) {
+    this.element.innerText = char
+  }
+
+  setColor (color) {
+    this.element.style.color = color
+  }
+
+  setCursor (bool) {
+    if (bool) {
+      this.element.classList.add('cursor-blink')
+    } else {
+      this.element.classList.remove('cursor-blink')
+    }
+  }
+}

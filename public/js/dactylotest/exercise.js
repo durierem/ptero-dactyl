@@ -98,7 +98,7 @@ $(document).ready(() => {
   $.get(target)
     .done((data) => {
       console.log(data)
-      exercise = new Exercise(defaultText)
+      exercise = new Exercise(data)
     })
     .fail(() => {
       console.log('Can\'t reach text database.')

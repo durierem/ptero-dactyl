@@ -144,7 +144,7 @@ $(document).ready(() => {
     .done((data) => {
       console.log(data)
       // benchmark = new Benchmark(data)
-      benchmark = new Benchmark(defaultText)
+      benchmark = new Benchmark(data)
     })
     .fail(() => {
       console.log('Can\'t reach text database.')

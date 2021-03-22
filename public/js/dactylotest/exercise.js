@@ -1,3 +1,5 @@
+/* global $ */
+
 'use strict'
 
 import { SpanManager } from './span-manager.js'
@@ -15,10 +17,9 @@ class Exercise {
     this.isFocused = true
     this.isInputAllowed = true
     this.isMouseOver = false
-    this.initialize()
   }
 
-  initialize () {
+  deploy () {
     // On insère le texte de référence dans la zone qui lui est dédiée
     for (const c of this.model.getReferenceText()) {
       this.textContainer.insertLast(c)
@@ -93,16 +94,16 @@ class Exercise {
 
 // Exercice a utiliser par defaut en cas de probleme pour joindre la
 // base de donnees
-const defaultText = "lle lle lle lle lle lle lle lle lle lle"
-let exercise = null
+const defaultText = 'lle lle lle lle lle lle lle lle lle lle'
+
 $(document).ready(() => {
   const target = '/api/get/new_exercise'
   $.get(target)
     .done((data) => {
-      exercise = new Exercise(data)
+      new Exercise(data).deploy()
     })
     .fail(() => {
       console.log('Can\'t reach text database.')
-      exercise = new Exercise(defaultText)
+      new Exercise(defaultText).deploy()
     })
 })

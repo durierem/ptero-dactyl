@@ -1,3 +1,5 @@
+/* global $ */
+
 'use strict'
 
 import { DataManager } from './data-manager.js'
@@ -17,10 +19,9 @@ class Benchmark {
     this.chrono = document.getElementById('chrono')
     this.chronoStarted = false
     this.lastChar = null
-    this.initialize()
   }
 
-  initialize () {
+  deploy () {
     // On insère le texte de référence dans la zone qui lui est dédiée
     for (const c of this.model.getReferenceText()) {
       this.textContainer.insertLast(c)
@@ -28,12 +29,12 @@ class Benchmark {
 
     // S'occupe d'afficher le chrono
     setInterval(() => {
-        const t = this.data.getTime()
-        let min = String(Math.floor((t / 60000) % 60)).padStart(2, '0')
-        let sec = String(Math.floor((t / 1000) % 60)).padStart(2, '0')
-        let milsec = String(t % 1000).padEnd(3, '0')
-        this.chrono.innerHTML = min + ':' + sec + ':' + milsec
-      }, 10)
+      const t = this.data.getTime()
+      const min = String(Math.floor((t / 60000) % 60)).padStart(2, '0')
+      const sec = String(Math.floor((t / 1000) % 60)).padStart(2, '0')
+      const milsec = String(t % 1000).padEnd(3, '0')
+      this.chrono.innerHTML = min + ':' + sec + ':' + milsec
+    }, 10)
 
     this.handleFocus()
 
@@ -60,7 +61,6 @@ class Benchmark {
         this.chronoStarted = true
         this.data.startTimer()
       }
-
 
       // Empêche la saisie de plusieurs espaces à la suite (bug random ?)
       if (c === ' ' && currentUserText()[currentUserText().length - 1] === ' ') {
@@ -154,21 +154,21 @@ class Benchmark {
 
 // Texte a utiliser par defaut en cas de probleme pour joindre la
 // base de donnees
-const defaultText = "La dactylographie est l'action de saisir un texte sur "
-    + "un clavier. Celui qui pratique la dactylographie, en tant que loisir "
-    + "ou métier, est un dactylographe. La pratique du métier nécessite "
-    + "l'utilisation de ses dix doigts avec rapidité, fluidité et précision "
-    + "et de ne pas regarder les touches du clavier mais de garder le regard "
-    + "sur le texte à saisir."
-let benchmark = null
+const defaultText = "La dactylographie est l'action de saisir un texte sur " +
+    'un clavier. Celui qui pratique la dactylographie, en tant que loisir ' +
+    'ou métier, est un dactylographe. La pratique du métier nécessite ' +
+    "l'utilisation de ses dix doigts avec rapidité, fluidité et précision " +
+    'et de ne pas regarder les touches du clavier mais de garder le regard ' +
+    'sur le texte à saisir.'
+
 $(document).ready(() => {
   const target = '/api/get/rdm_text'
   $.get(target)
     .done((data) => {
-      benchmark = new Benchmark(data)
+      new Benchmark(data).deploy()
     })
     .fail(() => {
       console.log('Can\'t reach text database.')
-      benchmark = new Benchmark(defaultText)
+      new Benchmark(defaultText).deploy()
     })
 })

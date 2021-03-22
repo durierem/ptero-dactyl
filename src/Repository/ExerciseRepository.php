@@ -20,15 +20,37 @@ class ExerciseRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Exercise Returns a random Exercise not already done
+     * @return Exercise If $tag == '' returns a random exercise, else if $tag !=
+     * '' AND $id == -1 returns an exercise with Tag != $tag, else returns an
+     * exercise with Tag == $tag AND $id != $id
+     * @param int $id Id of an exercise
+     * @param String $tag Tag of an exercise
      */
-    public function findExercise(String $last): ?Exercise
+    public function findExercise(int $id, String $tag): ?Exercise
     {
-        $exercises = $this->createQueryBuilder('e')
-            ->andWhere('e.tag <> :val')
-            ->setParameter('val', $last)
-            ->getQuery()
-            ->getResult();
+        if ($tag == '') {
+            $exercises = $this->createquerybuilder('e')
+                ->getquery()
+                ->getresult();
+        } else if ($tag != '' && $id == -1) {
+            $exercises = $this->createquerybuilder('e')
+                ->andwhere('e.tag <> :tag')
+                ->setparameter('tag', $tag)
+                ->getquery()
+                ->getresult();
+        } else {
+            $params = array(
+                  'id' => $id,
+                  'tag' => $tag
+            );
+
+            $exercises = $this->createquerybuilder('e')
+                ->where('e.id <> :id')
+                ->andwhere('e.tag = :tag')
+                ->setparameters($params)
+                ->getquery()
+                ->getresult();
+        }
 
         return $exercises[random_int(0, count($exercises) - 1)];
     }

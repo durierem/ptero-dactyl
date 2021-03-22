@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Text;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -22,25 +21,24 @@ class TextRepository extends ServiceEntityRepository
 
     /**
      * @return Text Returns a randomly selected Text
+     * @param int[] $prevIds the ids of the previous texts we don't want to get
      */
-    public function findRandom(Array $prevIds): Text
+    public function findRandom(array $prevIds): Text
     {
-        $entityManager = $this->getEntityManager();
+        $texts = $this->createQueryBuilder('t')
+            ->getQuery()
+            ->getResult()
+        ;
 
-        $ids = implode(',', array_values($prevIds));
-        if ($ids == '') {
-          $ids = '-1';
+        foreach ($texts as $key=>$text) {
+            if (in_array($text->getId(), $prevIds)) {
+                unset($texts[$key]);
+            }
         }
-        // Impossible d'utiliser rand() avec les builders fournis
-        // => on utilise une requête et un mapping manuel :/
-        $sql = "SELECT * FROM text WHERE id NOT IN ($ids) ORDER BY rand() LIMIT 1";
 
-        $rsm = new ResultSetMappingBuilder($entityManager);
-        $rsm->addRootEntityFromClassMetadata('App\Entity\Text', 't');
+        $res = array_values($texts);
 
-        $query = $entityManager->createNativeQuery($sql, $rsm);
-
-        return ($query->getResult())[0];
+        return $res[random_int(0, count($texts) - 1)];
     }
 
     // /**

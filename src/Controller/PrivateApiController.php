@@ -89,7 +89,7 @@ class PrivateApiController extends AbstractController
             // reset everything
             $session->remove('data');
             $session->remove('prev');
-            $session->remove('last');
+            $session->remove('lastId');
 
             $this->addFlash(
                 'benchDone',
@@ -123,6 +123,10 @@ class PrivateApiController extends AbstractController
         return new Response($text->getContent());
     }
 
+    const FIRST_EX = 1;
+    const SECOND_EX = 2;
+    const THIRD_EX = 4;
+
     /**
      * @Route("/api/get/new_exercise", name="get_exercise")
      */
@@ -132,22 +136,22 @@ class PrivateApiController extends AbstractController
             throw new HttpException(403, "Unauthorized request: private API");
         }
 
-        if ($session->has('currEx')) {
-            $currEx = $session->get('currEx');
-            $session->remove('currEx');
-            return new Response($currEx);
+        $lastId = intval($session->get('lastId', '-1'));
+        $currTag = $session->get('currTag', '');
+
+        $exercise = $exerciseRepository->findExercise($lastId, $currTag);
+        $session->set('lastId', $exercise->getId());
+        $session->set('currTag', $exercise->getTag());
+
+        if ($session->get('step') == self::SECOND_EX) {
+            $session->remove('lastId');
         }
 
-        $last = $session->get('last', '');
-        $exercise = $exerciseRepository->findExercise($last);
-        $session->set('last', $exercise->getTag());
-        $session->set('currEx', $exercise->getContent());
-
-        if ($session->get('step') == 1) {
+        if ($session->get('step') == self::FIRST_EX) {
             $data = $session->get('data');
             $data["ex1"] = $exercise->getTag();
             $session->set('data', $data);
-        } else {
+        } else if ($session->get('step') == self::THIRD_EX) {
             $data = $session->get('data');
             $data["ex2"] = $exercise->getTag();
             $session->set('data', $data);

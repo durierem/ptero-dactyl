@@ -91,13 +91,14 @@ class Exercise {
   }
 }
 
-const defaultText = 'Put all'
+// Exercice a utiliser par defaut en cas de probleme pour joindre la
+// base de donnees
+const defaultText = "lle lle lle lle lle lle lle lle lle lle"
 let exercise = null
 $(document).ready(() => {
   const target = '/api/get/new_exercise'
   $.get(target)
     .done((data) => {
-      console.log(data)
       exercise = new Exercise(data)
     })
     .fail(() => {

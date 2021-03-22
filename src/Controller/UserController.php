@@ -29,25 +29,29 @@ class UserController extends AbstractController
         return $this->render('userpanel.html.twig', ["dataTable"=>$data]);
     }
 
-    private function formatData(Array $bench): Array
+    /**
+     * @return Array Returns an array containing filtered test data
+     * @param Array $test An array containing row test data
+     */
+    private function formatData(Array $test): Array
     {
         $res = [];
-        foreach ($bench as $key=>$value) {
+        foreach ($test as $key=>$value) {
             if (preg_match("/^b\d$/", $key)) {
                 $time = round($value["time"]/1000, 1);
                 if (!isset($res['wpm'])) {
-                    $res = array_merge($res, array("wpm" => round(count($value["word_times"]) / $time * 60, 1)));
+                    $res["wpm"] = round(count($value["word_times"]) / $time * 60, 1);
                 } else {
                     $res['wpm'] += round(count($value["word_times"]) / $time * 60, 1);
                     $res['wpm'] /= 2;
                 }
                 if (!isset($res['misChar'])) {
-                    $res = array_merge($res, array("misChar" => $value["character_errors"]));
+                    $res["misChar"] = $value["character_errors"];
                 } else {
                     $res['misChar'] += $value['character_errors'];
                 }
                 if (!isset($res['misWord'])) {
-                    $res = array_merge($res, array("misWord" => $value["nb_false_word"]));
+                    $res["misWord"] = $value["nb_false_word"];
                 } else {
                     $res['misWord'] += $value['nb_false_word'];
                 }
@@ -58,10 +62,14 @@ class UserController extends AbstractController
         return $res;
     }
 
-    private function formatDate(DateTime $value): String
+    /**
+     * @return String Returns a string with $date formated
+     * @param DateTime $date the date to format
+     */
+    private function formatDate(DateTime $date): String
     {
-        $day = date_format($value, 'd/m/Y');
-        $time = date_format($value, 'H:i:s');
+        $day = date_format($date, 'd/m/Y');
+        $time = date_format($date, 'H:i:s');
         return $day." @ ".$time;
     }
 }

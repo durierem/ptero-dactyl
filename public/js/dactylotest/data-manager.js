@@ -14,7 +14,17 @@ export class DataManager {
     this.timer = 0
   }
 
-  // formate un json (par defaut) pour stocker les donnees a sauvegarder
+  /**
+   * Cree un json contenant les donnees liees a un benchmark
+   * {number} time: temps du test
+   * {number} character_errors: nombre de caracteres faux
+   * {number} nb_false_word: nombre de mots faux
+   * {array} word_errors: mots faux et leur nombre de caracateres faux
+   * {array} word_times: temps d'ecriture de chaque mot
+   * {array} key_combinations: tableau des temps entre chaque combinaisons
+   *  de 2 touches
+   * @returns {json} json contenant les donnees du benchmark
+   */
   getData () {
     return {
       time: this.time,
@@ -26,6 +36,10 @@ export class DataManager {
     }
   }
 
+  /**
+   * Mets en forme le tableau des temps d'ecriture des mots
+   * @returns {array} temps d'ecriture pour chaque mots du texte
+   */
   computeWordTimes () {
     const res = []
     let prev = 0
@@ -36,10 +50,16 @@ export class DataManager {
     return res
   }
 
+  /**
+   * Incremente le nombre de caracteres faux
+   */
   incFalseChar () {
     this.errChar++
   }
 
+  /**
+   * Incremente le nombre de mots faux
+   */
   incFalseWords () {
     this.numberOfFalseWord++
   }
@@ -72,10 +92,17 @@ export class DataManager {
     this.sameMis = true
   }
 
+  /**
+   * reinitialise l'indicateur de repetition d'une faute, a utiliser quand on
+   * change le mot courant dans le model lie
+   */
   resetMis () {
     this.sameMis = false
   }
 
+  /**
+   * ajoute le temps actuel au chrono time
+   */
   addWordTime () {
     this.wordTimes.push(this.time)
   }
@@ -101,9 +128,10 @@ export class DataManager {
     this.lastTime = this.time
   }
 
-  // Controle du timer
-  //  au 100e de seconde pres car c'est le plus petit interval possible pour
-  //  setInterval()
+  /**
+   * Demarre un timer qui aura une precision au 100e de seconde.
+   * Ne fonctionne que si le timer n'est pas deja en route.
+   */
   startTimer () {
     if (this.timer != 0) { return }
     this.timer = setInterval(() => {
@@ -111,10 +139,17 @@ export class DataManager {
     }, 10)
   }
 
+  /**
+   * Renvoie le temps actuel au timer en millisecondes
+   * @returns {number} le temps actuel au timer
+   */
   getTime () {
       return this.time
   }
 
+  /**
+   * Arrete le timer et le remet a 0.
+   */
   stopTimer () {
     clearInterval(this.timer)
     this.timer = 0

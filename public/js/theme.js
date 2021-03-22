@@ -9,6 +9,9 @@ class ThemeManager {
     this.icon = this.button.getElementsByTagName('i')[0]
   }
 
+  /**
+   * Initialise le theme en mettant les composants html a jour
+   */
   initialize () {
     document.body.classList = this.current
     this.button.classList.add(this.current === 'dark' ? 'blue-switcher' : 'red-switcher')
@@ -18,17 +21,17 @@ class ThemeManager {
     })
   }
 
+  /**
+   * Change de theme et met a jour le cookie pour qu'il persiste
+   */
   switchTheme () {
     this.button.classList.toggle('blue-switcher')
     this.button.classList.toggle('red-switcher')
     this.icon.classList.toggle('bi-moon-fill')
     this.icon.classList.toggle('bi-sun-fill')
 
-    // Switch de thème
     const newTheme = ((this.current === 'light') ? 'dark' : 'light')
-    // On actualise le cookie theme sur le thème choisi
     cookie.setCookie('theme', newTheme)
-    // On affiche le thème choisi
     this.setCurrent(newTheme)
   }
 

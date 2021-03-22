@@ -3,14 +3,10 @@
 {% block title %}Connexion{% endblock %}
 
 {% block stylesheets %}
-<link rel="stylesheet" type="text/css" href="{{ asset('css/form.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/form.css') }}">
 {% endblock %}
 
 {% block body %}
-
-{% include "header.html.twig" %}
-
-<div id="main-content-container">
     <h1>Connexion</h1>
     <form method="post">
         {% if error %}
@@ -53,4 +49,4 @@
             </button>
         </form>
     </div>
-    {% endblock %}
+{% endblock %}

@@ -1,0 +1,32 @@
+<footer>
+    <div>
+        <img id="univ-logo" src="{{ asset('images/logo-univ-rouen-normandie-blanc.png') }}" alt="Logo Université de Rouen">
+    </div>
+
+    <div>
+
+    </div>
+
+    <div>
+        <p id="app-version">v{{ app_version }}</p>
+    </div>
+</footer>
+
+<style>
+    footer {
+        min-height: 100px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: var(--dark-bg-primary);
+        color: var(--dark-fg);
+    }
+
+    #app-version {
+        font-size: small;
+    }
+
+    #univ-logo {
+        width: 120px;
+    }
+</style>

@@ -6,16 +6,19 @@
     <title>Ptero Dactyl - {% block title %}{% endblock %}</title>
     <link rel="icon" href="{{ asset('images/small_gra.ico') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('css/colorschemes.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/components.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/header.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('css/common.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/components.css') }}" />
     {% block stylesheets %}{% endblock %}
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     {% block javascripts %}{% endblock %}
 </head>
 
-{% block body %}{% endblock %}
+{% include "_header.html.twig" %}
+<div id="main-content-container">
+    {% block body %}{% endblock %}
+</div>
+{% include "_footer.html.twig" %}
 
 <script type="module" type="text/javascript" src="{{ asset('js/theme.js') }}"></script>
 

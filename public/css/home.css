@@ -4,13 +4,6 @@
     padding-right: 20px;
 }
 
-#main-content-container {
-    width: 66vw;
-    max-width: 750px;
-    margin: auto;
-    text-align: justify;
-}
-
 /* Boutons connexion/nouveau compte */
 #main-content-container:last-of-type div {
     padding: 10px;

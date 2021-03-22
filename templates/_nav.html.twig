@@ -1,0 +1,13 @@
+<nav id="nav">
+    <div id="links">
+        <a href="{{ path('home') }}"><i class="bi bi-house"></i> Accueil</a>
+        {% if app.user %}
+        <a href="{{ path('user_panel')}}"><i class="bi bi-person"></i> Mes statistiques ({{ app.user.username }})</a>
+        <a href="{{ path('app_logout') }}"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
+        {% else %}
+        <a href="{{ path('app_login') }}"><i class="bi bi-box-arrow-in-right"></i> Connexion</a>
+        <a href="{{ path('app_register') }}"><i class="bi bi-person-plus"></i> Nouveau compte</a>
+        {% endif %}
+        <a href="{{ path('about') }}"><i class="bi bi-info-circle"></i> A propos</a>
+    </div>
+</nav>

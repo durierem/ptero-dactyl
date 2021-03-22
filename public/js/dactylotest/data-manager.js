@@ -15,15 +15,16 @@ export class DataManager {
   }
 
   /**
-   * Cree un json contenant les donnees liees a un benchmark
-   * {number} time: temps du test
-   * {number} character_errors: nombre de caracteres faux
-   * {number} nb_false_word: nombre de mots faux
-   * {array} word_errors: mots faux et leur nombre de caracateres faux
-   * {array} word_times: temps d'ecriture de chaque mot
-   * {array} key_combinations: tableau des temps entre chaque combinaisons
-   *  de 2 touches
-   * @returns {json} json contenant les donnees du benchmark
+   * Renvoie un objet contenant les donnees liées à un benchmark.
+   *
+   * @typedef {Object} BenchmarkData
+   * @property {number} time - temps du test
+   * @property {number} character_errors - nombre de caracteres faux
+   * @property {number} nb_false_word - nombre de mots faux
+   * @property {Array.<string>} word_errors - mots faux et leur nombre de caracateres faux
+   * @property {Array.<number>} word_times - temps d'ecriture de chaque mot
+   * @property {Object.<string, number>} key_combinations - tableau des temps entre chaque combinaisons de 2 touches
+   * @return {BenchmarkData} L'objet contenant les données du benchmark
    */
   getData () {
     return {
@@ -135,7 +136,7 @@ export class DataManager {
   startTimer () {
     if (this.timer != 0) { return }
     this.timer = setInterval(() => {
-        this.time += 10
+      this.time += 10
     }, 10)
   }
 
@@ -144,7 +145,7 @@ export class DataManager {
    * @returns {number} le temps actuel au timer
    */
   getTime () {
-      return this.time
+    return this.time
   }
 
   /**

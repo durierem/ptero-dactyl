@@ -1,0 +1,67 @@
+<style>
+    #about-container {
+        margin: 10px;
+        flex-grow: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 66vw;
+        max-width: 750px;
+        margin: auto;
+        text-align: justify;
+    }
+
+    #about-container > * {
+        margin: 10px;
+    }
+
+    strong {
+        text-decoration: underline;
+        text-decoration-color:  var(--accent);
+    }
+</style>
+
+<div id="about-container">
+    <h1>Qu'est-ce que Ptero Dactyl ?</h1>
+    <p>
+        Ptero Dactyl est un projet mené par 4 étudiants en 3ème année de licence d'informatique.
+        Il a pour but de concevoir et programmer une plateforme de tests de dactylographie
+        qui se compose de deux types d'activités :
+    </p>
+    <ul>
+        <li>
+            Les <strong>benchmark</strong> sont des tests de dactylographie standards dans lesquels
+            l'utilisateur recopie un texte court. Au cours de l'activité, des statistiques sont
+            collectées, telles que le nombre de mots par minute et le nombre d'erreurs.
+        </li>
+        <li>
+            Les <strong>exercices</strong> sont des suites de lettres ou de mots ayant pour objectif
+            de faire progresser l'utilisateur dans certains domaines de sa frappe.
+        </li>
+    </ul>
+
+    <p>
+        Dans le cadre de ce projet, il est nécessaire d'effectuer une <strong>collecte et une analyse de
+            données</strong>
+        sur un échantillon d'utilisateurs afin de pouvoir déterminer quel type d'exercice correspond le
+        mieux à un utilisateur donné, en fonction de ses résultats aux benchmarks. C'est ici, cher
+        visiteur, que vous intervenez :)
+    </p>
+
+    <p>
+        En créant un compte (temporaire) et en vous connectant, vous accéderez à une <strong>série de tests</strong>
+        dont
+        la durée totale ne devrait pas dépasser 5 min :
+    </p>
+
+    <ol>
+        <li>Un premier benchmark servant à évaluer une première fois votre frappe</li>
+        <li>Un exercice choisi alétoirement, répété deux fois</li>
+        <li>Un deuxième benchmark</li>
+        <li>Un exercice choisi aléatoirement parmi ceux restants, répété deux fois</li>
+        <li>Un dernier benchmark</li>
+    </ol>
+
+    <p>Bon courage, et merci pour votre participation !</p>
+</div>

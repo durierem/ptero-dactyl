@@ -2,23 +2,23 @@
 
 namespace App\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Repository\BenchmarkRepository;
 use DateTime;
+use App\Repository\BenchmarkRepository;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class UserController extends AbstractController
+class UserPanelController extends AbstractController
 {
     /**
-    * @Route("/user", name="user_panel")
-    */
+     * @Route("/userpanel", name="user_panel")
+     */
     public function panel(BenchmarkRepository $benchmarkRepository): Response
     {
         $data = $benchmarkRepository->getUserData($this->getUser()->getId());
 
         foreach ($data as &$row) {
-            foreach($row as $key=>&$value) {
+            foreach ($row as $key => &$value) {
                 if ($key == "created_at") {
                     $value = $this->formatDate($value);
                 } else if ($key == "data") {
@@ -26,19 +26,19 @@ class UserController extends AbstractController
                 }
             }
         }
-        return $this->render('userpanel.html.twig', ["dataTable"=>$data]);
+        return $this->render('userpanel.html.twig', ["dataTable" => $data]);
     }
 
     /**
      * @return Array Returns an array containing filtered test data
      * @param Array $test An array containing row test data
      */
-    private function formatData(Array $test): Array
+    private function formatData(array $test): array
     {
         $res = [];
-        foreach ($test as $key=>$value) {
+        foreach ($test as $key => $value) {
             if (preg_match("/^b\d$/", $key)) {
-                $time = round($value["time"]/1000, 1);
+                $time = round($value["time"] / 1000, 1);
                 if (!isset($res['wpm'])) {
                     $res["wpm"] = round(count($value["word_times"]) / $time * 60, 1);
                 } else {
@@ -56,7 +56,7 @@ class UserController extends AbstractController
                     $res['misWord'] += $value['nb_false_word'];
                 }
             } else {
-                $res = array_merge($res, array($key=>$value));
+                $res = array_merge($res, array($key => $value));
             }
         }
         return $res;
@@ -70,6 +70,6 @@ class UserController extends AbstractController
     {
         $day = date_format($date, 'd/m/Y');
         $time = date_format($date, 'H:i:s');
-        return $day." @ ".$time;
+        return $day . " @ " . $time;
     }
 }

@@ -1,0 +1,11 @@
+{% extends "base.html.twig" %}
+
+{% block title %}A propos{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/about.html.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% include "_about.html.twig" %}
+{% endblock %}

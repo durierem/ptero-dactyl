@@ -3,87 +3,36 @@
 {% block title %}Accueil{% endblock %}
 
 {% block stylesheets %}
-<link rel="stylesheet" type="text/css" href="{{ asset('css/home.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/home.css') }}">
 {% endblock %}
 
 {% block body %}
-
-{% include "header.html.twig" %}
-
-<div id="main-content-container">
     {% if app.user %}
+        <a id="start-button" class="button" href="{{ path('session') }}">
+            <i class="bi bi-caret-right"></i>
+            {% if app.session.get('step') == 0 or app.session.get('step') == 7 %}
+                Démarrer
+            {% else %}
+                Reprendre
+            {% endif %}
+        </a>
 
-    <a id="start-button" class="button" href="{{ path('session') }}">
-        <i class="bi bi-caret-right"></i>
-        {% if app.session.get('step') == 0 or app.session.get('step') == 7 %}
-            Démarrer
-        {% else %}
-            Reprendre
-        {% endif %}
-    </a>
-
-    {% for message in app.flashes('benchDone') %}
-        <div class="alert">
-            {{ message }}
-        </div>
-    {% endfor %}
-
+        {% for message in app.flashes('benchDone') %}
+            <div class="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
     {% else %}
-
-    <h1>Qu'est-ce que Ptero Dactyl ?</h1>
-    <p>
-        Ptero Dactyl est un projet mené par 4 étudiants en 3ème année de licence d'informatique.
-        Il a pour but de concevoir et programmer une plateforme de tests de dactylographie
-        qui se compose de deux types d'activités :
-    </p>
-    <ul>
-        <li>
-            Les <strong>benchmark</strong> sont des tests de dactylographie standards dans lesquels
-            l'utilisateur recopie un texte court. Au cours de l'activité, des statistiques sont
-            collectées, telles que le nombre de mots par minute et le nombre d'erreurs.
-        </li>
-        <li>
-            Les <strong>exercices</strong> sont des suites de lettres ou de mots ayant pour objectif
-            de faire progresser l'utilisateur dans certains domaines de sa frappe.
-        </li>
-    </ul>
-
-    <p>
-        Dans le cadre de ce projet, il est nécessaire d'effectuer une <strong>collecte et une analyse de
-            données</strong>
-        sur un échantillon d'utilisateurs afin de pouvoir déterminer quel type d'exercice correspond le
-        mieux à un utilisateur donné, en fonction de ses résultats aux benchmarks. C'est ici, cher
-        visiteur, que vous intervenez :)
-    </p>
-
-    <p>
-        En créant un compte (temporaire) et en vous connectant, vous accéderez à une <strong>série de tests</strong>
-        dont
-        la durée totale ne devrait pas dépasser 5 min :
-    </p>
-
-    <ol>
-        <li>Un premier benchmark servant à évaluer une première fois votre frappe</li>
-        <li>Un exercice choisi alétoirement, répété deux fois</li>
-        <li>Un deuxième benchmark</li>
-        <li>Un exercice choisi aléatoirement parmi ceux restants, répété deux fois</li>
-        <li>Un dernier benchmark</li>
-    </ol>
-
-    <p>Bon courage, et merci pour votre participation !</p>
-
-    <div>
-        <a class="button" href="{{ path('app_login') }}">
-            <i class="bi bi-box-arrow-in-right"></i>
-            Connexion
-        </a>
-        <a class="button" href="{{ path('app_register') }}">
-            <i class="bi bi-person-plus"></i>
-            Nouveau compte
-        </a>
-    </div>
-
+        {% include "_about.html.twig" %}
+        <div>
+            <a class="button" href="{{ path('app_login') }}">
+                <i class="bi bi-box-arrow-in-right"></i>
+                Connexion
+            </a>
+            <a class="button" href="{{ path('app_register') }}">
+                <i class="bi bi-person-plus"></i>
+                Nouveau compte
+            </a>
+        </div>
     {% endif %}
-</div>
-
 {% endblock %}

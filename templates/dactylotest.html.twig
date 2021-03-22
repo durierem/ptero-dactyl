@@ -3,15 +3,10 @@
 {% block title %}Dactylotest{% endblock %}
 
 {% block stylesheets %}
-<link rel="stylesheet" type="text/css" href="{{ asset('css/dactylotest.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/dactylotest.css') }}">
 {% endblock %}
 
 {% block body %}
-
-{% include "header.html.twig" %}
-
-<div id="main-content-container">
-
     {% if dactylotest_type == 'benchmark' %}
         <h1>Benchmark</h1>
     {% elseif dactylotest_type == 'exercise' %}
@@ -19,55 +14,48 @@
     {% endif %}
 
     <div id="dactylotest-container">
-
         <p>Étape {{ app.session.get('step') + 1 }} / 7</p>
-
         <p id="text-container" class="area"></p>
-        {# <textarea id="user-input" hidden></textarea> #}
+        <!-- tabindex="1" to allow div to receive focus -->
         <p id="virtual-user-input" tabindex="1" class="area"></p>
-        {# tabindex="1" to allow div to receive focus #}
-
         <label id='chrono'></label>
-
     </div>
-</div>
 
-{% if dactylotest_type == 'benchmark' %}
-<script type="module" src="{{ asset('js/dactylotest/benchmark.js') }}"></script>
-{% elseif dactylotest_type == 'exercise' %}
-<script type="module" src="{{ asset('js/dactylotest/exercise.js') }}"></script>
-{% endif %}
+    {% if dactylotest_type == 'benchmark' %}
+        <script type="module" src="{{ asset('js/dactylotest/benchmark.js') }}"></script>
+    {% elseif dactylotest_type == 'exercise' %}
+        <script type="module" src="{{ asset('js/dactylotest/exercise.js') }}"></script>
+    {% endif %}
 
-<script>
-    // Taken from https://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back
-    // Prevent the backspace key from navigating back in Firefox
-    $(document).unbind('keydown').bind('keydown', function (event) {
-        if (event.keyCode === 8 || event.keyCode === 52) {
-            var doPrevent = true;
-            var types = ["text", "password", "file", "search", "email", "number", "date", "color", "datetime", "datetime-local", "month", "range", "search", "tel", "time", "url", "week"];
-            var d = $(event.srcElement || event.target);
-            var disabled = d.prop("readonly") || d.prop("disabled");
-            if (!disabled) {
-                if (d[0].isContentEditable) {
-                    doPrevent = false;
-                } else if (d.is("input")) {
-                    var type = d.attr("type");
-                    if (type) {
-                        type = type.toLowerCase();
-                    }
-                    if (types.indexOf(type) > -1) {
+    <script>
+        // Taken from https://stackoverflow.com/questions/1495219/how-can-i-prevent-the-backspace-key-from-navigating-back
+        // Prevent the backspace key from navigating back in Firefox
+        $(document).unbind('keydown').bind('keydown', function (event) {
+            if (event.keyCode === 8 || event.keyCode === 52) {
+                var doPrevent = true;
+                var types = ["text", "password", "file", "search", "email", "number", "date", "color", "datetime", "datetime-local", "month", "range", "search", "tel", "time", "url", "week"];
+                var d = $(event.srcElement || event.target);
+                var disabled = d.prop("readonly") || d.prop("disabled");
+                if (!disabled) {
+                    if (d[0].isContentEditable) {
+                        doPrevent = false;
+                    } else if (d.is("input")) {
+                        var type = d.attr("type");
+                        if (type) {
+                            type = type.toLowerCase();
+                        }
+                        if (types.indexOf(type) > -1) {
+                            doPrevent = false;
+                        }
+                    } else if (d.is("textarea")) {
                         doPrevent = false;
                     }
-                } else if (d.is("textarea")) {
-                    doPrevent = false;
+                }
+                if (doPrevent) {
+                    event.preventDefault();
+                    return false;
                 }
             }
-            if (doPrevent) {
-                event.preventDefault();
-                return false;
-            }
-        }
-    });
-</script>
-
+        });
+    </script>
 {% endblock %}

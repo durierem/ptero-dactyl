@@ -1,3 +1,38 @@
+<script src="{{ asset('js/nav.js') }}"></script>
+
+{% include "_nav.html.twig" %}
+
+<header id="header">
+    <div id="nav-opener-container">
+        <a id="nav-opener" href="javascript:void(0)" onclick="openNav()"><i class="bi bi-list"></i> Menu</a>
+    </div>
+    <div id="logo-container">
+        <a href="{{ path('home') }}"><img id="logo" src="{{ asset('images/big_gra.png') }}" alt="Logo"></a>
+        <a href="{{ path('home') }}" id="app-title">Ptero Dactyl<span class="blink">_</span></a>
+    </div>
+
+    <div id="theme-switcher-container">
+        <button id="theme-switcher" title="Changer de thème">
+            <i class="bi"></i>
+        </button>
+    </div>
+</header>
+
+<style>
+.blink {
+    font-family: inherit;
+    font-size: inherit;
+    animation-name: anim-blink;
+    animation-duration: 1s;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+@keyframes anim-blink {
+    from { opacity: 100%; }
+    to { opacity: 0%; }
+}
+
 header {
     height: 80px;
     background-color: var(--dark-bg-primary);
@@ -131,3 +166,5 @@ nav > #version {
 .blue-switcher:hover {
     color: var(--orange);
 }
+
+</style>

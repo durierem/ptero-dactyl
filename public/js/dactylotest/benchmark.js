@@ -58,11 +58,6 @@ class Benchmark {
         return
       }
 
-      if (!this.chronoStarted) {
-        this.chronoStarted = true
-        this.data.startTimer()
-      }
-
       // Empêche la saisie de plusieurs espaces à la suite (bug random ?)
       if (c === ' ' && currentUserText()[currentUserText().length - 1] === ' ') {
         return
@@ -79,19 +74,19 @@ class Benchmark {
           this.inputZone.removeLast()
         }
       } else {
-        if (this.isFirstInput) {
-          this.isFirstInput = false
-          this.data.startTimer()
-        }
 
-        this.data.addKeyComb(this.lastChar, c)
-        this.lastChar = c
         this.model.setLastInput(c)
         this.inputZone.insert(c)
 
         if (!this.model.isUserTextValid()) {
           this.data.addMistake(this.model.getCurrWord())
         } else {
+          if (this.isFirstInput) {
+            this.isFirstInput = false
+          } else {
+            this.data.addKeyComb(this.lastChar, c)
+          }
+          this.lastChar = c
           const isEndOfWord = !/\d|\w/.test(this.model.getReferenceText()
             .charAt(currentUserText().length))
           if (isEndOfWord) {

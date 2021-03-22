@@ -64,22 +64,24 @@ class PrivateApiController extends AbstractController
         $newData = $request->request->get('data');
         $newData = json_decode($newData, true);
 
-        $prevData = $session->get('data', []);
+        $currData = $session->get('data', []);
         $currStep = $session->get('step');
 
         if ($currStep == 0) {
-            $newData = array_merge($prevData, array("b1" => $newData));
-            $session->set('data', $newData);
+            $currData["b1"] = $newData;
+            $session->set('data', $currData);
         } else if ($currStep == 3) {
-            $newData = array_merge($prevData, array("b2" => $newData));
-            $session->set('data', $newData);
+            $currData["b2"] = $newData;
+            $session->set('data', $currData);
         } else {
-            $finalData = array_merge($prevData, array("b3" => $newData));
+            $currData["b3"] = $newData;
+            $date = new DateTime('now');
+            $currData["created_at"] = $date->format('d-m-Y @ H:i:s');
 
             $entityManager = $this->getDoctrine()->getManager();
 
             $benchmark = new Benchmark();
-            $benchmark->setData($finalData);
+            $benchmark->setData($currData);
             $benchmark->setUser($this->getUser());
             $benchmark->setCreatedAt(new DateTime('now'));
 

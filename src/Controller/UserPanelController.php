@@ -55,8 +55,6 @@ class UserPanelController extends AbstractController
                 } else {
                     $res['misWord'] += $value['nb_false_word'];
                 }
-            } else {
-                $res = array_merge($res, array($key => $value));
             }
         }
         return $res;
@@ -68,8 +66,8 @@ class UserPanelController extends AbstractController
      */
     private function formatDate(DateTime $date): String
     {
-        $day = date_format($date, 'd/m/Y');
-        $time = date_format($date, 'H:i:s');
+        $day = $date->format('d/m/Y');
+        $time = $date->format('H:i:s');
         return $day . " @ " . $time;
     }
 }

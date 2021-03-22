@@ -4,17 +4,12 @@
 // Une SpanObject est ratachée à un conteneur de span donné par container.
 // Une SpanObject contiendra 1 caractère donné par char. Ce caratctère est modifiable.
 export class Span {
-  constructor (container, char, index = null, cursor = false) {
+  constructor (container, char, referent = null) {
     this.container = container
     this.element = document.createElement('span')
     this.element.innerText = char
 
-    const referenceNode = index === null ? null : this.container.childNodes.item(index)
-    container.insertBefore(this.element, referenceNode)
-
-    if (cursor) {
-      this.setCursor(true)
-    }
+    container.insertBefore(this.element, referent)
   }
 
   getChar () {
@@ -35,8 +30,8 @@ export class Span {
 
   setCursor (bool) {
     if (bool) {
-      this.element.classList.add('active-cursor')
       this.element.classList.remove('inactive-cursor')
+      this.element.classList.add('active-cursor')
     } else {
       this.element.classList.remove('active-cursor')
       this.element.classList.add('inactive-cursor')

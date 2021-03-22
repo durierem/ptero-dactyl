@@ -3,13 +3,14 @@
 'use strict'
 
 import { SpanManager } from './span-manager.js'
+import { InputSpanManager } from './span-manager.js'
 import { DactyloTestModel } from './dactylotest-model.js'
 
 class Exercise {
   constructor (referenceText) {
     this.model = new DactyloTestModel(referenceText)
     this.textContainer = new SpanManager(document.getElementById('text-container'))
-    this.inputZone = new SpanManager(document.getElementById('virtual-user-input'))
+    this.inputZone = new InputSpanManager(document.getElementById('virtual-user-input'))
     // cette variable servira de memoire pour savoir de quelle couleur
     // on doit afficher le caractere que l'on insere
     this.mis = false
@@ -26,9 +27,6 @@ class Exercise {
     }
 
     this.handleFocus()
-
-    this.inputZone.insertLast('█')
-    this.inputZone.placeCursor(0)
     this.isInputAllowed = true
 
     document.body.addEventListener('keydown', (e) => {
@@ -51,7 +49,7 @@ class Exercise {
         // 'mis' defini la couleur: si l'utilisateur a fait une faute a cet
         // endroit on l'affiche comme une erreur
         this.model.setLastInput(c)
-        this.inputZone.insertCharAt(c, lastCharIndex())
+        this.inputZone.insert(c)
         this.inputZone.spans[lastCharIndex()].setColor(this.mis
           ? 'var(--error)'
           : 'var(--light-fg)')
@@ -82,10 +80,10 @@ class Exercise {
 
     document.body.addEventListener('click', () => {
       if (this.isMouseOver) {
-        this.inputZone.placeCursor(this.model.getUserText().length)
+        this.inputZone.setCursorBlink(true)
         this.isInputAllowed = true
       } else {
-        this.inputZone.removeCursor()
+        this.inputZone.setCursorBlink(false)
         this.isInputAllowed = false
       }
     })

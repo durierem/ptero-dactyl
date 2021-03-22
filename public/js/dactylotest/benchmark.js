@@ -4,6 +4,7 @@
 
 import { DataManager } from './data-manager.js'
 import { SpanManager } from './span-manager.js'
+import { InputSpanManager } from './span-manager.js'
 import { DactyloTestModel } from './dactylotest-model.js'
 
 class Benchmark {
@@ -11,7 +12,7 @@ class Benchmark {
     this.model = new DactyloTestModel(referenceText)
     this.data = new DataManager()
     this.textContainer = new SpanManager(document.getElementById('text-container'))
-    this.inputZone = new SpanManager(document.getElementById('virtual-user-input'))
+    this.inputZone = new InputSpanManager(document.getElementById('virtual-user-input'))
     this.isFirstInput = true
     this.isFocused = true
     this.isInputAllowed = true
@@ -38,8 +39,8 @@ class Benchmark {
 
     this.handleFocus()
 
-    this.inputZone.insertLast('█')
-    this.inputZone.placeCursor(0)
+    // this.inputZone.insertLast('█')
+    // this.inputZone.placeCursor(0)
     this.isInputAllowed = true
 
     document.body.addEventListener('keydown', (e) => {
@@ -75,7 +76,7 @@ class Benchmark {
       if (c === 'Backspace') {
         if (currentUserText().length > 0) {
           this.model.deleteLastInput() // => longueur du texte diminuée de 1
-          this.inputZone.removeCharAt(currentUserText().length)
+          this.inputZone.removeLast()
         }
       } else {
         if (this.isFirstInput) {
@@ -86,7 +87,7 @@ class Benchmark {
         this.data.addKeyComb(this.lastChar, c)
         this.lastChar = c
         this.model.setLastInput(c)
-        this.inputZone.insertCharAt(c, currentUserText().length - 1)
+        this.inputZone.insert(c)
 
         if (!this.model.isUserTextValid()) {
           this.data.addMistake(this.model.getCurrWord())
@@ -138,13 +139,11 @@ class Benchmark {
 
     document.body.addEventListener('click', () => {
       if (this.isMouseOver) {
-        console.log('set cursor')
-        this.inputZone.placeCursor(this.model.getUserText().length)
-        this.data.startTimer()
+        this.inputZone.setCursorBlink(true)
         this.isInputAllowed = true
+        this.data.startTimer()
       } else {
-        console.log('remove cursor')
-        this.inputZone.removeCursor()
+        this.inputZone.setCursorBlink(false)
         this.isInputAllowed = false
         this.data.stopTimer()
       }

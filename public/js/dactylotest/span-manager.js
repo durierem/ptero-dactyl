@@ -1,7 +1,9 @@
 'use strict'
 
 import { Span } from './span.js'
+import { Cursor } from './span.js'
 
+//---------------------------------------------------------------------------//
 
 /*
     SpanManager: Gestionnaire de Span. 
@@ -74,12 +76,15 @@ export class SpanManager {
     }
 }
 
+//---------------------------------------------------------------------------//
+
 /*
     InputSpanManager: Gestionnaire de Span incluant un curseur
     Le curseur est géré sous forme d'un Span.
     Les Span insérées par insert() s'insèrent à l'endroit du curseur
     afin de simuler une tape dans un éditeur de texte. 
     Un appel à remove() simule un effacement à la position du curseur.
+    Les appels insertLast() et removeLast() ne garantissent pas la cohérence du curseur.
 
     @pre 
         parentNode est un objet conteneur du DOM
@@ -89,10 +94,11 @@ export class SpanManager {
         this.getLength = 0
 */
 export class InputSpanManager extends SpanManager {
+    
     constructor (parentNode) {
         super(parentNode)
 
-        this.cursor = new Span(this.parentNode, '█')
+        this.cursor = new Cursor(this.parentNode, '█')
         this.spans.push(this.cursor)
         this.cursorIndex = 0;
     }
@@ -135,13 +141,12 @@ export class InputSpanManager extends SpanManager {
     /*
         setCursorBlink
         @pre
-            [boolean] bool
             bool != null
         @post
             Le curseur clignotte ou non en fonction de bool
     */
     setCursorBlink (bool) {
-        this.spans[this.cursorIndex].setCursor(bool)
+        this.spans[this.cursorIndex].setBlink(bool)
     }
 
 }

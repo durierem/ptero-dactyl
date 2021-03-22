@@ -26,6 +26,15 @@ class Benchmark {
       this.textContainer.insertLast(c)
     }
 
+    // S'occupe d'afficher le chrono
+    setInterval(() => {
+        const t = this.data.getTime()
+        let min = String(Math.floor((t / 60000) % 60)).padStart(2, '0')
+        let sec = String(Math.floor((t / 1000) % 60)).padStart(2, '0')
+        let milsec = String(t % 1000).padEnd(3, '0')
+        this.chrono.innerHTML = min + ':' + sec + ':' + milsec
+      }, 10)
+
     this.handleFocus()
 
     this.inputZone.insertLast('█')
@@ -50,13 +59,6 @@ class Benchmark {
       if (!this.chronoStarted) {
         this.chronoStarted = true
         this.data.startTimer()
-        setInterval(() => {
-          const t = this.data.getTime()
-          let min = String(Math.floor((t / 60000) % 60)).padStart(2, '0')
-          let sec = String(Math.floor((t / 1000) % 60)).padStart(2, '0')
-          let milsec = String(t % 1000).padEnd(3, '0')
-          this.chrono.innerHTML = min + ':' + sec + ':' + milsec
-        }, 10)
       }
 
 

@@ -13,7 +13,9 @@
 
     <h1>Nouveau compte</h1>
 
-    {{ form_start(registrationForm) }}
+    {{ form_start(registrationForm, {
+        action: path('app_register'),
+    }) }}
     {{ form_row(registrationForm.username, {
         label: 'Nom d\'utilisateur',
     }) }}

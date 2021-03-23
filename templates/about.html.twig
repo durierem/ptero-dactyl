@@ -2,10 +2,8 @@
 
 {% block title %}A propos{% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/about.html.css') }}">
-{% endblock %}
-
 {% block body %}
     {% include "_about.html.twig" %}
+    <p id="app-version">v{{ app_version }}</p>
+    <p>Copyright © 2021 Ptero Dactyl. Tous droits réservés.</p>
 {% endblock %}

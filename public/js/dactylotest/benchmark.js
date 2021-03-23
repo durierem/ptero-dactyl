@@ -71,7 +71,7 @@ class Benchmark extends AbstractDactylo {
     }
 
     isFinished () {
-        this.model.isFinished()
+        return this.model.isFinished()
     }
 
     onFinish () {
@@ -96,7 +96,7 @@ class Benchmark extends AbstractDactylo {
     }
 
     onBlur () {
-        this.data.pauseTimer()
+        this.data.stopTimer()
     }
 }
 

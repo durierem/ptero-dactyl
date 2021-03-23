@@ -149,9 +149,9 @@ export class DataManager {
   }
 
   /**
-   * Arrete le timer et le remet a 0.
+   * Met en Pause le timer
    */
-  stopTimer () {
+  pauseTimer () {
     clearInterval(this.timer)
     this.timer = 0
   }

@@ -13,11 +13,7 @@ class Exercise {
     this.inputZone = new InputSpanManager(document.getElementById('virtual-user-input'))
     // cette variable servira de memoire pour savoir de quelle couleur
     // on doit afficher le caractere que l'on insere
-    this.mis = false
-    this.isFirstInput = true
-    this.isFocused = true
-    this.isInputAllowed = true
-    this.isMouseOver = false
+    this.mistake = false
   }
 
   deploy () {
@@ -27,12 +23,8 @@ class Exercise {
     }
 
     this.handleFocus()
-    this.isInputAllowed = true
 
     document.body.addEventListener('keydown', (e) => {
-      if (!this.isInputAllowed) {
-        return
-      }
 
       const c = e.key
 
@@ -40,20 +32,16 @@ class Exercise {
         return
       }
 
-      const lastCharIndex = () => { return this.model.getUserTextLength() - 1 }
-
       if (!this.model.isInputCorrect(c)) {
-        this.mis = true
+        this.mistake = true
       } else {
         // on ajoute le caractere avec la bonne couleur
         // 'mis' defini la couleur: si l'utilisateur a fait une faute a cet
         // endroit on l'affiche comme une erreur
         this.model.setLastInput(c)
         this.inputZone.insert(c)
-        this.inputZone.spans[lastCharIndex()].setColor(this.mis
-          ? 'var(--error)'
-          : 'var(--light-fg)')
-        this.mis = false
+        this.inputZone.getSpanAt().setColor(this.mistake ? 'var(--error)' : 'var(--light-fg)')
+        this.mistake = false
 
         /*
          * ici on controle ou en est l'utilisateur dans la chaine des tests
@@ -71,23 +59,15 @@ class Exercise {
   }
 
   handleFocus () {
-    this.inputZone.getElement().addEventListener('mouseover', () => {
-      this.isMouseOver = true
-    })
-    this.inputZone.getElement().addEventListener('mouseleave', () => {
-      this.isMouseOver = false
-    })
-
-    document.body.addEventListener('click', () => {
-      if (this.isMouseOver) {
+    this.inputZone.getElement().addEventListener('focus', () =>{
         this.inputZone.setCursorBlink(true)
         this.isInputAllowed = true
-      } else {
+    })
+    this.inputZone.getElement().addEventListener('blur', () => {
         this.inputZone.setCursorBlink(false)
         this.isInputAllowed = false
-      }
     })
-  }
+}
 }
 
 // Exercice a utiliser par defaut en cas de probleme pour joindre la

@@ -31,6 +31,19 @@ export class SpanManager {
     }
 
     /*
+        getSpanAt: Retourne la span à l'indice i du texte affiché
+        @pre
+            0 < i < this.getLength()
+        @post
+            i === default value => Retourne la dernière lettre du texte affiché
+            i => Retourne la lettre à l'indice i du texte affiché
+    */
+    getSpanAt (i = this.getLength() - 1) {
+        if (i < 0 || i >= this.getLength) { return null }
+        return this.spans[i]
+    }
+
+    /*
         getLength
         @post
             Retourne la taille du texte formé
@@ -94,7 +107,7 @@ export class SpanManager {
         this.getLength = 0
 */
 export class InputSpanManager extends SpanManager {
-    
+
     constructor (parentNode) {
         super(parentNode)
 
@@ -126,6 +139,22 @@ export class InputSpanManager extends SpanManager {
     remove () {
         if (this.spans.length === 1) { return }
         else { super.removeLast() }
+    }
+
+    /*
+        getSpanAt: Retourne la span à l'indice i du texte affiché
+        @pre
+            0 < i < this.getLength()
+        @post
+            i === default value => Retourne la dernière lettre du texte affiché
+            i => Retourne la lettre à l'indice i du texte affiché, ne revoie jamais le curseur
+    */
+    getSpanAt (i = this.getLength()) {
+        if (i < 0 || i > this.getLength) { return null }
+        if (this.spans[i] === this.cursor) {
+            return this.spans[i - 1]
+        }
+        return this.spans[i]
     }
 
      /*

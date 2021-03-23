@@ -14,3 +14,8 @@
     font-family: "Iosevka Slab Regular";
     text-align: left;
 }
+
+#virtual-user-input {
+    /* Résoud le problème des espaces qui ne d'affichent pas */
+    white-space: pre;
+}

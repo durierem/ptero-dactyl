@@ -65,6 +65,8 @@ export class AbstractDactylo {
         this.inheritor.onFinish()
       }
     })
+
+    this.inputZone.getElement().focus()
   }
 
   checkWellImplemented () {

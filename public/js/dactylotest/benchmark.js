@@ -42,13 +42,12 @@ class Benchmark extends AbstractDactylo {
         this.inputZone.remove()
         this.lastChar = null
       }
-      return
+    } else {
+      // Mise à jour du model
+      this.model.setLastInput(c)
+      // Mise à jour de la vue
+      this.inputZone.insert(c)
     }
-
-    // Mise à jour du model
-    this.model.setLastInput(c)
-    // Mise à jour de la vue
-    this.inputZone.insert(c)
 
     // Traitement des erreurs
     if (!this.model.isUserTextValid()) {

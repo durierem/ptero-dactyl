@@ -1,87 +1,69 @@
-/* global $ */
-
 'use strict'
 
-import { SpanManager } from './span-manager.js'
-import { InputSpanManager } from './span-manager.js'
-import { DactyloTestModel } from './dactylotest-model.js'
+import { AbstractDactylo } from './abstractdactylo.js'
 
-class Exercise {
-  constructor (referenceText) {
-    this.model = new DactyloTestModel(referenceText)
-    this.textContainer = new SpanManager(document.getElementById('text-container'))
-    this.inputZone = new InputSpanManager(document.getElementById('virtual-user-input'))
-    // cette variable servira de memoire pour savoir de quelle couleur
-    // on doit afficher le caractere que l'on insere
-    this.mistake = false
-  }
-
-  deploy () {
-    // On insère le texte de référence dans la zone qui lui est dédiée
-    for (const c of this.model.getReferenceText()) {
-      this.textContainer.insertLast(c)
+class Exercise extends AbstractDactylo {
+    constructor (referenceText) {
+        super(referenceText)
+        super.inheritor = this
+        // Le dernier caractère tapé est correct ou érroné
+        this.mistake = false
     }
 
-    this.handleFocus()
-
-    document.body.addEventListener('keydown', (e) => {
-
-      const c = e.key
-
-      if (!/^.$/.test(c)) {
-        return
-      }
-
-      if (!this.model.isInputCorrect(c)) {
-        this.mistake = true
-      } else {
-        // on ajoute le caractere avec la bonne couleur
-        // 'mis' defini la couleur: si l'utilisateur a fait une faute a cet
-        // endroit on l'affiche comme une erreur
-        this.model.setLastInput(c)
-        this.inputZone.insert(c)
-        this.inputZone.getSpanAt().setColor(this.mistake ? 'var(--error)' : 'var(--light-fg)')
-        this.mistake = false
-
-        /*
-         * ici on controle ou en est l'utilisateur dans la chaine des tests
-         * on le renvoie donc soit vers un autre exercice, soit vers le
-         * benchmark suivant
-         */
-        if (this.model.isFinished()) {
-          this.isInputAllowed = false
-          this.inputZone.getElement().innerHTML = 'FINI'
-          console.log('FINISHED')
-          window.location.assign('/dactylotest/session?isFinished=true')
+    onLoad () {
+        // On insère le texte de référence dans la zone qui lui est dédiée
+        for (const c of this.model.getReferenceText()) {
+            this.textContainer.insertLast(c)
         }
-      }
-    })
-  }
+    }
+  
+    handleInput (e) {  
+        const c = e.key
+  
+        if (!/^.$/.test(c)) {
+            return
+        }
+  
+        if (!this.model.isInputCorrect(c)) {
+            this.mistake = true
+        } else {
+            // On ajoute le caractère avec la bonne couleur
+            this.model.setLastInput(c)
+            this.inputZone.insert(c)
+            this.inputZone.getSpanAt().setColor(this.mistake ? 'var(--error)' : 'var(--light-fg)')
+            this.mistake = false
+        }
+    }
 
-  handleFocus () {
-    this.inputZone.getElement().addEventListener('focus', () =>{
-        this.inputZone.setCursorBlink(true)
-        this.isInputAllowed = true
-    })
-    this.inputZone.getElement().addEventListener('blur', () => {
-        this.inputZone.setCursorBlink(false)
-        this.isInputAllowed = false
-    })
-}
+    isFinished () {
+        return this.model.isFinished()
+    }
+
+    onFinish () {
+        this.inputZone.getElement().innerHTML = 'FINI'
+        console.log('FINI')
+        window.location.assign('/dactylotest/session?isFinished=true')
+    }
+
+    onFocus() { return }
+
+    onBlur() { return }
 }
 
-// Exercice a utiliser par defaut en cas de probleme pour joindre la
-// base de donnees
+//---------------------------------------------------------------------------//
+
+// Exercice a utiliser par défaut en cas de problème pour joindre la
+// base de données
 const defaultText = 'lle lle lle lle lle lle lle lle lle lle'
 
 $(document).ready(() => {
-  const target = '/api/get/new_exercise'
-  $.get(target)
+    const target = '/api/get/new_exercise'
+    $.get(target)
     .done((data) => {
-      new Exercise(data).deploy()
+        new Exercise(data).start()
     })
     .fail(() => {
-      console.log('Can\'t reach text database.')
-      new Exercise(defaultText).deploy()
+        console.log('Can\'t reach text database.')
+        new Exercise(defaultText).start()
     })
 })

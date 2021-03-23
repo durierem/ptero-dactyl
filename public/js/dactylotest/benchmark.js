@@ -1,24 +1,20 @@
-/* global $ */
-
 'use strict'
 
+import { AbstractDactylo } from './abstractdactylo.js'
 import { DataManager } from './data-manager.js'
-import { SpanManager } from './span-manager.js'
-import { InputSpanManager } from './span-manager.js'
-import { DactyloTestModel } from './dactylotest-model.js'
 
-class Benchmark {
+class Benchmark extends AbstractDactylo {
+
     constructor (referenceText) {
-        this.model = new DactyloTestModel(referenceText)
+        super(referenceText)
+        super.inheritor = this
+
         this.data = new DataManager()
-        this.textContainer = new SpanManager(document.getElementById('text-container'))
-        this.inputZone = new InputSpanManager(document.getElementById('virtual-user-input'))
-        this.isFirstInput = true
         this.chrono = document.getElementById('chrono')
         this.lastChar = null
     }
 
-    deploy () {
+    onLoad() {
         // On insère le texte de référence dans la zone qui lui est dédiée
         for (const c of this.model.getReferenceText()) {
             this.textContainer.insertLast(c)
@@ -26,88 +22,85 @@ class Benchmark {
 
         // S'occupe d'afficher le chrono
         setInterval(() => {
-        const t = this.data.getTime()
-        const min = String(Math.floor((t / 60000) % 60)).padStart(2, '0')
-        const sec = String(Math.floor((t / 1000) % 60)).padStart(2, '0')
-        const milsec = String(t % 1000).padEnd(3, '0').slice(0, -1)
-        this.chrono.innerHTML = min + ':' + sec + ':' + milsec
-        }, 10)
+            const t = this.data.getTime()
+            const min = String(Math.floor((t / 60000) % 60)).padStart(2, '0')
+            const sec = String(Math.floor((t / 1000) % 60)).padStart(2, '0')
+            const milsec = String(t % 1000).padEnd(3, '0').slice(0, -1)
+            this.chrono.innerHTML = min + ':' + sec + ':' + milsec
+            }, 10)
 
-        // On ajoute les évenements de focus sur inputZone
-        this.handleFocus()
+    }
 
-        this.inputZone.getElement().addEventListener('keydown', (e) => {
-            const c = e.key
+    handleInput (e) {
+        const c = e.key
 
-            // Bloque les touches spéciales (Backspace, ArrowLeft, Escape, etc) 
-            if (!/^.$/.test(c)) {
-                // Si la touche est Backspace on effectue les actions appropriée
-                if (c === 'Backspace' && this.inputZone.getLength() > 0) {
-                    this.model.deleteLastInput() // => longueur du texte diminuée de 1
-                    this.inputZone.remove()
-                    this.lastChar = null
-                }
-                return
-            }
-
-            // Mise à jour du model
-            this.model.setLastInput(c)
-            // Mise à jour de la vue
-            this.inputZone.insert(c)
-
-            // Traitement des erreurs
-            if (!this.model.isUserTextValid()) {
-                this.inputZone.getElement().style.backgroundColor = 'var(--error)'
-                this.data.addMistake(this.model.getCurrWord())
+        // Bloque les touches spéciales (Backspace, ArrowLeft, Escape, etc) 
+        if (!/^.$/.test(c)) {
+            // Si la touche est Backspace on effectue les actions appropriée
+            if (c === 'Backspace' && this.inputZone.getLength() > 0) {
+                this.model.deleteLastInput() // => longueur du texte diminuée de 1
+                this.inputZone.remove()
                 this.lastChar = null
-            } else {
-                this.inputZone.getElement().style.backgroundColor = 'var(--light-bg-secondary)'
-                if (this.inputZone.getLength() > 1 && this.lastChar != null) {
-                    this.data.addKeyComb(this.lastChar, c)
-                }
-                this.lastChar = c
-                const isEndOfWord = !/\d|\w/.test(this.model.getReferenceText().charAt(this.inputZone.getLength()))
-                if (isEndOfWord) {
-                    this.data.resetMis()
-                    this.data.addWordTime()
-                    this.model.setCurrentWord()
-                }
             }
+            return
+        }
 
-            if (this.model.isFinished()) {
-                this.isInputAllowed = false
-                this.inputZone.getElement().innerHTML = 'FINI'
-                this.data.stopTimer()
-                console.log(this.data.getData())
-                const jason = this.data.getData()
-                const target = '/api/send/benchdata'
-                $.post(target, { data: JSON.stringify(jason) })
-                .done(() => {
-                    window.location.assign('/dactylotest/session?isFinished=true')
-                })
-                .fail((data) => {
-                    // On redirige vers la page d'accueil avec un paramètre erreur
-                    // car la sauvegarde à échouée
-                    window.location.assign('/?error=true')
-                    console.log('Couldn\'t save data: ' + JSON.parse(data))
-                })
+        // Mise à jour du model
+        this.model.setLastInput(c)
+        // Mise à jour de la vue
+        this.inputZone.insert(c)
+
+        // Traitement des erreurs
+        if (!this.model.isUserTextValid()) {
+            this.inputZone.getElement().style.backgroundColor = 'var(--error)'
+            this.data.addMistake(this.model.getCurrWord())
+            this.lastChar = null
+        } else {
+            this.inputZone.getElement().style.backgroundColor = 'var(--light-bg-secondary)'
+            if (this.lastChar != null) {
+                this.data.addKeyComb(this.lastChar, c)
             }
+            this.lastChar = c
+            const isEndOfWord = !/\d|\w/.test(this.model.getReferenceText().charAt(this.inputZone.getLength()))
+            if (isEndOfWord) {
+                this.data.resetMis()
+                this.data.addWordTime()
+                this.model.setCurrentWord()
+            }
+        }
+    }
+
+    isFinished () {
+        return this.model.isFinished()
+    }
+
+    onFinish () {
+        this.inputZone.getElement().innerHTML = 'FINI'
+        this.data.stopTimer()
+        const jason = this.data.getData()
+        const target = '/api/send/benchdata'
+        $.post(target, { data: JSON.stringify(jason) })
+        .done(() => {
+            window.location.assign('/dactylotest/session?isFinished=true')
+        })
+        .fail((data) => {
+            // On redirige vers la page d'accueil avec un paramètre erreur
+            // car la sauvegarde à échouée
+            window.location.assign('/?error=true')
+            console.log('Couldn\'t save data: ' + JSON.parse(data))
         })
     }
 
-    handleFocus () {
-        this.inputZone.getElement().addEventListener('focus', () =>{
-            this.inputZone.setCursorBlink(true)
-            this.isInputAllowed = true
-            this.data.startTimer()
-        })
-        this.inputZone.getElement().addEventListener('blur', () => {
-            this.inputZone.setCursorBlink(false)
-            this.isInputAllowed = false
-            this.data.stopTimer()
-        })
+    onFocus () {
+        this.data.startTimer()
+    }
+
+    onBlur () {
+        this.data.stopTimer()
     }
 }
+
+//---------------------------------------------------------------------------//
 
 // Texte a utiliser par defaut en cas de probleme pour joindre la
 // base de donnees
@@ -122,10 +115,10 @@ $(document).ready(() => {
   const target = '/api/get/rdm_text'
   $.get(target)
     .done((data) => {
-      new Benchmark(data).deploy()
+      new Benchmark(data).start()
     })
     .fail(() => {
       console.log('Can\'t reach text database.')
-      new Benchmark(defaultText).deploy()
+      new Benchmark(defaultText).start()
     })
 })

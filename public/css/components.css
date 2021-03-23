@@ -40,18 +40,13 @@ a.button, a.button:visited {
 }
 
 /* Ajoute un effet de clignotement type curseur */
-.active-cursor {
+.animate-cursor {
     animation: cursor-blink 1s step-start infinite;
-    opacity: 100;
 }
 @keyframes cursor-blink {
     50% {
-        opacity: 0;
+        opacity: 100;
     }
-}
-
-.inactive-cursor {
-    opacity: 0;
 }
 
 /* Cache un élément. L'élément est toujours rendu dans la page. */

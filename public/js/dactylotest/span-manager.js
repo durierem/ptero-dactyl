@@ -1,7 +1,9 @@
 'use strict'
 
 import { Span } from './span.js'
+import { Cursor } from './span.js'
 
+//---------------------------------------------------------------------------//
 
 /*
     SpanManager: Gestionnaire de Span. 
@@ -26,6 +28,19 @@ export class SpanManager {
     */
     getElement () {
         return this.parentNode
+    }
+
+    /*
+        getSpanAt: Retourne la span à l'indice i du texte affiché
+        @pre
+            0 < i < this.getLength()
+        @post
+            i === default value => Retourne la dernière lettre du texte affiché
+            i => Retourne la lettre à l'indice i du texte affiché
+    */
+    getSpanAt (i = this.getLength() - 1) {
+        if (i < 0 || i >= this.getLength) { return null }
+        return this.spans[i]
     }
 
     /*
@@ -74,12 +89,15 @@ export class SpanManager {
     }
 }
 
+//---------------------------------------------------------------------------//
+
 /*
     InputSpanManager: Gestionnaire de Span incluant un curseur
     Le curseur est géré sous forme d'un Span.
     Les Span insérées par insert() s'insèrent à l'endroit du curseur
     afin de simuler une tape dans un éditeur de texte. 
     Un appel à remove() simule un effacement à la position du curseur.
+    Les appels insertLast() et removeLast() ne garantissent pas la cohérence du curseur.
 
     @pre 
         parentNode est un objet conteneur du DOM
@@ -89,10 +107,11 @@ export class SpanManager {
         this.getLength = 0
 */
 export class InputSpanManager extends SpanManager {
+
     constructor (parentNode) {
         super(parentNode)
 
-        this.cursor = new Span(this.parentNode, '█')
+        this.cursor = new Cursor(this.parentNode, '█')
         this.spans.push(this.cursor)
         this.cursorIndex = 0;
     }
@@ -122,6 +141,22 @@ export class InputSpanManager extends SpanManager {
         else { super.removeLast() }
     }
 
+    /*
+        getSpanAt: Retourne la span à l'indice i du texte affiché
+        @pre
+            0 < i < this.getLength()
+        @post
+            i === default value => Retourne la dernière lettre du texte affiché
+            i => Retourne la lettre à l'indice i du texte affiché, ne revoie jamais le curseur
+    */
+    getSpanAt (i = this.getLength()) {
+        if (i < 0 || i > this.getLength) { return null }
+        if (this.spans[i] === this.cursor) {
+            return this.spans[i - 1]
+        }
+        return this.spans[i]
+    }
+
      /*
         getLength
         @post
@@ -135,13 +170,12 @@ export class InputSpanManager extends SpanManager {
     /*
         setCursorBlink
         @pre
-            [boolean] bool
             bool != null
         @post
             Le curseur clignotte ou non en fonction de bool
     */
     setCursorBlink (bool) {
-        this.spans[this.cursorIndex].setCursor(bool)
+        this.spans[this.cursorIndex].setBlink(bool)
     }
 
 }

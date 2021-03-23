@@ -11,7 +11,7 @@
     margin: 10px;
     border: 2px solid var(--dark-bg-primary);
     border-radius: 5px 5px 5px 5px;
-    transition-duration: 0.1s;
+    transition: all 0.1s ease-in-out;
     min-width: 100px;
     box-shadow: 0 0 10px var(--dark-bg-primary);
 }

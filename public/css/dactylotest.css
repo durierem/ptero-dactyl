@@ -19,3 +19,11 @@
     /* Résoud le problème des espaces qui ne d'affichent pas */
     white-space: break-spaces;
 }
+
+#tag {
+    align-self: flex-start;
+}
+
+#chrono {
+    align-self: flex-end;
+}

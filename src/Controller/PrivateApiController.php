@@ -9,6 +9,7 @@ use App\Repository\ExerciseRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -122,7 +123,7 @@ class PrivateApiController extends AbstractController
         array_push($prevIds, $text->getId());
         $session->set('prev', $prevIds);
 
-        return new Response($text->getContent());
+        return $this->json(array('content' => $text->getContent(), 'source' => $text->getSource()));
     }
 
     const FIRST_EX = 1;
@@ -159,6 +160,6 @@ class PrivateApiController extends AbstractController
             $session->set('data', $data);
         }
 
-        return new Response($exercise->getContent());
+        return $this->json(array('content' => $exercise->getContent(), 'tag' => $exercise->getTag()));
     }
 }

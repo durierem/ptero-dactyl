@@ -62,10 +62,12 @@ $(document).ready(() => {
   const target = '/api/get/new_exercise'
   $.get(target)
     .done((data) => {
-      new Exercise(data).start()
+        document.getElementById('tag').innerText = data['tag']
+        new Exercise(data['content']).start()
     })
     .fail(() => {
       console.log('Can\'t reach text database.')
+      document.getElementById('tag').innerText = 'trigramme'
       new Exercise(defaultText).start()
     })
 })

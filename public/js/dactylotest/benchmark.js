@@ -13,6 +13,7 @@ class Benchmark extends AbstractDactylo {
     this.data = new DataManager()
     this.chrono = document.getElementById('chrono')
     this.lastChar = null
+    this.isFirstInput = true
   }
 
   onLoad () {
@@ -33,6 +34,11 @@ class Benchmark extends AbstractDactylo {
 
   handleInput (e) {
     const c = e.key
+
+    if (this.isFirstInput) {
+      this.isFirstInput = false
+      this.data.startTimer()
+    }
 
     // Bloque les touches spéciales (Backspace, ArrowLeft, Escape, etc)
     if (!/^.$/.test(c)) {
@@ -91,7 +97,9 @@ class Benchmark extends AbstractDactylo {
   }
 
   onFocus () {
-    this.data.startTimer()
+    if (!this.isFirstInput) {
+      this.data.startTimer()
+    }
   }
 
   onBlur () {

@@ -4,7 +4,7 @@
 
 <header id="header">
     <div id="nav-opener-container">
-        <a href="javascript:void(0)" onclick="openNav()">
+        <a onclick="openNav()">
             <div id="nav-opener">
                 <div></div>
             </div>
@@ -22,6 +22,30 @@
         </button>
     </div>
 </header>
+
+<script type="text/javascript">
+    function openNav () {
+      document.getElementById('nav').style.width = '250px'
+      document.getElementById('nav-opener').classList.add('nav-opener-active')
+      document.getElementById('nav-opener-text').classList.add('nav-opener-text-active')
+      document.getElementById('nav-opener-text').innerHTML = 'Fermer'
+      setTimeout(() => {
+        document.getElementById('header').addEventListener('click', closeNav)
+        document.getElementById('main-content-container').addEventListener('click', closeNav)
+      }, 1)
+    }
+
+    function closeNav () {
+      document.getElementById('nav').style.width = '0'
+      document.getElementById('nav-opener').classList.remove('nav-opener-active')
+      document.getElementById('nav-opener-text').classList.remove('nav-opener-text-active')
+      document.getElementById('nav-opener-text').innerHTML = 'Menu'
+      setTimeout(() => {
+        document.getElementById('header').removeEventListener('click', closeNav)
+        document.getElementById('main-content-container').removeEventListener('click', closeNav)
+      }, 1)
+    }
+</script>
 
 <style>
 .blink {
@@ -86,7 +110,7 @@ nav > #links > a:visited {
     padding: 10px;
     width: 250px;
     border-left: 0 solid var(--accent);
-    transition: all 0.1s ease-in-out;
+    transition: 0.1s;
 }
 
 nav > #links > a:hover {
@@ -120,6 +144,10 @@ nav {
     text-decoration: none;
 }
 
+#nav-opener-container > a:hover {
+    cursor: pointer;
+}
+
 #nav-opener-text {
     color: var(--dark-fg);
     transition: all 0.2s ease-in-out;
@@ -147,11 +175,11 @@ nav {
 }
 
 .nav-opener-active:before {
-  transform: translateY(6px) translateX(65px) rotate(45deg);
+  transform: translateY(6px) translateX(350%) rotate(45deg);
 }
 
 .nav-opener-active:after {
-  transform: translateY(-6px) translateX(65px) rotate(-45deg);
+  transform: translateY(-6px) translateX(350%) rotate(-45deg);
 }
 
 .nav-opener-active div {

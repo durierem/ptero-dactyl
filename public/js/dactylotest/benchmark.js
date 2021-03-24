@@ -35,11 +35,6 @@ class Benchmark extends AbstractDactylo {
   handleInput (e) {
     const c = e.key
 
-    if (this.isFirstInput) {
-      this.isFirstInput = false
-      this.data.startTimer()
-    }
-
     // Bloque les touches spéciales (Backspace, ArrowLeft, Escape, etc)
     if (!/^.$/.test(c)) {
       // Si la touche est Backspace on effectue les actions appropriée
@@ -49,7 +44,13 @@ class Benchmark extends AbstractDactylo {
         this.lastChar = null
       }
     } else {
-      // Mise à jour du model
+      // On démarre le timer uniquement lors de la première frappe
+      if (this.isFirstInput) {
+        this.isFirstInput = false
+        this.data.startTimer()
+      }
+
+      // Mise à jour du modèle
       this.model.setLastInput(c)
       // Mise à jour de la vue
       this.inputZone.insert(c)

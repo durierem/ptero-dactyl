@@ -43,7 +43,6 @@ class Exercise extends AbstractDactylo {
 
   onFinish () {
     this.inputZone.getElement().innerHTML = 'FINI'
-    console.log('FINI')
     window.location.assign('/dactylotest/session?isFinished=true')
   }
 

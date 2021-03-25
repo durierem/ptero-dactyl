@@ -71,11 +71,10 @@ export class DataManager {
    * @param {string} word Le mot actuel
    */
   addMistake (word) {
-    console.log('mistakes', word)
     this.incFalseChar()
     let idx = -1
     this.mistakes.find((value, index) => {
-      if (value.indexOf(word) != -1) {
+      if (value.indexOf(word) !== -1) {
         idx = index
       }
     })
@@ -117,7 +116,7 @@ export class DataManager {
   addKeyComb (a, b) {
     let idx = -1
     this.keyComb.find((value, index) => {
-      if (value.indexOf(a + '' + b) != -1) {
+      if (value.indexOf(a + '' + b) !== -1) {
         idx = index
       }
     })
@@ -134,7 +133,7 @@ export class DataManager {
    * Ne fonctionne que si le timer n'est pas deja en route.
    */
   startTimer () {
-    if (this.timer != 0) { return }
+    if (this.timer !== 0) { return }
     this.timer = setInterval(() => {
       this.time += 10
     }, 10)

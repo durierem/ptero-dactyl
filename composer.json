@@ -41,6 +41,7 @@
         "symfony/twig-bundle": "^5.2",
         "symfony/validator": "5.2.*",
         "symfony/web-link": "5.2.*",
+        "symfony/web-profiler-bundle": "5.2.*",
         "symfony/yaml": "5.2.*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
@@ -53,8 +54,7 @@
         "symfony/maker-bundle": "^1.29",
         "symfony/phpunit-bridge": "^5.2",
         "symfony/stopwatch": "^5.2",
-        "symfony/var-dumper": "^5.2",
-        "symfony/web-profiler-bundle": "^5.2"
+        "symfony/var-dumper": "^5.2"
     },
     "config": {
         "optimize-autoloader": true,

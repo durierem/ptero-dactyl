@@ -42,13 +42,5 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/dactylotest, roles: ROLE_USER }
         - { path: ^/user, roles: ROLE_USER }
-        
-        # Restriction par adresse ip 
-        # https://symfony.com/doc/current/security/access_control.html#matching-access-control-by-ip
-        # Je crois que 10.130.163.208 est l'adresse du server de l'Université
-        - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY, ips: [10.130.163.208, 127.0.0.1, ::1] }
-        - { path: ^/api, roles: ROLE_NO_ACCESS }

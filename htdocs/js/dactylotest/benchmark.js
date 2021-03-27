@@ -119,17 +119,18 @@ const defaultText = "La dactylographie est l'action de saisir un texte sur " +
 'et de ne pas regarder les touches du clavier mais de garder le regard ' +
 'sur le texte à saisir.'
 
-document.getElementById('tag').innerHTML = 'Benchmark'
-
 $(document).ready(() => {
   const target = '/api/get/rdm_text'
   $.get(target)
     .done((data) => {
-        document.getElementById('tag').innerHTML += " | " + data['source']
-        new Benchmark(data['content']).start()
+      const a = document.getElementById('source-link')
+      a.innerHTML = data.source
+      a.href = data.source_url
+      new Benchmark(data.content).start()
     })
     .fail(() => {
-      console.log('Can\'t reach text database.')
+      document.getElementById('source').innerHTML = 'Impossible d\'atteindre la base de données :('
+      document.getElementById('source').classList.add('error')
       new Benchmark(defaultText).start()
     })
 })

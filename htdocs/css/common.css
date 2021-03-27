@@ -23,6 +23,7 @@
 
 * {
     margin: 0;
+    box-sizing: border-box;
 }
 
 *:focus {
@@ -57,4 +58,14 @@ body {
 
 #main-content-container > * {
     margin: 10px;
+}
+
+a,
+a:visited {
+    color: var(--blue);
+    text-decoration: underline;
+}
+
+.error {
+    color: var(--red);
 }

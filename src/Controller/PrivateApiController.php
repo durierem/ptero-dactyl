@@ -123,7 +123,7 @@ class PrivateApiController extends AbstractController
         array_push($prevIds, $text->getId());
         $session->set('prev', $prevIds);
 
-        return $this->json(array('content' => $text->getContent(), 'source' => $text->getSource()));
+        return $this->json($text->toArray());
     }
 
     const FIRST_EX = 1;

@@ -61,12 +61,11 @@ $(document).ready(() => {
   const target = '/api/get/new_exercise'
   $.get(target)
     .done((data) => {
-        document.getElementById('tag').innerText = data['tag']
-        new Exercise(data['content']).start()
+      new Exercise(data.content).start()
     })
     .fail(() => {
-      console.log('Can\'t reach text database.')
-      document.getElementById('tag').innerText = 'trigramme'
+      document.getElementById('source').innerHTML = 'Impossible d\'atteindre la base de données :('
+      document.getElementById('source').classList.add('error')
       new Exercise(defaultText).start()
     })
 })

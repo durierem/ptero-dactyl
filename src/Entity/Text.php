@@ -27,6 +27,11 @@ class Text
      */
     private $source;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $source_url;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -54,5 +59,22 @@ class Text
         $this->source = $source;
 
         return $this;
+    }
+
+    public function getSourceUrl(): ?string
+    {
+        return $this->source_url;
+    }
+
+    public function setSourceUrl(?string $source_url): self
+    {
+        $this->source_url = $source_url;
+
+        return $this;
+    }
+
+    public function toArray(): array
+    {
+        return get_object_vars($this);
     }
 }

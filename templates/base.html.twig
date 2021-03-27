@@ -14,10 +14,12 @@
     {% block javascripts %}{% endblock %}
 </head>
 
+<body>
 {% include "_header.html.twig" %}
 <div id="main-content-container">
     {% block body %}{% endblock %}
 </div>
+</body>
 
 <script type="module" type="text/javascript" src="{{ asset('js/theme.js') }}"></script>
 

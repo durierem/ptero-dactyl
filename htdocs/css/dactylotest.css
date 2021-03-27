@@ -3,11 +3,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 800px;
 }
 
 #virtual-user-input,
 #text-container {
-    width: 800px;
+    width: 100%;
     height: 150px;
     resize: none;
     user-select: none;
@@ -20,10 +21,15 @@
     white-space: break-spaces;
 }
 
-#tag {
-    align-self: flex-start;
+#source {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    font-size: small;
 }
 
 #chrono {
-    align-self: flex-end;
+    display: flex;
+    justify-content: center;
+    margin: 10px;
 }

@@ -67,7 +67,7 @@ class Benchmark extends AbstractDactylo {
         if (this.lastChar != null) {
           this.data.addKeyComb(this.lastChar, c)
         }
-        if (!c === 'Backspace') {
+        if (c !== 'Backspace') {
           this.lastChar = c
         }
         const isEndOfWord = !/\d|\w/.test(this.model.getReferenceText().charAt(this.inputZone.getLength()))

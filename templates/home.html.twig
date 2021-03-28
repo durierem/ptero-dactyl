@@ -22,6 +22,10 @@
                 {{ message }}
             </div>
         {% endfor %}
+
+        {% for message in app.flashes('error') %}
+            <p class="error">{{ message }}</p>
+        {% endfor %}
     {% else %}
         {% include "_about.html.twig" %}
         <div>

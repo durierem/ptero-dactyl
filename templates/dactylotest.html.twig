@@ -18,7 +18,9 @@
         <p id="text-container" class="area"></p>
         <!-- tabindex="1" to allow div to receive focus -->
         <p id="virtual-user-input" tabindex="1" class="area"></p>
+        {% if dactylotest_type == 'benchmark' %}
         <div id="source"><p>Source :&nbsp;</p><a id="source-link"></a></div>
+        {% endif %}
         <div id="chrono"></div>
     </div>
 

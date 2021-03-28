@@ -56,22 +56,26 @@ class Benchmark extends AbstractDactylo {
       this.inputZone.insert(c)
     }
 
-    // Traitement des erreurs
-    if (!this.model.isUserTextValid()) {
-      this.inputZone.getElement().style.backgroundColor = 'var(--light-bg-red)'
-      this.data.addMistake(this.model.getCurrWord())
-      this.lastChar = null
-    } else {
-      this.inputZone.getElement().style.backgroundColor = 'var(--light-bg-secondary)'
-      if (this.lastChar != null) {
-        this.data.addKeyComb(this.lastChar, c)
-      }
-      this.lastChar = c
-      const isEndOfWord = !/\d|\w/.test(this.model.getReferenceText().charAt(this.inputZone.getLength()))
-      if (isEndOfWord) {
-        this.data.resetMis()
-        this.data.addWordTime()
-        this.model.setCurrentWord()
+    if (/^.$|Backspace/.test(c)) {
+      // Traitement des erreurs
+      if (!this.model.isUserTextValid()) {
+        this.inputZone.getElement().style.backgroundColor = 'var(--light-bg-red)'
+        this.data.addMistake(this.model.getCurrWord())
+        this.lastChar = null
+      } else {
+        this.inputZone.getElement().style.backgroundColor = 'var(--light-bg-secondary)'
+        if (this.lastChar != null) {
+          this.data.addKeyComb(this.lastChar, c)
+        }
+        if (!c === 'Backspace') {
+          this.lastChar = c
+        }
+        const isEndOfWord = !/\d|\w/.test(this.model.getReferenceText().charAt(this.inputZone.getLength()))
+        if (isEndOfWord) {
+          this.data.resetMis()
+          this.data.addWordTime()
+          this.model.setCurrentWord()
+        }
       }
     }
   }

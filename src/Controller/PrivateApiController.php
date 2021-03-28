@@ -9,7 +9,6 @@ use App\Repository\ExerciseRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,6 +18,8 @@ class PrivateApiController extends AbstractController
     const BENCHMARK = 'benchmark';
     const EXERCISE = 'exercise';
     const END = 'home';
+
+    const TIMESTAMP_FORMAT = 'd-m-Y @ H:i:s';
 
     private $sequence = [
         self::BENCHMARK,
@@ -77,7 +78,11 @@ class PrivateApiController extends AbstractController
         } else {
             $currData["b3"] = $newData;
             $date = new DateTime('now');
-            $currData["created_at"] = $date->format('d-m-Y @ H:i:s');
+            $currData["created_at"] = $date->format(self::TIMESTAMP_FORMAT);
+
+            if (!$this->dataFormatValid($currData)) {
+                throw new HttpException(503, "invalid data format, can't send to database.");
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -161,5 +166,86 @@ class PrivateApiController extends AbstractController
         }
 
         return $this->json(array('content' => $exercise->getContent(), 'tag' => $exercise->getTag()));
+    }
+
+    // TOOL
+
+    private function dataFormatValid(Array $data): bool
+    {
+        if ($data == []) {
+            return false;
+        }
+        $bCount = 0;
+        $eCount = 0;
+        foreach ($data as $key=>$field) {
+            if (preg_match("/^b\d$/", $key)) {
+                ++$bCount;
+                if ($this->validateBenchdata($field) == false) {
+                    return false;
+                }
+            } else if (preg_match("/^ex\d$/", $key)) {
+                ++$eCount;
+                if ($field == "") {
+                    return false;
+                }
+            } else if ($key == "created_at") {
+                if (!$this->validateDate($field, self::TIMESTAMP_FORMAT)) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        $typeNb = array_count_values($this->sequence);
+        return $bCount == $typeNb[self::BENCHMARK] 
+            && $eCount == $typeNb[self::BENCHMARK] - 1
+            && isset($data["created_at"]);
+    }
+
+    private function validateBenchdata(Array $data): bool
+    {
+        if (!isset($data['time']) || !isset($data['character_errors'])
+            || !isset($data['nb_false_word']) || !isset($data['word_errors'])
+            || !isset($data['word_times']) || !isset($data['key_combinations'])) {
+            return false;
+        }
+        if (!is_int($data['time']) || !is_int($data['character_errors'])
+            || !is_int($data['nb_false_word'])) {
+            return false;
+        }
+        foreach ($data['word_errors'] as $field) {
+            foreach ($field as $key=>$val) {
+                if ($key == 0) {
+                    if (!is_string($val)){
+                        return false;
+                    }
+                } else if (!is_int($val)){
+                    return false;
+                }
+            }
+        }
+        foreach ($data['word_times'] as $val) {
+            if (!is_int($val)) {
+                return false;
+            }
+        }
+        foreach ($data['word_errors'] as $field) {
+            foreach ($field as $key=>$val) {
+                if ($key == 0) {
+                    if (!(is_string($val) && strlen($val) == 2)){
+                        return false;
+                    }
+                } else if (!is_int($val)){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private function validateDate(String $date, String $format): bool
+    {
+        $d = DateTime::createFromFormat($format, $date);
+        return $d && $d->format($format) == $date;
     }
 }

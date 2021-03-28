@@ -1,8 +1,18 @@
 <nav id="nav">
+    {% if app.user %}
+        <div id="username">
+            <i class="bi bi-person-circle"></i>
+            {% if app.user.username|length > 15 %}
+                {{ app.user.username|slice(0, 15) }}...
+            {% else %}
+                {{ app.user.username }}
+            {% endif %}
+        </div>
+    {% endif %}
     <div id="links">
         <a href="{{ path('home') }}"><i class="bi bi-house"></i> Accueil</a>
         {% if app.user %}
-        <a href="{{ path('user_panel') }}"><i class="bi bi-person"></i> Mes statistiques ({{ app.user.username }})</a>
+        <a href="{{ path('user_panel')}}"><i class="bi bi-person"></i> Mes statistiques</a>
         <a href="{{ path('app_logout') }}"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>
         {% else %}
         <a href="{{ path('app_login') }}"><i class="bi bi-box-arrow-in-right"></i> Connexion</a>
@@ -11,3 +21,79 @@
         <a href="{{ path('about') }}"><i class="bi bi-info-circle"></i> A propos</a>
     </div>
 </nav>
+
+<style>
+    nav {
+        position: absolute;
+        width: 0;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        background-color: var(--dark-bg-primary);
+        overflow-x: hidden;
+        transition: 0.2s;
+        box-shadow: 0 0 10px var(--dark-bg-primary);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: stretch;
+    }
+
+    /* Menu type "onglet" */
+    nav {
+        height: 100%;
+        padding-top: 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    nav > #username > * {
+        width: 230px;
+    }
+
+    nav > #username > i {
+        color: var(--accent);
+    }
+
+    nav > #username  {
+        text-align: center;
+        min-width: 230px;
+        padding: 10px;
+        margin: 10px;
+        color: var(--dark-fg);
+        background-color: var(--dark-bg-secondary);
+        border-radius: 5px;
+    }
+
+    nav > #links {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+    }
+
+    nav > #links > a,
+    nav > #links > a:visited {
+        text-decoration: none;
+        color: var(--dark-fg);
+        padding: 10px;
+        width: 250px;
+        border-left: 0 solid var(--accent);
+        transition: 0.1s;
+    }
+
+    nav > #links > a:hover {
+        background-color: var(--dark-bg-secondary);
+        border-left: 2px solid var(--accent);
+        padding-left: 20px;
+    }
+
+    /* Menu type "bulle" */
+    /*
+    nav {
+        border-radius: 5px;
+        margin: 90px 10px 10px 10px;
+    }
+    */
+</style>

@@ -71,59 +71,7 @@ header {
     transition: margin-left 0.5s;
 }
 
-nav {
-    position: absolute;
-    width: 0;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    background-color: var(--dark-bg-primary);
-    overflow-x: hidden;
-    transition: 0.2s;
-    box-shadow: 0 0 10px var(--dark-bg-primary);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: stretch;
-    box-sizing: border-box;
-}
 
-/* Menu type "onglet" */
-nav {
-    height: 100%;
-    padding-top: 80px;
-}
-
-nav > #links {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: stretch;
-}
-
-nav > #links > a,
-nav > #links > a:visited {
-    text-decoration: none;
-    color: var(--dark-fg);
-    padding: 10px;
-    width: 250px;
-    border-left: 0 solid var(--accent);
-    transition: 0.1s;
-}
-
-nav > #links > a:hover {
-    background-color: var(--dark-bg-secondary);
-    border-left: 2px solid var(--accent);
-    padding-left: 20px;
-}
-
-/* Menu type "bulle" */
-/*
-nav {
-    border-radius: 5px;
-    margin: 90px 10px 10px 10px;
-}
-*/
 
 #nav-opener-container {
     flex: 1;

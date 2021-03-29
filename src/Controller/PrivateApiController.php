@@ -82,6 +82,7 @@ class PrivateApiController extends AbstractController
 
             if (!$this->isDataFormatValid($currData)) {
                 $this->addFlash("error", "Une erreur est survenue :(");
+                $this->clearSessionVariables($session);
                 throw new HttpException(422, "Invalid data format");
             }
 
@@ -96,10 +97,7 @@ class PrivateApiController extends AbstractController
             $entityManager->flush();
 
             // reset everything
-            $session->remove('data');
-            $session->remove('prev');
-            $session->remove('lastId');
-            $session->remove('currTag');
+            $this->clearSessionVariables($session);
 
             $this->addFlash(
                 'benchDone',
@@ -242,7 +240,7 @@ class PrivateApiController extends AbstractController
         foreach ($data['key_combinations'] as $field) {
             foreach ($field as $key => $val) {
                 if ($key == 0) {
-                    if (!(is_string($val) && strlen($val) == 2)) {
+                    if (!(is_string($val) && iconv_strlen($val) == 2)) {
                         return false;
                     }
                 } else if (!is_int($val)) {
@@ -257,5 +255,14 @@ class PrivateApiController extends AbstractController
     {
         $d = DateTime::createFromFormat($format, $date);
         return $d && $d->format($format) == $date;
+    }
+
+    private function clearSessionVariables(SessionInterface $session)
+    {
+        $session->remove('data');
+        $session->remove('prev');
+        $session->remove('lastId');
+        $session->remove('currTag');
+        $session->remove('step');
     }
 }

@@ -60,7 +60,12 @@ class Benchmark extends AbstractDactylo {
       // Traitement des erreurs
       if (!this.model.isUserTextValid()) {
         this.inputZone.getElement().style.backgroundColor = 'var(--light-bg-red)'
-        this.data.addMistake(this.model.getCurrWord())
+
+        // On ajoute pas d'erreur sur les backspaces
+        if (c !== 'Backspace') {
+          this.data.addMistake(this.model.getCurrWord())
+        }
+
         this.lastChar = null
       } else {
         this.inputZone.getElement().style.backgroundColor = 'var(--light-bg-secondary)'
@@ -94,10 +99,9 @@ class Benchmark extends AbstractDactylo {
         window.location.assign('/dactylotest/session?isFinished=true')
       })
       .fail((data) => {
-      // On redirige vers la page d'accueil avec un paramètre erreur
-      // car la sauvegarde à échouée
+        // On redirige vers la page d'accueil avec un paramètre erreur
+        // car la sauvegarde à échouée
         window.location.assign('/?error=true')
-        console.log('Couldn\'t save data: ' + JSON.parse(data))
       })
   }
 

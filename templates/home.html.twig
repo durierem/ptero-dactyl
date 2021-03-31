@@ -8,7 +8,7 @@
 
 {% block body %}
     {% if app.user %}
-        <a id="start-button" class="button" href="{{ path('session') }}">
+        <a id="start-button" class="button" href="{{ path('sequence') }}">
             <i class="bi bi-caret-right"></i>
             {% if app.session.get('step') == 0 or app.session.get('step') == 7 %}
                 Démarrer

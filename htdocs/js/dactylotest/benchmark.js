@@ -96,7 +96,7 @@ class Benchmark extends AbstractDactylo {
     const target = '/api/send/benchdata'
     $.post(target, { data: JSON.stringify(jason) })
       .done(() => {
-        window.location.assign('/dactylotest/session?isFinished=true')
+        window.location.assign('/dactylotest/sequence?isStepFinished=true')
       })
       .fail((data) => {
         // On redirige vers la page d'accueil avec un paramètre erreur

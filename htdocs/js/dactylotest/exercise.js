@@ -43,7 +43,7 @@ class Exercise extends AbstractDactylo {
 
   onFinish () {
     this.inputZone.getElement().innerHTML = 'FINI'
-    window.location.assign('/dactylotest/session?isFinished=true')
+    window.location.assign('/dactylotest/sequence?isStepFinished=true')
   }
 
   onFocus () { }

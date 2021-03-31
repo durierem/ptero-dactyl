@@ -28,29 +28,32 @@ class PrivateApiController extends AbstractController
         self::BENCHMARK,
         self::EXERCISE,
         self::EXERCISE,
-        self::BENCHMARK
+        self::BENCHMARK,
+        self::END,
     ];
 
     /**
-     * @Route("/dactylotest/session", name="session")
+     * @Route("/dactylotest/sequence", name="sequence")
      */
-    public function session(Request $request, SessionInterface $session)
+    public function sequence(Request $request, SessionInterface $session)
     {
+        // Indice de l'étape courante ou 0 dans le cas d'une nouvelle série
         $currentStep = $session->get('step', 0);
 
-        if ($currentStep >= sizeof($this->sequence) - 1) {
-            $session->remove('step');
-            return $this->redirectToRoute('home');
-        }
-
+        // Détermine si l'utilisateur peut passer à l'étape suivante
         $nextStep = $currentStep;
-        if ($request->query->get('isFinished', 'false') === 'true') {
+        if ($request->query->get('isStepFinished', 'false') === 'true') {
             $nextStep += 1;
         }
 
         $session->set('step', $nextStep);
-
         $nextRoute = $this->sequence[$nextStep];
+
+        // Nettoie la session lorsque la série est terminée
+        if ($nextRoute == self::END) {
+            $this->clearSessionVariables($session);
+        }
+
         return $this->redirectToRoute($nextRoute);
     }
 
@@ -95,9 +98,6 @@ class PrivateApiController extends AbstractController
 
             $entityManager->persist($benchmark);
             $entityManager->flush();
-
-            // reset everything
-            $this->clearSessionVariables($session);
 
             $this->addFlash(
                 'benchDone',

@@ -13,7 +13,7 @@ export class DactyloTestModel {
 
     this.currChar = null
     this.cursorIndex = 0
-    this.currWord = this.referenceText.slice(0, this.findNextSpace(0))
+    this.currWord = this.referenceText.slice(0, this.findEndOfWord(0))
   }
 
   /**
@@ -34,12 +34,12 @@ export class DactyloTestModel {
 
   /**
    * Renvoie l'index de la fin d'un mot
-   * $param {number} index du debut du mot
-   * @returns {number} index de la fin du mot
+   * @param {number} index l'index du debut du mot
+   * @returns {number} l'index de la fin du mot
    */
-  findNextSpace (index) {
+  findEndOfWord (index) {
     for (let i = index; i < this.referenceText.length; i++) {
-      if (!/\w|\d/.test(this.referenceText.charAt(i))) {
+      if (/[\.,\/#!$%' "^&*;:{}=_`~()]/.test(this.referenceText.charAt(i))) {
         return i
       }
     }
@@ -50,10 +50,10 @@ export class DactyloTestModel {
    * Renvoie l'index du debut du prochain mot
    * @returns {number} index du debut du prochain mot
    */
-  findFirst () {
+  findNextWord () {
     for (let i = this.cursorIndex; i < this.referenceText.length; i++) {
-      if (!/\w|\d/.test(this.referenceText.charAt(i)) &&
-         /\w|\d/.test(this.referenceText.charAt(i + 1))) {
+      if (/[\.,\/#!$%' "^&*;:{}=_`~()]/.test(this.referenceText.charAt(i)) &&
+         !/[\.,\/#!$%' "^&*;:{}=_`~()]/.test(this.referenceText.charAt(i + 1))) {
         return i + 1
       }
     }
@@ -65,9 +65,9 @@ export class DactyloTestModel {
    */
   setCurrentWord () {
     // debut du prochain mot
-    const first = this.findFirst()
+    const first = this.findNextWord()
     // fin du prochain mot
-    const nextSpace = this.findNextSpace(first)
+    const nextSpace = this.findEndOfWord(first)
     this.currWord = this.referenceText.slice(first === -1 ? this.cursorIndex + 1 : first,
       nextSpace === -1 ? this.referenceText.length : nextSpace)
   }

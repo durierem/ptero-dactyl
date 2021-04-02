@@ -35,7 +35,7 @@ class ExoFixture extends Fixture
 
         $manager->persist((new Exercise())->setTag("ponct")->setContent(
             "Le milieu, la terre, l'enfant ; tout n'est peut-être pas " .
-                "tel qu'il est dit : un esprit ? Non ! Un fantôme... "
+                "tel qu'il est dit : un esprit ? Non ! Un fantome... "
         ));
 
         $manager->persist((new Exercise)->setTag("ponct")->setContent(
@@ -48,7 +48,7 @@ class ExoFixture extends Fixture
             "Ce texte, est un texte fait... Pour vous faire travailler... " .
                 "Les ponctuations. Arretez de comprendre ce que vous lisez, " .
                 "écrivez plus (vite) ! Mille sabords ! Imaginez une suite de " .
-                "caractères. Dénuée de sens, vide d'interêt."
+                "caractères. Dénuée de sens, vide d'esprit."
         ));
 
         // $manager->persist(

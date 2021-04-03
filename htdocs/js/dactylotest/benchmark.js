@@ -4,6 +4,7 @@
 
 import { AbstractDactylo } from './abstractdactylo.js'
 import { DataManager } from './data-manager.js'
+import { punctRegex } from './dactylotest-model'
 
 class Benchmark extends AbstractDactylo {
   constructor (referenceText) {
@@ -75,7 +76,7 @@ class Benchmark extends AbstractDactylo {
         if (c !== 'Backspace') {
           this.lastChar = c
         }
-        const isEndOfWord = /[\.,\/#!$%' "^&*;:{}=_`~()]/.test(this.model.getReferenceText().charAt(this.inputZone.getLength()))
+        const isEndOfWord = punctRegex.test(this.model.getReferenceText().charAt(this.inputZone.getLength()))
         if (isEndOfWord) {
           this.data.resetMis()
           this.data.addWordTime()

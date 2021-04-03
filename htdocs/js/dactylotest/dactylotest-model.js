@@ -1,5 +1,7 @@
 'use strict'
 
+const punctRegex = /[.,/#!$% "^&*;:{}=_`~()]/
+
 export class DactyloTestModel {
   /**
    * @constructor
@@ -39,7 +41,7 @@ export class DactyloTestModel {
    */
   findEndOfWord (index) {
     for (let i = index; i < this.referenceText.length; i++) {
-      if (/[\.,\/#!$%' "^&*;:{}=_`~()]/.test(this.referenceText.charAt(i))) {
+      if (punctRegex.test(this.referenceText.charAt(i))) {
         return i
       }
     }
@@ -52,8 +54,8 @@ export class DactyloTestModel {
    */
   findNextWord () {
     for (let i = this.cursorIndex; i < this.referenceText.length; i++) {
-      if (/[\.,\/#!$%' "^&*;:{}=_`~()]/.test(this.referenceText.charAt(i)) &&
-         !/[\.,\/#!$%' "^&*;:{}=_`~()]/.test(this.referenceText.charAt(i + 1))) {
+      if (punctRegex.test(this.referenceText.charAt(i)) &&
+         !punctRegex.test(this.referenceText.charAt(i + 1))) {
         return i + 1
       }
     }

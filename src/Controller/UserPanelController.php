@@ -38,7 +38,7 @@ class UserPanelController extends AbstractController
         $res = [];
         foreach ($test as $key => $value) {
             if (preg_match("/^b\d$/", $key)) {
-                $time = round($value["time"] / 1000, 2);
+                $time = $value["time"] / 1000;
                 if (!isset($res['wpm'])) {
                     $res["wpm"] = round(count($value["word_times"]) / $time * 60, 1);
                 } else {

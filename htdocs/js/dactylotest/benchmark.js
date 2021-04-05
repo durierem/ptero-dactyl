@@ -4,7 +4,7 @@
 
 import { AbstractDactylo } from './abstractdactylo.js'
 import { DataManager } from './data-manager.js'
-import { punctRegex } from './dactylotest-model'
+import { punctRegex } from './dactylotest-model.js'
 
 class Benchmark extends AbstractDactylo {
   constructor (referenceText) {

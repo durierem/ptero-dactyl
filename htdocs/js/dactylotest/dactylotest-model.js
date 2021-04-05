@@ -1,6 +1,6 @@
 'use strict'
 
-const punctRegex = /[.,/#!$% "^&*;:{}=_`~()]/
+export const punctRegex = /[.,/#!$% "^&*;:{}=_`~()]/
 
 export class DactyloTestModel {
   /**

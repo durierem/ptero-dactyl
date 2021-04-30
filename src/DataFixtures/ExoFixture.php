@@ -29,18 +29,17 @@ class ExoFixture extends Fixture
 
         $manager->persist((new Exercise())->setTag("ponct")->setContent(
             "Oh l'Amérique ! Etats-Unis d'Amérique... \"A l'ouest se trouvent " .
-                "les Mines d'Argent\". Jamais, je ne pourrai te rendre 5€, " .
-                "la monnaie de ta pièce."
+                "les Mines d'Argent\"."
         ));
 
         $manager->persist((new Exercise())->setTag("ponct")->setContent(
-            "Le milieu, la terre, l'enfant ; tout n'est peut-être pas " .
+            "Le milieu, la terre, l'enfant ; tout n'est pas " .
                 "tel qu'il est dit : un esprit ? Non ! Un fantome... "
         ));
 
         $manager->persist((new Exercise)->setTag("ponct")->setContent(
             "La maison mère disait \"Haha je ne crois pas en dieu ? " .
-                "Peut être !\" Rien de tel qu'une (immense !) conjoncture " .
+                "\" Rien de tel qu'une (immense !) conjoncture " .
                 "ésotérique, d'une bien pensance : pesante."
         ));
 

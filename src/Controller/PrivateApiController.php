@@ -72,6 +72,10 @@ class PrivateApiController extends AbstractController
         $currData = $session->get('data', []);
         $currStep = $session->get('step');
 
+        $prevIds = $session->get('prev', []);
+        array_push($prevIds, $session->get('currTextId', '-1'));
+        $session->set('prev', $prevIds);
+
         if ($currStep == 0) {
             $currData["b1"] = $newData;
             $session->set('data', $currData);
@@ -125,9 +129,7 @@ class PrivateApiController extends AbstractController
         $prevIds = $session->get('prev', []);
 
         $text = $textRepository->findRandom($prevIds);
-
-        array_push($prevIds, $text->getId());
-        $session->set('prev', $prevIds);
+        $session->set('currTextId', $text->getId());
 
         return $this->json($text->toArray());
     }
@@ -261,6 +263,7 @@ class PrivateApiController extends AbstractController
     {
         $session->remove('data');
         $session->remove('prev');
+        $session->remove('currTextId');
         $session->remove('lastId');
         $session->remove('currTag');
         $session->remove('step');

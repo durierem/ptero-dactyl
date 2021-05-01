@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Psr\Log\LoggerInterface;
 
 class PrivateApiController extends AbstractController
 {
@@ -35,7 +36,7 @@ class PrivateApiController extends AbstractController
     /**
      * @Route("/dactylotest/sequence", name="sequence")
      */
-    public function sequence(Request $request, SessionInterface $session)
+    public function sequence(Request $request, SessionInterface $session, LoggerInterface $logger)
     {
         // Indice de l'étape courante ou 0 dans le cas d'une nouvelle série
         $currentStep = $session->get('step', 0);
@@ -52,17 +53,24 @@ class PrivateApiController extends AbstractController
         // Nettoie la session lorsque la série est terminée
         if ($nextRoute == self::END) {
             $this->clearSessionVariables($session);
+            $logger->info("Session cleared", [
+                'user' => $this->getUser()->getUsername()
+            ]);
         }
 
+        $logger->info("Redirecting to route '{$nextRoute}' (step {$nextStep})", [
+            'user' => $this->getUser()->getUsername()
+        ]);
         return $this->redirectToRoute($nextRoute);
     }
 
     /**
      * @Route("/api/send/benchdata", name="save_dactylotest")
      */
-    public function save(Request $request, SessionInterface $session): Response
+    public function save(Request $request, SessionInterface $session, LoggerInterface $logger): Response
     {
         if (!$request->isXmlHttpRequest()) {
+            $logger->error("Not an XHR request");
             throw new HttpException(403, "Unauthorized request: private API");
         }
 
@@ -88,7 +96,11 @@ class PrivateApiController extends AbstractController
             $currData["created_at"] = $date->format(self::TIMESTAMP_FORMAT);
 
             if (!$this->isDataFormatValid($currData)) {
-                $this->addFlash("error", "Une erreur est survenue :(");
+                $logger->error('Invalid data format while saving', [
+                    'user' => $this->getUser()->getUsername(),
+                    'data' => $currData
+                ]);
+                $this->addFlash("error", "Une erreur est survenue, les données n'ont pas été sauvegardées (format de données invalide)");
                 $this->clearSessionVariables($session);
                 throw new HttpException(422, "Invalid data format");
             }
@@ -102,6 +114,10 @@ class PrivateApiController extends AbstractController
 
             $entityManager->persist($benchmark);
             $entityManager->flush();
+
+            $logger->info('Sequence data saved', [
+                'user' => $this->getUser()->getUsername()
+            ]);
 
             $this->addFlash(
                 'benchDone',

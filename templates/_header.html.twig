@@ -24,6 +24,7 @@
 <script type="text/javascript">
     function openNav () {
       document.getElementById('nav').style.width = '250px'
+      document.getElementById('nav-opener-container').style.position = 'fixed'
       document.getElementById('nav-opener').classList.add('nav-opener-active')
       document.getElementById('nav-opener-text').classList.add('nav-opener-text-active')
       document.getElementById('nav-opener-text').innerHTML = 'Fermer'
@@ -35,6 +36,7 @@
 
     function closeNav () {
       document.getElementById('nav').style.width = '0'
+      document.getElementById('nav-opener-container').style.position = 'absolute'
       document.getElementById('nav-opener').classList.remove('nav-opener-active')
       document.getElementById('nav-opener-text').classList.remove('nav-opener-text-active')
       document.getElementById('nav-opener-text').innerHTML = 'Menu'
@@ -71,15 +73,17 @@ header {
     transition: margin-left 0.5s;
 }
 
-
-
 #nav-opener-container {
+    position: absolute;
+    top: 20px;
+    left: 10px;
     flex: 1;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     min-width: 100px;
     max-width: 15%;
+    z-index: 2;
 }
 
 #nav-opener-container > a {
@@ -105,6 +109,7 @@ header {
   width: 20px;
 }
 
+
 #nav-opener:after,
 #nav-opener:before,
 #nav-opener div,
@@ -121,11 +126,11 @@ header {
 }
 
 .nav-opener-active:before {
-  transform: translateY(6px) translateX(350%) rotate(45deg);
+  transform: translateY(6px) rotate(45deg);
 }
 
 .nav-opener-active:after {
-  transform: translateY(-6px) translateX(350%) rotate(-45deg);
+  transform: translateY(-6px) rotate(-45deg);
 }
 
 .nav-opener-active div {
@@ -133,7 +138,6 @@ header {
 }
 
 .nav-opener-text-active {
-  transform: translateX(-25px);
   text-decoration: none;
 }
 
@@ -149,7 +153,7 @@ header {
     height: 80px;
 }
 
-@media all and (max-width: 600px) {
+@media all and (max-width: 700px) {
     #app-title, #app-title:active, #app-title:hover, #app-title:visited {
         display: none;
     }
@@ -168,6 +172,9 @@ header {
 }
 
 #theme-switcher-container {
+    position: absolute;
+    top: 25px;
+    right: 20px;
     flex: 1;
     display: flex;
     justify-content: flex-end;
@@ -178,13 +185,12 @@ header {
     border:none;
     background: none;
     font-size: 1em;
-    margin: 20px;
     transition-duration: 0.1s;
 }
 
 #theme-switcher:hover {
     cursor: pointer;
-    transform: scale(1.5) rotate(-33deg);
+    transform: rotate(-33deg);
 }
 
 .red-switcher {

@@ -4,6 +4,7 @@ form {
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+    max-width: 300px;
 }
 
 form > div {
@@ -11,9 +12,10 @@ form > div {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: left;
     margin: 10px;
 }
+
 
 form > div > input {
     background-color: var(--light-bg-secondary);
@@ -28,9 +30,9 @@ form > div > input {
     text-align: left;
     font-size: inherit;
     max-width: 300px;
-
 }
 
 form > div > ul {
     color: var(--red);
 }
+

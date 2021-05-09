@@ -16,11 +16,10 @@
     box-shadow: 0 0 10px var(--dark-bg-primary);
 }
 .button:hover {
-    background-color: var(--dark-bg-secondary);
     border-color: var(--accent);
     box-shadow: 0 0 10px var(--accent);
     cursor: pointer;
-    transform: scale(1.1);
+    background-color: #23232F;
 }
 a.button, a.button:visited {
     text-decoration: none;

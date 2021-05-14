@@ -35,6 +35,14 @@ class BenchmarkRepository extends ServiceEntityRepository
         ;
     }
 
+    public function getAll(): Array
+    {
+        return $this->createQueryBuilder('b')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 
     // /**
     //  * @return Benchmark[] Returns an array of Benchmark objects

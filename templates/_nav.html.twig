@@ -11,6 +11,7 @@
     {% endif %}
     <div id="links">
         <a href="{{ path('home') }}"><i class="bi bi-house"></i> Accueil</a>
+        <a href="{{ path('leaderboard') }}"><i class="bi bi-clipboard-data"></i> Leaderboard</a>
         {% if app.user %}
         <a href="{{ path('user_panel')}}"><i class="bi bi-person"></i> Mes statistiques</a>
         <a href="{{ path('app_logout') }}"><i class="bi bi-box-arrow-left"></i> Déconnexion</a>

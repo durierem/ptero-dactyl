@@ -1,0 +1,37 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Leaderboard{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/userpanel.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% if dataTable == [] %}
+        <p>Aucune données</p>
+    {% else %}
+        <div id="rounded-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan=4><i class="bi bi-spellcheck"></i> Meilleurs scores </th>
+                    </tr>
+                    <tr>
+                        <th><i class="bi bi-person"></i> Nom</th>
+                        <th><i class="bi bi-speedometer2"></i> Mots / minute</th>
+                        <th><i class="bi bi-calendar-date"></i> Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in dataTable %}
+                        <tr>
+                            <td>{{row['name']}}</td>
+                            <td>{{row['score']}}</td>
+                            <td>{{row['date']}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -61,7 +61,10 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "symfony/flex": false
+        }
     },
     "autoload": {
         "psr-4": {
@@ -80,8 +83,8 @@
     },
     "scripts": {
         "auto-scripts": {
-            "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+            "cache:clear": "symfony console cache:clear",
+            "assets:install %PUBLIC_DIR%": "symfony console assets:install htdocs"
         },
         "post-install-cmd": [
             "@auto-scripts"

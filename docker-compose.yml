@@ -1,0 +1,69 @@
+x-base: &base
+  build:
+    context: .
+    dockerfile: Dockerfile
+  image: ptero-dactyl-dev:1.0.0
+  environment: &env
+    APP_ENV: ${APP_ENV:-dev}
+  tmpfs:
+    - /tmp
+
+x-backend: &backend
+  <<: *base
+  stdin_open: true
+  tty: true
+  depends_on:
+    mariadb:
+      condition: service_started
+  environment:
+    <<: *env
+    DATABASE_URL: mysql://symfony:symfony@mariadb:3306/ptero-dactyl
+  volumes:
+    - .:/app:cached
+    - cache:/app/var/cache
+    - vendor:/app/vendor
+    - bundles:/app/htdocs/bundles
+
+
+# The services below are not meant to be all fired up at once with `docker compose up`.
+# Refer to the usage of each service for further instructions.
+#
+# Tip: alias docker commands within your shell.
+# Example with bash:
+#   alias dcu="docker compose up --remove-orphans"
+#   alias dcr="docker compose run --rm --service-ports"
+services:
+
+  mariadb:
+    image: mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: symfony
+      MARIADB_USER: symfony
+      MARIADB_PASSWORD: symfony
+      MARIADB_DATABASE: ptero-dactyl
+    volumes:
+      - mariadb:/var/lib/mysql
+
+  web:
+    <<: *backend
+    command: ["symfony", "server:start", "--no-tls"]
+    ports:
+      - 8000:8000
+
+  symfony:
+    <<: *backend
+    entrypoint: ["symfony"]
+
+  composer:
+    <<: *backend
+    entrypoint: ["composer"]
+
+  bash:
+    <<: *backend
+    command: ["/bin/bash"]
+
+volumes:
+  mariadb:
+  cache:
+  vendor:
+  bundles:
